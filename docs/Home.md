@@ -1,1 +1,1 @@
-![[../README]]
+See readme: [[../README|README.md]]
