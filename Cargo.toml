@@ -2,5 +2,11 @@
 name = "ferriswatch"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+description = "Shared themes and colour palettes for consistent styling across applications"
+readme = "README.md"
+repository = "https://git.hankin.io/rust/ferriswatch"
+keywords = ["theme", "palette", "colors", "styling"]
+categories = ["gui"]
 
 [dependencies]
