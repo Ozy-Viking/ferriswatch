@@ -1,4 +1,4 @@
-# ferriswatch
+# Ferriswatch
 
 Shared themes and colour palettes for consistent styling across applications.
 
@@ -7,9 +7,12 @@ and styling conventions.
 
 ## Status
 
-Early development. Theme and palette APIs are not implemented yet. The current
-source contains only the Cargo starter code.
+Early development. Theme and palette APIs are not implemented yet.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Color
+
+![color](/docs/Color.md)
