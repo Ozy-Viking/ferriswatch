@@ -12,8 +12,46 @@ jobs:
     optional: false
   triggers:
   - type: BranchUpdateTrigger
+    branches: '** -sync/** -ferriswatch-sync-state'
     userMatch: anyone
   - type: TagCreateTrigger
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  includeUpstreamWhenRebuild: false
+  includeDownstreamWhenRebuild: false
+  timeout: 600
+- name: Sync collaboration
+  steps:
+  - type: CheckoutStep
+    name: Check out trusted sync code
+    cloneCredential:
+      type: DefaultCredential
+    withLfs: false
+    withSubmodules: false
+    condition: SUCCESSFUL
+    optional: false
+  - type: CommandStep
+    name: Test and preflight collaboration sync
+    runInContainer: true
+    image: python:3.13-bookworm
+    interpreter:
+      type: PosixInterpreter
+      shell: sh
+      commands: |
+        set -eu
+        python -m unittest discover -s tools -p 'test_sync*.py'
+        python tools/sync_collaboration.py
+    runAs: 0:0
+    envVars:
+    - name: ONEDEV_TOKEN
+      value: '@secret:ONEDEV_TOKEN@'
+    - name: GITHUB_TOKEN
+      value: '@secret:GITHUB_TOKEN@'
+    useTTY: true
+    condition: SUCCESSFUL
+    optional: false
+  sequentialGroup: ferriswatch-collaboration-sync
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
