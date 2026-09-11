@@ -2,4 +2,4 @@
 
 ## Test
 
-![readme](../README.md)
+![readme](/README.md)
