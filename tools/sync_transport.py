@@ -29,18 +29,20 @@ class API:
         self.token = token
         self.opener = urllib.request.build_opener(NoRedirect)
 
-    def call(self, method, path, data=None, **query):
+    def call(self, method, path, data=None, response_text=False, **query):
         url = self.base + "/" + path.lstrip("/")
         if query:
             url += "?" + urllib.parse.urlencode(query)
         headers = {"Authorization": "Bearer " + self.token,
-                   "Accept": "application/json", "Content-Type": "application/json",
+                   "Accept": "text/plain" if response_text else "application/json", "Content-Type": "application/json",
                    "User-Agent": "ferriswatch-sync"}
         req = urllib.request.Request(url, method=method, headers=headers,
                                      data=None if data is None else json.dumps(data).encode())
         try:
             with self.opener.open(req, timeout=45) as response:
                 body = response.read()
+                if response_text:
+                    return body.decode().strip()
                 return json.loads(body) if body else None
         except urllib.error.HTTPError as error:
             # Response bodies can contain submitted private text or credentials.

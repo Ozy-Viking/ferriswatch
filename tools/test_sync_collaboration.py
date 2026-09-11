@@ -213,7 +213,7 @@ class SyncTests(unittest.TestCase):
 
     def test_project_scoped_token_does_not_need_private_user_profiles(self):
         class ScopedAPI:
-            def call(self, method, path):
+            def call(self, method, path, **kwargs):
                 if path == "tod/get-login-name":
                     return "ozy-viking"
                 if path == "user":

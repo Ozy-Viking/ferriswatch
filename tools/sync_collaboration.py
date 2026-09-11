@@ -48,7 +48,7 @@ class Platforms:
         self.api = {"od": od, "gh": gh}
         # Project-scoped tokens cannot access users/me or other private profiles.
         # This account ID was verified with the administrator API during setup.
-        login = od.call("GET", "tod/get-login-name")
+        login = od.call("GET", "tod/get-login-name", response_text=True)
         if login != ONEDEV_ACTOR["name"]:
             raise SyncError("OneDev token owner changed; verify and update ONEDEV_ACTOR")
         self.users = {"od": dict(ONEDEV_ACTOR), "gh": gh.call("GET", "user")}
