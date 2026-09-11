@@ -12,7 +12,3 @@ Early development. Theme and palette APIs are not implemented yet.
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
-## Color
-
-![color](/docs/Color.md)
