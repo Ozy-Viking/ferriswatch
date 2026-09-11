@@ -10,3 +10,10 @@ keywords = ["theme", "palette", "colors", "styling"]
 categories = ["gui"]
 
 [dependencies]
+miette = { version = "7.6", features = ["fancy", "serde"] }
+serde = "1.0"
+thiserror = "2.0"
+viking_macros = "0.3.6"
+
+[dev-dependencies]
+rstest = "0.27.0"
