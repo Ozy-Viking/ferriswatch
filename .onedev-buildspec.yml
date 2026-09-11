@@ -1,0 +1,22 @@
+version: 53
+jobs:
+- name: Push to GitHub
+  steps:
+  - type: PushRepository
+    name: Push to GitHub
+    remoteUrl: https://github.com/Ozy-Viking/ferriswatch.git
+    userName: Ozy-Viking
+    passwordSecret: GITHUB_TOKEN
+    force: false
+    condition: SUCCESSFUL
+    optional: false
+  triggers:
+  - type: BranchUpdateTrigger
+    userMatch: anyone
+  - type: TagCreateTrigger
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  includeUpstreamWhenRebuild: false
+  includeDownstreamWhenRebuild: false
+  timeout: 600
