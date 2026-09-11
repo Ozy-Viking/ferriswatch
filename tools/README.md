@@ -11,6 +11,10 @@ minutes. It requires job secrets `ONEDEV_TOKEN` and `GITHUB_TOKEN`. The OneDev
 identity needs permission to manage issues and PRs and write code in this project.
 The GitHub token needs Contents, Issues, and Pull requests read/write access to
 this repository. Restrict these secrets to trusted builds on `main` in OneDev.
+The token owner is verified against `ONEDEV_ACTOR` in the script, currently
+`ozy-viking`, ID 1. If switching to a service account, verify and update that mapping.
+Other OneDev authors are attributed by user ID and the source link, since the
+project-scoped token cannot read their private account profiles.
 
 New issues and open PRs are copied in either direction. Titles, descriptions, and
 open/closed state can be edited on either platform. Concurrent changes to the

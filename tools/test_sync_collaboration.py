@@ -211,6 +211,19 @@ class SyncTests(unittest.TestCase):
         baseline = {side: digest("old") for side in ("od", "gh")}
         self.assertEqual(choose("same", "same", baseline), "equal")
 
+    def test_project_scoped_token_does_not_need_private_user_profiles(self):
+        class ScopedAPI:
+            def call(self, method, path):
+                if path == "tod/get-login-name":
+                    return "ozy-viking"
+                if path == "user":
+                    return {"id": 100, "login": "bot"}
+                raise AssertionError(f"Unexpected private account lookup: {path}")
+
+        platforms = Platforms(ScopedAPI(), ScopedAPI())
+        self.assertEqual(platforms.author("od", {"userId": 2}), "OneDev user ID 2")
+        self.assertTrue(platforms.is_bot("od", {"submitterId": 1}))
+
 
 if __name__ == "__main__":
     unittest.main()

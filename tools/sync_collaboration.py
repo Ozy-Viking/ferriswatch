@@ -14,6 +14,7 @@ from sync_transport import API, Git, State, SyncError
 ONEDEV = "https://onedev.hankin.io"
 PROJECT = "rust/ferriswatch"
 PROJECT_ID = 24
+ONEDEV_ACTOR = {"id": 1, "name": "ozy-viking"}
 GITHUB = "Ozy-Viking/ferriswatch"
 SIDES = ("od", "gh")
 
@@ -45,7 +46,12 @@ def strip_footer(body, footer):
 class Platforms:
     def __init__(self, od, gh):
         self.api = {"od": od, "gh": gh}
-        self.users = {"od": od.call("GET", "users/me"), "gh": gh.call("GET", "user")}
+        # Project-scoped tokens cannot access users/me or other private profiles.
+        # This account ID was verified with the administrator API during setup.
+        login = od.call("GET", "tod/get-login-name")
+        if login != ONEDEV_ACTOR["name"]:
+            raise SyncError("OneDev token owner changed; verify and update ONEDEV_ACTOR")
+        self.users = {"od": dict(ONEDEV_ACTOR), "gh": gh.call("GET", "user")}
         self.repo = "repos/" + GITHUB
 
     def inventory(self, kind, side):
@@ -78,7 +84,9 @@ class Platforms:
         user_id = row.get("submitterId", row.get("userId"))
         if user_id is None:
             raise SyncError("OneDev author ID missing")
-        return self.api[side].call("GET", f"users/{user_id}")["name"]
+        if user_id == self.users["od"]["id"]:
+            return self.users["od"]["name"]
+        return f"OneDev user ID {user_id}"
 
     def is_bot(self, side, row):
         actor = row.get("user", {}).get("id") if side == "gh" else row.get(
