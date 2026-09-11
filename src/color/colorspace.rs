@@ -1,6 +1,6 @@
 //! Color-space representations, alpha aliases, and conversions through linear sRGB.
 
-use super::{Alpha, Clamp, Color, ColorError, ColorResult};
+use super::{Alpha, Clamp, Color, ColorResult};
 
 mod a98_rgb;
 pub use a98_rgb::A98Rgb;
@@ -63,20 +63,14 @@ pub trait ColorSpace: Sized + TryFrom<LinearSrgb> + Clamp
 where
     LinearSrgb: TryFrom<Self>,
 {
-    fn try_into_color(self) -> ColorResult<Color>
-    where
-        <LinearSrgb as TryFrom<Self>>::Error: Into<ColorError>,
-    {
-        let color = LinearSrgb::try_from(self).map_err(Into::into)?;
+    fn try_into_color(self) -> ColorResult<Color> {
+        let color = self.try_into_linear_srgb_raw()?;
 
         Color::new(color.r(), color.g(), color.b(), 1.0)
     }
 
-    fn try_from_color(color: Color) -> ColorResult<Self>
-    where
-        <Self as TryFrom<LinearSrgb>>::Error: Into<ColorError>,
-    {
-        Self::try_from(color.linear_srgb()).map_err(Into::into)
+    fn try_from_color(color: Color) -> ColorResult<Self> {
+        Self::try_from_linear_srgb_raw(color.linear_srgb())
     }
     fn try_into_linear_srgb_raw(self) -> ColorResult<LinearSrgb>;
 
