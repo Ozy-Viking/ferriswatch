@@ -795,3 +795,30 @@ pub(super) fn color_channel<T: AdjacentValue, R: RangeBounds<T>>(
         Err(_) => panic!("invalid built-in range for channel {name}"),
     }
 }
+
+/// Constructs the fixed, valid byte range used by constant RGB values.
+pub(super) const fn byte_color_channel(name: &'static str, value: u8) -> ColorChannel<u8> {
+    Channel {
+        name,
+        value,
+        range: (Bound::Included(0), Bound::Included(255)),
+        limits: (Some(0), Some(255)),
+        wrapping: None,
+    }
+}
+
+/// Converts a byte to the fixed alpha range for constant RGBA values.
+pub(super) const fn alpha_byte_channel(value: u8) -> ColorChannel<f32> {
+    unit_color_channel("alpha", value as f32 / 255.0)
+}
+
+/// Constructs the fixed unit range used by constant floating-point colors.
+pub(super) const fn unit_color_channel(name: &'static str, value: f32) -> ColorChannel<f32> {
+    Channel {
+        name,
+        value,
+        range: (Bound::Included(0.0), Bound::Included(1.0)),
+        limits: (Some(0.0), Some(1.0)),
+        wrapping: None,
+    }
+}

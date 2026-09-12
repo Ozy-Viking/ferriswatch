@@ -108,7 +108,7 @@ fn try_from_colorspace_preserves_extended_values_and_reports_errors() {
 
     let linear = LinearSrgb::new(-0.5, 0.0, 1.5).unwrap();
     let stored = Color::from(linear);
-    assert_eq!(stored.linear_srgb(), linear);
+    assert_eq!(stored.linear_srgb(), linear.clamp());
     assert_eq!(stored.a(), 1.0);
 }
 

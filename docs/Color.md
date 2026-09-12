@@ -37,6 +37,18 @@ target space.
 
 ## Creating colors
 
+[`Color::TRANSPARENT`] is fully transparent black: red, green, blue, and alpha
+are all `0.0`. It is a constant, so it can be used in other constant definitions
+without a constructor or error handling.
+
+```rust
+use ferriswatch::color::Color;
+
+const BACKGROUND: Color = Color::TRANSPARENT;
+assert_eq!(BACKGROUND.a(), 0.0);
+assert_eq!((BACKGROUND.r(), BACKGROUND.g(), BACKGROUND.b()), (0.0, 0.0, 0.0));
+```
+
 Each color-space type represents coordinates in that space. For example, `Srgb`
 holds encoded sRGB values, while `Hsl` holds hue, saturation, and lightness.
 `Color::try_from(value)` creates the common stored representation from any
@@ -94,7 +106,7 @@ direct return type means every valid `Color` can be converted. A
 | XYZ, D50 | `x`, `y`, `z` | `xyz_d50()` | `XyzD50` |
 | XYZ, D65 | `x`, `y`, `z` | `xyz_d65()` | `ColorResult<XyzD65>` |
 
-Byte RGB rejects out-of-gamut input. HSL and HSV can encounter singular
+The named `rgb()` method rejects out-of-gamut input. HSL and HSV can encounter singular
 coordinates for extended colors. Lab, LCh, and D65 XYZ can overflow for large
 finite inputs. These failures remain errors rather than silently clamping the
 result.
@@ -102,6 +114,36 @@ result.
 The infallible target spaces also implement `From<LinearSrgb>`. Other targets
 implement `TryFrom<LinearSrgb>`. Conversion back to linear sRGB remains fallible
 for other color spaces.
+
+## From and Into conversions
+
+Infallible conversions to and from `Color` implement `From`, which also provides
+`Into`. They clamp destination channels to their declared bounds, wrap hue, and
+leave unbounded channels unchanged. Byte RGB quantizes encoded channels to the
+nearest byte. These conversions can lose out-of-gamut values and precision.
+
+`Rgb`, `Srgb`, and `LinearSrgb` support both directions, including their alpha
+wrappers. `Color` also converts infallibly to A98 RGB, Display P3, ProPhoto RGB,
+Rec.2020, HWB, Oklab, OkLCh, LMS, cube-root LMS, and D50 XYZ, with or without
+alpha. Reverse directions that can reject non-finite values or overflow retain
+`TryFrom`. Bare spaces discard alpha or supply opaque alpha; wrappers preserve it.
+
+```rust
+use ferriswatch::color::{Color, Rgb, Rgba};
+let source = Color::new(-0.25, 0.5, 2.0, 0.375)?;
+let rgb: Rgb = source.into();
+assert_eq!(rgb, Rgb::new(0, 188, 255));
+let rgba: Rgba = source.into();
+assert_eq!(rgba.alpha(), 0.375);
+let restored: Color = rgba.into();
+assert_eq!(restored.a(), 0.375);
+# Ok::<(), ferriswatch::color::ColorError>(())
+```
+
+Where `From` exists, Rust's blanket `TryFrom` performs the same clamping
+conversion. Use `ColorSpace::try_into_color()` and the explicit raw methods for
+unclamped conversion. Existing conversions directly between spaces through
+`LinearSrgb` retain their raw behavior.
 
 ## Generic and clamped conversions
 
@@ -162,7 +204,7 @@ Clamping occurs only in the destination space of a clamped conversion. Source
 channels and intermediate linear-sRGB coordinates retain their extended values.
 Byte RGB applies its final bounds immediately before quantization.
 
-For a sequence of conversions, use `Color::try_from(...)` and unclamped
+For a sequence of conversions, use `ColorSpace::try_into_color()` and unclamped
 conversions for intermediate results, then call `to_clamped::<T>()` for the
 final target. `Color::clamped_from(...)` treats `Color` as the destination and
 clamps immediately; a later conversion cannot recover values clipped there.

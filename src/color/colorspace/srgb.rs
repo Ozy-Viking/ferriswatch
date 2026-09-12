@@ -1,4 +1,7 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::{
+    ColorChannel,
+    channel::{byte_color_channel, color_channel},
+};
 
 use super::{ColorSpace, LinearSrgb};
 use crate::color::{Clamp, ColorError, ColorResult, floats_eq};
@@ -187,6 +190,39 @@ pub struct Rgb(
 );
 
 impl Rgb {
+    /// Creates an encoded sRGB color from a packed `0xRRGGBB` integer.
+    ///
+    /// # Panics
+    /// Panics if the value exceeds `0xFFFFFF`; alpha bytes are not accepted.
+    ///
+    /// ```
+    /// use ferriswatch::color::Rgb;
+    /// const ROSEWATER: Rgb = Rgb::hex(0xf5e0dc);
+    /// assert_eq!(ROSEWATER.to_hex(), "#F5E0DC");
+    /// ```
+    pub const fn from_hex(value: u32) -> Self {
+        assert!(value <= 0xFFFFFF, "RGB hex value must fit in 24 bits");
+        Self::new((value >> 16) as u8, (value >> 8) as u8, value as u8)
+    }
+
+    /// Shorthand for [`Self::from_hex`], including its 24-bit input requirement.
+    pub const fn hex(value: u32) -> Self {
+        Self::from_hex(value)
+    }
+
+    /// Parses three or six ASCII hex digits, with an optional leading `#`.
+    ///
+    /// Letter case is ignored. Three digits expand by repeating each digit.
+    /// Whitespace, `0x` prefixes, and alpha components are not accepted.
+    ///
+    /// # Errors
+    /// Returns [`ColorError::InvalidLength`] for other digit counts, or
+    /// [`ColorError::InvalidHex`] for non-hex characters.
+    pub fn from_hex_str(value: &str) -> ColorResult<Self> {
+        let [r, g, b, _] = parse_hex(value, false)?;
+        Ok(Self::new(r, g, b))
+    }
+
     /// Returns uppercase CSS hex (`#RRGGBB`), like [`Self::to_upper_hex`].
     pub fn to_hex(&self) -> String {
         self.to_upper_hex()
@@ -203,11 +239,11 @@ impl Rgb {
     }
 
     /// Creates byte channels with names and inclusive bounds `0..=255`.
-    pub fn new(r: u8, g: u8, b: u8) -> Self {
+    pub const fn new(r: u8, g: u8, b: u8) -> Self {
         Self(
-            color_channel("r", r, 0..=255),
-            color_channel("g", g, 0..=255),
-            color_channel("b", b, 0..=255),
+            byte_color_channel("r", r),
+            byte_color_channel("g", g),
+            byte_color_channel("b", b),
         )
     }
 
@@ -388,7 +424,7 @@ impl ColorSpace for Rgb {
     }
 
     fn try_into_linear_srgb_raw(self) -> ColorResult<LinearSrgb> {
-        LinearSrgb::try_from(Srgb::from(self))
+        Ok(LinearSrgb::from(self))
     }
 
     fn try_from_linear_srgb_raw(color: LinearSrgb) -> ColorResult<Self> {
@@ -403,9 +439,94 @@ impl TryFrom<LinearSrgb> for Rgb {
     }
 }
 
-impl TryFrom<Rgb> for LinearSrgb {
-    type Error = ColorError;
-    fn try_from(color: Rgb) -> ColorResult<Self> {
-        color.try_into_linear_srgb_raw()
+impl From<Rgb> for LinearSrgb {
+    /// Decodes byte channels to linear light without clipping or quantization.
+    fn from(color: Rgb) -> Self {
+        Self {
+            r: color_channel("r", srgb_to_linear(color.r_f32()), 0.0..=1.0),
+            g: color_channel("g", srgb_to_linear(color.g_f32()), 0.0..=1.0),
+            b: color_channel("b", srgb_to_linear(color.b_f32()), 0.0..=1.0),
+        }
     }
+}
+
+impl std::str::FromStr for Rgb {
+    type Err = ColorError;
+
+    fn from_str(value: &str) -> ColorResult<Self> {
+        Self::from_hex_str(value)
+    }
+}
+
+impl crate::color::Alpha<Rgb> {
+    /// Creates an sRGB color with alpha from packed `0xRRGGBBAA` bytes.
+    ///
+    /// The low byte is always alpha, including when leading RGB bytes are zero.
+    ///
+    /// ```
+    /// use ferriswatch::color::Rgba;
+    /// const COLOR: Rgba = Rgba::from_hex(0xf5e0dc80);
+    /// assert_eq!(format!("{COLOR:#X}"), "#F5E0DC80");
+    /// ```
+    pub const fn from_hex(value: u32) -> Self {
+        Self {
+            color: Rgb::from_hex(value >> 8),
+            alpha: crate::color::channel::alpha_byte_channel(value as u8),
+        }
+    }
+
+    /// Shorthand for [`Self::from_hex`], using `0xRRGGBBAA` order.
+    pub const fn hex(value: u32) -> Self {
+        Self::from_hex(value)
+    }
+
+    /// Parses RGB or RGBA hex, with an optional leading `#`.
+    ///
+    /// Accepts 3, 4, 6, or 8 ASCII hex digits. Short forms repeat each digit;
+    /// RGB forms default to opaque alpha. RGBA forms place alpha last.
+    /// Whitespace and `0x` prefixes are not accepted.
+    ///
+    /// # Errors
+    /// Returns [`ColorError::InvalidLength`] for other digit counts, or
+    /// [`ColorError::InvalidHex`] for non-hex characters.
+    pub fn from_hex_str(value: &str) -> ColorResult<Self> {
+        let [r, g, b, a] = parse_hex(value, true)?;
+        Ok(Self::from_hex(u32::from_be_bytes([r, g, b, a])))
+    }
+}
+
+impl std::str::FromStr for crate::color::Alpha<Rgb> {
+    type Err = ColorError;
+
+    fn from_str(value: &str) -> ColorResult<Self> {
+        Self::from_hex_str(value)
+    }
+}
+
+fn parse_hex(value: &str, allow_alpha: bool) -> ColorResult<[u8; 4]> {
+    let digits = value.strip_prefix('#').unwrap_or(value).as_bytes();
+    let (channels, step) = match digits.len() {
+        3 => (3, 1),
+        6 => (3, 2),
+        4 if allow_alpha => (4, 1),
+        8 if allow_alpha => (4, 2),
+        length => return Err(ColorError::InvalidLength(length)),
+    };
+    let nibble = |byte: u8| -> ColorResult<u8> {
+        match byte {
+            b'0'..=b'9' => Ok(byte - b'0'),
+            b'a'..=b'f' => Ok(byte - b'a' + 10),
+            b'A'..=b'F' => Ok(byte - b'A' + 10),
+            _ => Err(ColorError::InvalidHex),
+        }
+    };
+    let mut result = [255; 4];
+    for (channel, digits) in result[..channels].iter_mut().zip(digits.chunks_exact(step)) {
+        *channel = if step == 1 {
+            nibble(digits[0])? * 17
+        } else {
+            nibble(digits[0])? * 16 + nibble(digits[1])?
+        };
+    }
+    Ok(result)
 }
