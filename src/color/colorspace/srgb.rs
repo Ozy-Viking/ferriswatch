@@ -196,6 +196,21 @@ impl Rgb {
         )
     }
 
+    /// Borrows the red channel and its bounds.
+    pub fn r_channel(&self) -> &ColorChannel<u8> {
+        &self.0
+    }
+
+    /// Borrows the green channel and its bounds.
+    pub fn g_channel(&self) -> &ColorChannel<u8> {
+        &self.1
+    }
+
+    /// Borrows the blue channel and its bounds.
+    pub fn b_channel(&self) -> &ColorChannel<u8> {
+        &self.2
+    }
+
     pub fn r(&self) -> u8 {
         *self.0
     }

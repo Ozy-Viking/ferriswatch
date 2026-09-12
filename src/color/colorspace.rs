@@ -108,11 +108,11 @@ pub type XyzD65a = Alpha<XyzD65>;
 /// # Examples
 ///
 /// ```
-/// use ferriswatch::color::{Color, ColorSpace, Oklch, Srgb};
+/// use ferriswatch::color::{Color, Oklch, Srgb};
 ///
-/// let source = Srgb::new(1.0, 0.0, 0.0)?.try_into_color()?;
-/// let polar = Oklch::try_from_color(source)?;
-/// let restored: Color = polar.try_into_color()?;
+/// let source = Color::try_from(Srgb::new(1.0, 0.0, 0.0)?)?;
+/// let polar: Oklch = source.oklch();
+/// let restored = Color::try_from(polar)?;
 /// assert!((restored.r() - source.r()).abs() < 0.00001);
 /// # Ok::<(), ferriswatch::color::ColorError>(())
 /// ```
@@ -137,7 +137,7 @@ where
     /// Converts from linear sRGB without clamping; rejects unrepresentable results.
     fn try_from_linear_srgb_raw(color: LinearSrgb) -> ColorResult<Self>;
 
-    /// Converts and applies channel clamping before storing the result.
+    /// Converts without clamping the input, then clamps the destination channels.
     ///
     /// Byte representations override this to clamp before quantization.
     fn try_from_linear_srgb_clamped(color: LinearSrgb) -> ColorResult<Self> {

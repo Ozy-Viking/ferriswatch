@@ -1,3 +1,5 @@
+#![doc = include_str!("../../docs/Color.md")]
+
 mod channel;
 pub use channel::{
     AdjacentValue, Channel, ChannelBuilder, ChannelError, ColorChannel, RangeErrorReason,
@@ -107,6 +109,7 @@ pub trait Clamp {
     fn clamp(self) -> Self;
 }
 
+/// Converts without clamping the source or intermediates, then clamps the target.
 pub trait ClampedInto<T>: Sized {
     fn clamped_into(self) -> ColorResult<T>;
 }
@@ -120,6 +123,8 @@ where
     }
 }
 
+/// Converts without clamping the source or intermediates, then clamps the target.
+/// Byte targets apply their bounds immediately before quantization.
 pub trait ClampedFrom<T>: Sized {
     fn clamped_from(value: T) -> ColorResult<Self>;
 }

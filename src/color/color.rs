@@ -159,6 +159,20 @@ impl Color {
         T::try_from_linear_srgb_clamped(self.linear_srgb())
     }
 
+    /// Converts from a color space and clamps the stored linear-sRGB channels.
+    /// Alpha is set to one. Source components are not clamped before conversion.
+    ///
+    /// # Errors
+    /// Returns the source conversion error for non-finite or overflowing coordinates.
+    pub fn clamped_from<T>(color: T) -> ColorResult<Self>
+    where
+        T: ColorSpace,
+        LinearSrgb: TryFrom<T>,
+    {
+        let linear = color.try_into_linear_srgb_raw()?;
+        Ok(Self::from(linear.clamp()))
+    }
+
     /// Converts to [`Rgb`] without clamping, ignoring alpha.
     ///
     /// # Errors
@@ -301,5 +315,61 @@ impl Color {
 impl std::fmt::Display for Color {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         std::fmt::Display::fmt(&self.linear_srgba(), f)
+    }
+}
+
+impl From<LinearSrgb> for Color {
+    /// Stores linear-sRGB channels with alpha set to one.
+    fn from(color: LinearSrgb) -> Self {
+        Self {
+            r: *color.r_channel(),
+            g: *color.g_channel(),
+            b: *color.b_channel(),
+            a: color_channel("alpha", 1.0, 0.0..=1.0),
+        }
+    }
+}
+
+macro_rules! impl_try_from_colorspace {
+    ($($space:ty),+ $(,)?) => {$(
+        impl TryFrom<$space> for Color {
+            type Error = ColorError;
+
+            /// Converts without clamping and sets alpha to one.
+            fn try_from(color: $space) -> ColorResult<Self> {
+                color.try_into_color()
+            }
+        }
+    )+};
+}
+
+impl_try_from_colorspace!(
+    Rgb,
+    Srgb,
+    A98Rgb,
+    DisplayP3,
+    ProPhotoRgb,
+    Rec2020,
+    Hsl,
+    Hsv,
+    Hwb,
+    Lab,
+    Lch,
+    Oklab,
+    Oklch,
+    Lms,
+    LmsPrime,
+    Xyz,
+    XyzD50,
+    XyzD65,
+);
+
+impl<T> crate::color::ClampedFrom<T> for Color
+where
+    T: ColorSpace,
+    LinearSrgb: TryFrom<T>,
+{
+    fn clamped_from(color: T) -> ColorResult<Self> {
+        Self::clamped_from(color)
     }
 }
