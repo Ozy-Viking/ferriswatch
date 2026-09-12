@@ -16,11 +16,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Xyz {
     /// X tristimulus value, normally nonnegative, with no fixed upper bound.
-    pub x: ColorChannel,
+    pub x: ColorChannel<f32>,
     /// Relative luminance, nominally `0.0..=1.0`; values above white may exceed one.
-    pub y: ColorChannel,
+    pub y: ColorChannel<f32>,
     /// Z tristimulus value, normally nonnegative, with no fixed upper bound.
-    pub z: ColorChannel,
+    pub z: ColorChannel<f32>,
 }
 
 impl Xyz {

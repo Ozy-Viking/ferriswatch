@@ -14,11 +14,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Lab {
     /// Lightness, nominally `0.0..=100.0`, from black to reference white.
-    pub l: ColorChannel,
+    pub l: ColorChannel<f32>,
     /// Green-negative/red-positive axis, nominally `-125.0..=125.0`.
-    pub a: ColorChannel,
+    pub a: ColorChannel<f32>,
     /// Blue-negative/yellow-positive axis, nominally `-125.0..=125.0`.
-    pub b: ColorChannel,
+    pub b: ColorChannel<f32>,
 }
 
 impl Lab {

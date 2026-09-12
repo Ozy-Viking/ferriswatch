@@ -14,11 +14,11 @@ use crate::color::{Clamp, ColorError, ColorResult, floats_eq};
 #[derive(Debug, Clone, Copy)]
 pub struct LinearSrgb {
     /// Red channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) r: ColorChannel,
+    pub(in crate::color) r: ColorChannel<f32>,
     /// Green channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) g: ColorChannel,
+    pub(in crate::color) g: ColorChannel<f32>,
     /// Blue channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) b: ColorChannel,
+    pub(in crate::color) b: ColorChannel<f32>,
 }
 
 impl LinearSrgb {
@@ -41,7 +41,7 @@ impl LinearSrgb {
     }
 
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel {
+    pub fn r_channel(&self) -> &ColorChannel<f32> {
         &self.r
     }
 
@@ -50,7 +50,7 @@ impl LinearSrgb {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel {
+    pub fn g_channel(&self) -> &ColorChannel<f32> {
         &self.g
     }
 
@@ -59,7 +59,7 @@ impl LinearSrgb {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel {
+    pub fn b_channel(&self) -> &ColorChannel<f32> {
         &self.b
     }
 

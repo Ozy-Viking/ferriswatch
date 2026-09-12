@@ -14,13 +14,13 @@ use crate::color::{Alpha, Clamp, ColorError, ColorResult, ColorSpace, LinearSrgb
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
     /// Red channel, finite and nominally `0.0..=1.0`.
-    r: ColorChannel,
+    r: ColorChannel<f32>,
     /// Green channel, finite and nominally `0.0..=1.0`.
-    g: ColorChannel,
+    g: ColorChannel<f32>,
     /// Blue channel, finite and nominally `0.0..=1.0`.
-    b: ColorChannel,
+    b: ColorChannel<f32>,
     /// Alpha channel, finite and in `0.0..=1.0`.
-    a: ColorChannel,
+    a: ColorChannel<f32>,
 }
 
 impl PartialEq for Color {
@@ -58,7 +58,7 @@ impl Color {
         })
     }
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel {
+    pub fn r_channel(&self) -> &ColorChannel<f32> {
         &self.r
     }
 
@@ -67,7 +67,7 @@ impl Color {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel {
+    pub fn g_channel(&self) -> &ColorChannel<f32> {
         &self.g
     }
 
@@ -76,7 +76,7 @@ impl Color {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel {
+    pub fn b_channel(&self) -> &ColorChannel<f32> {
         &self.b
     }
 
@@ -85,7 +85,7 @@ impl Color {
     }
 
     /// Borrows the a channel and its bounds.
-    pub fn a_channel(&self) -> &ColorChannel {
+    pub fn a_channel(&self) -> &ColorChannel<f32> {
         &self.a
     }
 

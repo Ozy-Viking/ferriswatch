@@ -16,11 +16,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LmsPrime {
     /// Long-wavelength component; finite, with no fixed bounds.
-    pub l: ColorChannel,
+    pub l: ColorChannel<f32>,
     /// Medium-wavelength component; finite, with no fixed bounds.
-    pub m: ColorChannel,
+    pub m: ColorChannel<f32>,
     /// Short-wavelength component; finite, with no fixed bounds.
-    pub s: ColorChannel,
+    pub s: ColorChannel<f32>,
 }
 
 impl LmsPrime {

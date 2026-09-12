@@ -776,7 +776,7 @@ macro_rules! float_values {
 float_values!(f32, f64);
 
 /// A color component whose bounds may be inclusive, exclusive, or unbounded.
-pub type ColorChannel<T = f32> = Channel<T>;
+pub type ColorChannel<T> = Channel<T>;
 
 pub(super) fn color_channel<T: AdjacentValue, R: RangeBounds<T>>(
     name: &'static str,

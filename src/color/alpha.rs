@@ -29,7 +29,7 @@ pub struct Alpha<C> {
     /// Color channels in the ranges defined by `C`.
     pub(super) color: C,
     /// Opacity, finite and in `0.0..=1.0`.
-    pub(super) alpha: ColorChannel,
+    pub(super) alpha: ColorChannel<f32>,
 }
 
 impl<C> Alpha<C> {
@@ -64,7 +64,7 @@ impl<C> Alpha<C> {
     }
 
     /// Borrows the opacity channel and its bounds.
-    pub fn alpha_channel(&self) -> &ColorChannel {
+    pub fn alpha_channel(&self) -> &ColorChannel<f32> {
         &self.alpha
     }
 

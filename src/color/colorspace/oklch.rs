@@ -12,11 +12,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Oklch {
     /// Lightness, nominally `0.0..=1.0`, from black to reference white.
-    pub l: ColorChannel,
+    pub l: ColorChannel<f32>,
     /// Nonnegative chroma, nominally `0.0..=0.4`; larger values are possible.
-    pub c: ColorChannel,
+    pub c: ColorChannel<f32>,
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero. Has no effect when chroma is zero.
-    pub h: ColorChannel,
+    pub h: ColorChannel<f32>,
 }
 
 impl Oklch {

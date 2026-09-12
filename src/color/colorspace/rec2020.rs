@@ -13,11 +13,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rec2020 {
     /// Red channel, nominally `0.0..=1.0`.
-    pub r: ColorChannel,
+    pub r: ColorChannel<f32>,
     /// Green channel, nominally `0.0..=1.0`.
-    pub g: ColorChannel,
+    pub g: ColorChannel<f32>,
     /// Blue channel, nominally `0.0..=1.0`.
-    pub b: ColorChannel,
+    pub b: ColorChannel<f32>,
 }
 
 impl Rec2020 {

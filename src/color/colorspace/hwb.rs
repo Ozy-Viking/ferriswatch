@@ -12,11 +12,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Hwb {
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero.
-    pub h: ColorChannel,
+    pub h: ColorChannel<f32>,
     /// Whiteness in `0.0..=1.0`.
-    pub w: ColorChannel,
+    pub w: ColorChannel<f32>,
     /// Blackness in `0.0..=1.0`.
-    pub b: ColorChannel,
+    pub b: ColorChannel<f32>,
 }
 
 impl Hwb {

@@ -10,11 +10,11 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Hsl {
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero.
-    pub h: ColorChannel,
+    pub h: ColorChannel<f32>,
     /// Saturation in `0.0..=1.0`, from achromatic to fully saturated.
-    pub s: ColorChannel,
+    pub s: ColorChannel<f32>,
     /// Lightness in `0.0..=1.0`, from black to white.
-    pub l: ColorChannel,
+    pub l: ColorChannel<f32>,
 }
 
 impl Hsl {

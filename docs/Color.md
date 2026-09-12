@@ -187,8 +187,9 @@ fn main() -> Result<(), ColorError> {
 ## Channel bounds and clamping
 
 `Channel<T>` stores a name, a value, a lower bound, an upper bound, and optional
-wrapping. `ColorChannel<T>` is an alias for `Channel<T>`, with `f32` as its
-default value type. All color-space types remain `Copy`.
+wrapping. `ColorChannel<T>` is an alias for `Channel<T>` and requires an explicit
+value type, such as `ColorChannel<f32>` or `ColorChannel<u8>`. All color-space
+types remain `Copy`.
 
 Color-space constructors assign each component its name, bounds, and wrapping
 behavior. Constructors for spaces with public channels preserve the supplied
@@ -396,7 +397,8 @@ explicitly with `Alpha::new(converted, color.a())`.
 
 ## Formatting
 
-Color-space `Display` implementations use CSS color syntax except for LMS and
+Color-space `Display` implementations, used by `{}` and `.to_string()`, produce
+CSS color syntax except for LMS and
 cube-root LMS, which produce descriptive text. HSV displays as equivalent HWB.
 Lab and LCh use D50, while `Xyz` uses D65.
 
@@ -408,6 +410,10 @@ not clamp finite values or guarantee a lossless round trip.
 adds a CSS `#` prefix. sRGB hex formatting clamps to `0..=1` and rounds to
 bytes; alpha wrappers append a rounded alpha byte.
 
+`Rgb::to_hex()` and `Rgb::to_upper_hex()` return uppercase `#RRGGBB` strings.
+`Rgb::to_lower_hex()` returns lowercase `#rrggbb`. All three include the `#`
+prefix and two digits per channel.
+
 ```rust
 use ferriswatch::color::{Channel, ChannelError, Hsl, Rgb};
 
@@ -416,6 +422,9 @@ fn main() -> Result<(), ChannelError<u8>> {
     let rgb = Rgb::new(255, 128, 0);
     assert_eq!(rgb.r_channel().name(), "r");
     assert_eq!(format!("{rgb:#X}"), "#FF8000");
+    assert_eq!(rgb.to_hex(), "#FF8000");
+    assert_eq!(rgb.to_upper_hex(), "#FF8000");
+    assert_eq!(rgb.to_lower_hex(), "#ff8000");
 
     let byte = Channel::new("R", 10_u8, 0..=255)?;
     assert_eq!(format!("{byte:02x}"), "0a");

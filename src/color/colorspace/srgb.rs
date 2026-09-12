@@ -17,11 +17,11 @@ use std::fmt;
 #[derive(Debug, Clone, Copy)]
 pub struct Srgb {
     /// Red channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) r: ColorChannel,
+    pub(super) r: ColorChannel<f32>,
     /// Green channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) g: ColorChannel,
+    pub(super) g: ColorChannel<f32>,
     /// Blue channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) b: ColorChannel,
+    pub(super) b: ColorChannel<f32>,
 }
 
 impl Srgb {
@@ -44,7 +44,7 @@ impl Srgb {
     }
 
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel {
+    pub fn r_channel(&self) -> &ColorChannel<f32> {
         &self.r
     }
 
@@ -53,7 +53,7 @@ impl Srgb {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel {
+    pub fn g_channel(&self) -> &ColorChannel<f32> {
         &self.g
     }
 
@@ -62,7 +62,7 @@ impl Srgb {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel {
+    pub fn b_channel(&self) -> &ColorChannel<f32> {
         &self.b
     }
 
@@ -187,6 +187,21 @@ pub struct Rgb(
 );
 
 impl Rgb {
+    /// Returns uppercase CSS hex (`#RRGGBB`), like [`Self::to_upper_hex`].
+    pub fn to_hex(&self) -> String {
+        self.to_upper_hex()
+    }
+
+    /// Returns lowercase CSS hex (`#rrggbb`), with two digits per channel.
+    pub fn to_lower_hex(&self) -> String {
+        format!("{self:#x}")
+    }
+
+    /// Returns uppercase CSS hex (`#RRGGBB`), with two digits per channel.
+    pub fn to_upper_hex(&self) -> String {
+        format!("{self:#X}")
+    }
+
     /// Creates byte channels with names and inclusive bounds `0..=255`.
     pub fn new(r: u8, g: u8, b: u8) -> Self {
         Self(
