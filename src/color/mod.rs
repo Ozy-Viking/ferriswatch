@@ -2,7 +2,7 @@
 
 mod channel;
 pub use channel::{
-    AdjacentValue, Channel, ChannelBuilder, ChannelError, ColorChannel, RangeErrorReason,
+    AdjacentValue, Channel, ChannelBuilder, ChannelError, RangeErrorReason,
     WrappingRangeErrorReason, WrappingValue,
 };
 mod conversions;
@@ -11,6 +11,7 @@ mod formatting;
 mod matrices;
 mod perceptual_conversion;
 mod rgb_conversion;
+mod srgb_byte_table;
 
 pub mod colorspace;
 pub use colorspace::*;

@@ -11,7 +11,7 @@
 //! Other spaces must be converted to sRGB before they can be represented as CSS hex.
 //!
 //! Construct colors with `new(...)` to configure their channel names and bounds.
-//! Public components are [`super::ColorChannel`] values: use `*color.h` to read
+//! Public components are [`super::Channel`] values: use `*color.h` to read
 //! a number and `color.h.set_value(...)` to replace it without clamping.
 //! [`Srgb`] and [`LinearSrgb`] retain numeric getters and expose immutable
 //! channel access through `r_channel()`, `g_channel()`, and `b_channel()`.

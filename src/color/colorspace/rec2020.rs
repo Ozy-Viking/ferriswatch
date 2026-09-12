@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 /// A ITU-R BT.2020 color with encoded RGB channels and no alpha.
 ///
@@ -13,20 +13,20 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rec2020 {
     /// Red channel, nominally `0.0..=1.0`.
-    pub r: ColorChannel<f32>,
+    pub r: Channel<f32>,
     /// Green channel, nominally `0.0..=1.0`.
-    pub g: ColorChannel<f32>,
+    pub g: Channel<f32>,
     /// Blue channel, nominally `0.0..=1.0`.
-    pub b: ColorChannel<f32>,
+    pub b: Channel<f32>,
 }
 
 impl Rec2020 {
     /// Creates channels with this color space's bounds, without validating or clamping values.
     pub fn new(r: f32, g: f32, b: f32) -> Self {
         Self {
-            r: color_channel("r", r, 0.0..=1.0),
-            g: color_channel("g", g, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
+            r: Channel::color_channel("r", r, 0.0..=1.0),
+            g: Channel::color_channel("g", g, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
         }
     }
 }

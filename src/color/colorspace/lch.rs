@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 /// A CIELAB color expressed in cylindrical lightness, chroma, and hue coordinates.
 ///
@@ -14,20 +14,20 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Lch {
     /// Lightness, nominally `0.0..=100.0`, from black to reference white.
-    pub l: ColorChannel<f32>,
+    pub l: Channel<f32>,
     /// Nonnegative chroma, nominally `0.0..=150.0`; larger values are possible.
-    pub c: ColorChannel<f32>,
+    pub c: Channel<f32>,
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero. Has no effect when chroma is zero.
-    pub h: ColorChannel<f32>,
+    pub h: Channel<f32>,
 }
 
 impl Lch {
     /// Creates channels with this color space's bounds, without validating or clamping values.
     pub fn new(l: f32, c: f32, h: f32) -> Self {
         Self {
-            l: color_channel("l", l, 0.0..=100.0),
-            c: color_channel("c", c, 0.0..),
-            h: color_channel("h", h, 0.0..360.0)
+            l: Channel::color_channel("l", l, 0.0..=100.0),
+            c: Channel::color_channel("c", c, 0.0..),
+            h: Channel::color_channel("h", h, 0.0..360.0)
                 .with_wrapping()
                 .expect("built-in hue range is valid"),
         }

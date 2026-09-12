@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 /// An sRGB color expressed as hue, whiteness, and blackness.
 ///
@@ -12,22 +12,22 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Hwb {
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero.
-    pub h: ColorChannel<f32>,
+    pub h: Channel<f32>,
     /// Whiteness in `0.0..=1.0`.
-    pub w: ColorChannel<f32>,
+    pub w: Channel<f32>,
     /// Blackness in `0.0..=1.0`.
-    pub b: ColorChannel<f32>,
+    pub b: Channel<f32>,
 }
 
 impl Hwb {
     /// Creates channels with this color space's bounds, without validating or clamping values.
     pub fn new(h: f32, w: f32, b: f32) -> Self {
         Self {
-            h: color_channel("h", h, 0.0..360.0)
+            h: Channel::color_channel("h", h, 0.0..360.0)
                 .with_wrapping()
                 .expect("built-in hue range is valid"),
-            w: color_channel("w", w, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
+            w: Channel::color_channel("w", w, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
         }
     }
 }

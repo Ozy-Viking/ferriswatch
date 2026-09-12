@@ -1,8 +1,8 @@
+use crate::color::Channel;
 use crate::color::{
     A98Rgb, DisplayP3, Hsl, Hsv, Hwb, Lab, Lch, Lms, LmsPrime, Oklab, Oklch, ProPhotoRgb, Rec2020,
     Rgb, Rgba, Srgb, Xyz, XyzD50, XyzD65,
 };
-use crate::color::{ColorChannel, channel::color_channel};
 
 use crate::color::{Alpha, Clamp, ColorError, ColorResult, ColorSpace, LinearSrgb, floats_eq};
 
@@ -21,13 +21,13 @@ use crate::color::{Alpha, Clamp, ColorError, ColorResult, ColorSpace, LinearSrgb
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
     /// Red channel, finite and nominally `0.0..=1.0`.
-    r: ColorChannel<f32>,
+    r: Channel<f32>,
     /// Green channel, finite and nominally `0.0..=1.0`.
-    g: ColorChannel<f32>,
+    g: Channel<f32>,
     /// Blue channel, finite and nominally `0.0..=1.0`.
-    b: ColorChannel<f32>,
+    b: Channel<f32>,
     /// Alpha channel, finite and in `0.0..=1.0`.
-    a: ColorChannel<f32>,
+    a: Channel<f32>,
 }
 
 impl PartialEq for Color {
@@ -52,10 +52,10 @@ impl Color {
     /// assert_eq!(BACKGROUND.a(), 0.0);
     /// ```
     pub const TRANSPARENT: Self = Self {
-        r: crate::color::channel::unit_color_channel("r", 0.0),
-        g: crate::color::channel::unit_color_channel("g", 0.0),
-        b: crate::color::channel::unit_color_channel("b", 0.0),
-        a: crate::color::channel::unit_color_channel("alpha", 0.0),
+        r: Channel::unit_color_channel("r", 0.0),
+        g: Channel::unit_color_channel("g", 0.0),
+        b: Channel::unit_color_channel("b", 0.0),
+        a: Channel::unit_color_channel("alpha", 0.0),
     };
 
     /// Converts packed RGB or RGBA hex into linear sRGB with alpha.
@@ -65,12 +65,67 @@ impl Color {
     /// retain leading zeros. Use [`Self::from_hex_str`] or convert an explicit
     /// [`Rgba`] when a packed RGBA value fits in 24 bits.
     ///
-    /// # Errors
-    /// Propagates errors from conversion to [`Color`].
-    pub fn from_hex(value: u32) -> ColorResult<Self> {
-        match value {
-            0..=0xFFFFFF => Ok(Self::from(Rgb::from_hex(value))),
-            _ => Ok(Self::from(Rgba::from_hex(value))),
+    /// This conversion cannot fail. The result wrapper is retained for compatibility;
+    /// use [`Self::hex`] for a direct opaque RGB value in constant definitions.
+    pub const fn from_hex(value: u32) -> ColorResult<Self> {
+        if value <= 0xFFFFFF {
+            Ok(Self::hex(value))
+        } else {
+            Ok(Self::hex_alpha(value))
+        }
+    }
+
+    /// Decodes packed `0xRRGGBB` hex into an opaque color, including in constants.
+    ///
+    /// RGB bytes are decoded to linear light and alpha is one. Integers do not
+    /// retain digit counts: shorter literals are interpreted with leading zeros.
+    /// Use [`Self::hex_alpha`] for packed RGBA or [`Self::from_rgba8`] for separate bytes.
+    ///
+    /// # Panics
+    /// Panics if `value` exceeds `0xFFFFFF`.
+    ///
+    /// ```
+    /// use ferriswatch::color::Color;
+    /// const ROSEWATER: Color = Color::hex(0xf5e0dc);
+    /// assert_eq!(ROSEWATER.a(), 1.0);
+    /// ```
+    pub const fn hex(value: u32) -> Self {
+        assert!(value <= 0xFFFFFF, "RGB hex value must fit in 24 bits");
+        Self::from_rgba8((value >> 16) as u8, (value >> 8) as u8, value as u8, 255)
+    }
+
+    /// Decodes packed `0xRRGGBBAA` hex into a color, including in constants.
+    ///
+    /// RGB bytes are decoded to linear light. The final byte is alpha, divided
+    /// by 255: zero is transparent and 255 is opaque. Every `u32` is interpreted
+    /// as eight hex digits with leading zeros; integers do not retain digit counts.
+    ///
+    /// ```
+    /// use ferriswatch::color::Color;
+    /// const FADED: Color = Color::hex_alpha(0xf5e0dc80);
+    /// const CLEAR: Color = Color::hex_alpha(0x00000000);
+    /// assert_eq!(FADED.a(), 128.0 / 255.0);
+    /// assert_eq!(CLEAR, Color::TRANSPARENT);
+    /// ```
+    pub const fn hex_alpha(value: u32) -> Self {
+        Self::from_rgba8(
+            (value >> 24) as u8,
+            (value >> 16) as u8,
+            (value >> 8) as u8,
+            value as u8,
+        )
+    }
+
+    /// Decodes encoded sRGB bytes and a linear alpha byte, including in constants.
+    ///
+    /// Each input is in `0..=255`. Alpha zero is transparent and 255 is opaque.
+    pub const fn from_rgba8(r: u8, g: u8, b: u8, a: u8) -> Self {
+        use crate::color::srgb_byte_table::SRGB_BYTE_TO_LINEAR;
+        Self {
+            r: Channel::unit_color_channel("r", SRGB_BYTE_TO_LINEAR[r as usize]),
+            g: Channel::unit_color_channel("g", SRGB_BYTE_TO_LINEAR[g as usize]),
+            b: Channel::unit_color_channel("b", SRGB_BYTE_TO_LINEAR[b as usize]),
+            a: Channel::unit_color_channel("alpha", a as f32 / 255.0),
         }
     }
 
@@ -119,14 +174,14 @@ impl Color {
         }
 
         Ok(Self {
-            r: color_channel("r", r, 0.0..=1.0),
-            g: color_channel("g", g, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
-            a: color_channel("alpha", a, 0.0..=1.0),
+            r: Channel::color_channel("r", r, 0.0..=1.0),
+            g: Channel::color_channel("g", g, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
+            a: Channel::color_channel("alpha", a, 0.0..=1.0),
         })
     }
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel<f32> {
+    pub fn r_channel(&self) -> &Channel<f32> {
         &self.r
     }
 
@@ -135,7 +190,7 @@ impl Color {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel<f32> {
+    pub fn g_channel(&self) -> &Channel<f32> {
         &self.g
     }
 
@@ -144,7 +199,7 @@ impl Color {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel<f32> {
+    pub fn b_channel(&self) -> &Channel<f32> {
         &self.b
     }
 
@@ -153,7 +208,7 @@ impl Color {
     }
 
     /// Borrows the a channel and its bounds.
-    pub fn a_channel(&self) -> &ColorChannel<f32> {
+    pub fn a_channel(&self) -> &Channel<f32> {
         &self.a
     }
 
@@ -394,7 +449,7 @@ impl From<LinearSrgb> for Color {
             r: *color.r_channel(),
             g: *color.g_channel(),
             b: *color.b_channel(),
-            a: color_channel("alpha", 1.0, 0.0..=1.0),
+            a: Channel::color_channel("alpha", 1.0, 0.0..=1.0),
         }
     }
 }
@@ -459,10 +514,10 @@ impl From<Srgb> for Color {
             crate::color::rgb_conversion::decode_srgb(f64::from(v)).clamp(0.0, 1.0) as f32
         });
         Self {
-            r: color_channel("r", r, 0.0..=1.0),
-            g: color_channel("g", g, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
-            a: color_channel("alpha", 1.0, 0.0..=1.0),
+            r: Channel::color_channel("r", r, 0.0..=1.0),
+            g: Channel::color_channel("g", g, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
+            a: Channel::color_channel("alpha", 1.0, 0.0..=1.0),
         }
     }
 }

@@ -775,50 +775,62 @@ macro_rules! float_values {
 }
 float_values!(f32, f64);
 
-/// A color component whose bounds may be inclusive, exclusive, or unbounded.
-pub type ColorChannel<T> = Channel<T>;
-
-pub(super) fn color_channel<T: AdjacentValue, R: RangeBounds<T>>(
-    name: &'static str,
-    value: T,
-    range: R,
-) -> ColorChannel<T> {
-    match Channel::new(
-        name,
-        value,
-        (
-            range.start_bound().map(|v| *v),
-            range.end_bound().map(|v| *v),
-        ),
-    ) {
-        Ok(channel) => channel,
-        Err(_) => panic!("invalid built-in range for channel {name}"),
+impl<T: AdjacentValue> Channel<T> {
+    /// Creates a channel with the supplied bounds, preserving its value.
+    ///
+    /// Does not clamp or validate the value. Wrapping is disabled.
+    ///
+    /// # Panics
+    /// Panics if the range has invalid bounds or contains no representable values.
+    /// Use [`Self::new`] to receive a range error instead.
+    pub fn color_channel<R: RangeBounds<T>>(name: &'static str, value: T, range: R) -> Self {
+        match Self::new(name, value, range) {
+            Ok(channel) => channel,
+            Err(_) => panic!("invalid range for channel {name}"),
+        }
     }
 }
 
-/// Constructs the fixed, valid byte range used by constant RGB values.
-pub(super) const fn byte_color_channel(name: &'static str, value: u8) -> ColorChannel<u8> {
-    Channel {
-        name,
-        value,
-        range: (Bound::Included(0), Bound::Included(255)),
-        limits: (Some(0), Some(255)),
-        wrapping: None,
+impl Channel<u8> {
+    /// Creates a byte channel with inclusive bounds `0..=255` and no wrapping.
+    pub const fn byte_color_channel(name: &'static str, value: u8) -> Self {
+        Self {
+            name,
+            value,
+            range: (Bound::Included(0), Bound::Included(255)),
+            limits: (Some(0), Some(255)),
+            wrapping: None,
+        }
     }
 }
 
-/// Converts a byte to the fixed alpha range for constant RGBA values.
-pub(super) const fn alpha_byte_channel(value: u8) -> ColorChannel<f32> {
-    unit_color_channel("alpha", value as f32 / 255.0)
-}
+impl Channel<f32> {
+    /// Creates an `alpha` channel in `0..=1` by dividing a byte by 255.
+    pub const fn alpha_byte_channel(value: u8) -> Self {
+        Self::unit_color_channel("alpha", value as f32 / 255.0)
+    }
 
-/// Constructs the fixed unit range used by constant floating-point colors.
-pub(super) const fn unit_color_channel(name: &'static str, value: f32) -> ColorChannel<f32> {
-    Channel {
-        name,
-        value,
-        range: (Bound::Included(0.0), Bound::Included(1.0)),
-        limits: (Some(0.0), Some(1.0)),
-        wrapping: None,
+    /// Creates a channel with inclusive bounds `0..=1` and no wrapping.
+    ///
+    /// Preserves the supplied value, including out-of-range or non-finite values.
+    /// Use [`Self::value_in_range`] to validate it or [`Clamp::clamp`] to clamp it.
+    ///
+    /// ```
+    /// use ferriswatch::color::Channel;
+    /// const RED: Channel<f32> = Channel::unit_color_channel("r", 0.5);
+    /// const ALPHA: Channel<f32> = Channel::alpha_byte_channel(128);
+    /// const BYTE: Channel<u8> = Channel::byte_color_channel("r", 255);
+    /// assert_eq!(*RED, 0.5);
+    /// assert_eq!(*ALPHA, 128.0 / 255.0);
+    /// assert_eq!(*BYTE, 255);
+    /// ```
+    pub const fn unit_color_channel(name: &'static str, value: f32) -> Self {
+        Self {
+            name,
+            value,
+            range: (Bound::Included(0.0), Bound::Included(1.0)),
+            limits: (Some(0.0), Some(1.0)),
+            wrapping: None,
+        }
     }
 }

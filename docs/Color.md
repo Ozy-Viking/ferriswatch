@@ -49,6 +49,27 @@ assert_eq!(BACKGROUND.a(), 0.0);
 assert_eq!((BACKGROUND.r(), BACKGROUND.g(), BACKGROUND.b()), (0.0, 0.0, 0.0));
 ```
 
+Use `Color::hex(...)` to define palette constants from encoded sRGB hex. It
+returns `Color` directly and decodes RGB bytes to linear light at compile time.
+`Color::hex(...)` accepts only packed `0xRRGGBB` values up to `0xFFFFFF` and
+always supplies opaque alpha. Larger values panic. Integers do not retain digit
+counts, so shorter literals are interpreted with leading zeros.
+`Color::hex_alpha(...)` takes packed `0xRRGGBBAA`, including leading-zero values
+such as `0x00000080`. The final byte supplies alpha. Every `u32` is interpreted
+as eight hex digits, padded with leading zeros.
+`Color::from_hex(...)` is also const, retains its RGB/RGBA dispatch, and returns
+`ColorResult<Color>` for compatibility. For explicit alpha, including leading-zero RGBA colors, use
+`Color::from_rgba8(r, g, b, a)`.
+
+```rust
+use ferriswatch::color::Color;
+
+const ROSEWATER: Color = Color::hex(0xf5e0dc);
+const TRANSLUCENT_BLACK: Color = Color::hex_alpha(0x00000080);
+assert_eq!(ROSEWATER.a(), 1.0);
+assert_eq!(TRANSLUCENT_BLACK.a(), 128.0 / 255.0);
+```
+
 Each color-space type represents coordinates in that space. For example, `Srgb`
 holds encoded sRGB values, while `Hsl` holds hue, saturation, and lightness.
 `Color::try_from(value)` creates the common stored representation from any
@@ -229,8 +250,7 @@ fn main() -> Result<(), ColorError> {
 ## Channel bounds and clamping
 
 `Channel<T>` stores a name, a value, a lower bound, an upper bound, and optional
-wrapping. `ColorChannel<T>` is an alias for `Channel<T>` and requires an explicit
-value type, such as `ColorChannel<f32>` or `ColorChannel<u8>`. All color-space
+wrapping. Color components use `Channel<f32>` or `Channel<u8>`. All color-space
 types remain `Copy`.
 
 Color-space constructors assign each component its name, bounds, and wrapping

@@ -68,7 +68,7 @@ fn every_space_configures_channel_names() {
 #[case(Hwb::new(0.0, 0.25, 0.25).h)]
 #[case(Lch::new(50.0, 10.0, 0.0).h)]
 #[case(Oklch::new(0.5, 0.1, 0.0).h)]
-fn hue_channels_validate_and_wrap_mutations(#[case] mut hue: ColorChannel<f32>) {
+fn hue_channels_validate_and_wrap_mutations(#[case] mut hue: Channel<f32>) {
     hue.set_value(-30.0);
     assert_eq!(
         hue.value_in_range(),

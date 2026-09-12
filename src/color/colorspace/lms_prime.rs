@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 /// Nonlinear LMS intermediate coordinates.
 ///
@@ -16,20 +16,20 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LmsPrime {
     /// Long-wavelength component; finite, with no fixed bounds.
-    pub l: ColorChannel<f32>,
+    pub l: Channel<f32>,
     /// Medium-wavelength component; finite, with no fixed bounds.
-    pub m: ColorChannel<f32>,
+    pub m: Channel<f32>,
     /// Short-wavelength component; finite, with no fixed bounds.
-    pub s: ColorChannel<f32>,
+    pub s: Channel<f32>,
 }
 
 impl LmsPrime {
     /// Creates channels with this color space's bounds, without validating or clamping values.
     pub fn new(l: f32, m: f32, s: f32) -> Self {
         Self {
-            l: color_channel("l", l, ..),
-            m: color_channel("m", m, ..),
-            s: color_channel("s", s, ..),
+            l: Channel::color_channel("l", l, ..),
+            m: Channel::color_channel("m", m, ..),
+            s: Channel::color_channel("s", s, ..),
         }
     }
 }

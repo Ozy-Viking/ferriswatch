@@ -1,7 +1,4 @@
-use crate::color::{
-    ColorChannel,
-    channel::{byte_color_channel, color_channel},
-};
+use crate::color::Channel;
 
 use super::{ColorSpace, LinearSrgb};
 use crate::color::{Clamp, ColorError, ColorResult, floats_eq};
@@ -20,11 +17,11 @@ use std::fmt;
 #[derive(Debug, Clone, Copy)]
 pub struct Srgb {
     /// Red channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) r: ColorChannel<f32>,
+    pub(super) r: Channel<f32>,
     /// Green channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) g: ColorChannel<f32>,
+    pub(super) g: Channel<f32>,
     /// Blue channel, nominally `0.0..=1.0`; must be finite.
-    pub(super) b: ColorChannel<f32>,
+    pub(super) b: Channel<f32>,
 }
 
 impl Srgb {
@@ -40,14 +37,14 @@ impl Srgb {
         }
 
         Ok(Self {
-            r: color_channel("r", r, 0.0..=1.0),
-            g: color_channel("g", g, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
+            r: Channel::color_channel("r", r, 0.0..=1.0),
+            g: Channel::color_channel("g", g, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
         })
     }
 
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel<f32> {
+    pub fn r_channel(&self) -> &Channel<f32> {
         &self.r
     }
 
@@ -56,7 +53,7 @@ impl Srgb {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel<f32> {
+    pub fn g_channel(&self) -> &Channel<f32> {
         &self.g
     }
 
@@ -65,7 +62,7 @@ impl Srgb {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel<f32> {
+    pub fn b_channel(&self) -> &Channel<f32> {
         &self.b
     }
 
@@ -103,9 +100,9 @@ impl From<LinearSrgb> for Srgb {
         // The signed encoding compresses large magnitudes, so finite linear
         // channels always produce finite encoded channels.
         Self {
-            r: color_channel("r", linear_to_srgb(color.r()), 0.0..=1.0),
-            g: color_channel("g", linear_to_srgb(color.g()), 0.0..=1.0),
-            b: color_channel("b", linear_to_srgb(color.b()), 0.0..=1.0),
+            r: Channel::color_channel("r", linear_to_srgb(color.r()), 0.0..=1.0),
+            g: Channel::color_channel("g", linear_to_srgb(color.g()), 0.0..=1.0),
+            b: Channel::color_channel("b", linear_to_srgb(color.b()), 0.0..=1.0),
         }
     }
 }
@@ -182,11 +179,11 @@ fn linear_to_srgb(value: f32) -> f32 {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rgb(
     /// Red channel in `0..=255`.
-    pub ColorChannel<u8>,
+    pub Channel<u8>,
     /// Green channel in `0..=255`.
-    pub ColorChannel<u8>,
+    pub Channel<u8>,
     /// Blue channel in `0..=255`.
-    pub ColorChannel<u8>,
+    pub Channel<u8>,
 );
 
 impl Rgb {
@@ -241,24 +238,24 @@ impl Rgb {
     /// Creates byte channels with names and inclusive bounds `0..=255`.
     pub const fn new(r: u8, g: u8, b: u8) -> Self {
         Self(
-            byte_color_channel("r", r),
-            byte_color_channel("g", g),
-            byte_color_channel("b", b),
+            Channel::byte_color_channel("r", r),
+            Channel::byte_color_channel("g", g),
+            Channel::byte_color_channel("b", b),
         )
     }
 
     /// Borrows the red channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel<u8> {
+    pub fn r_channel(&self) -> &Channel<u8> {
         &self.0
     }
 
     /// Borrows the green channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel<u8> {
+    pub fn g_channel(&self) -> &Channel<u8> {
         &self.1
     }
 
     /// Borrows the blue channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel<u8> {
+    pub fn b_channel(&self) -> &Channel<u8> {
         &self.2
     }
 
@@ -443,9 +440,9 @@ impl From<Rgb> for LinearSrgb {
     /// Decodes byte channels to linear light without clipping or quantization.
     fn from(color: Rgb) -> Self {
         Self {
-            r: color_channel("r", srgb_to_linear(color.r_f32()), 0.0..=1.0),
-            g: color_channel("g", srgb_to_linear(color.g_f32()), 0.0..=1.0),
-            b: color_channel("b", srgb_to_linear(color.b_f32()), 0.0..=1.0),
+            r: Channel::color_channel("r", srgb_to_linear(color.r_f32()), 0.0..=1.0),
+            g: Channel::color_channel("g", srgb_to_linear(color.g_f32()), 0.0..=1.0),
+            b: Channel::color_channel("b", srgb_to_linear(color.b_f32()), 0.0..=1.0),
         }
     }
 }
@@ -471,7 +468,7 @@ impl crate::color::Alpha<Rgb> {
     pub const fn from_hex(value: u32) -> Self {
         Self {
             color: Rgb::from_hex(value >> 8),
-            alpha: crate::color::channel::alpha_byte_channel(value as u8),
+            alpha: Channel::alpha_byte_channel(value as u8),
         }
     }
 

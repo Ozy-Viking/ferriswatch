@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 use crate::color::{Clamp, ColorError, ColorResult, ColorSpace, LinearSrgb, floats_eq};
 
@@ -29,7 +29,7 @@ pub struct Alpha<C> {
     /// Color channels in the ranges defined by `C`.
     pub(super) color: C,
     /// Opacity, finite and in `0.0..=1.0`.
-    pub(super) alpha: ColorChannel<f32>,
+    pub(super) alpha: Channel<f32>,
 }
 
 impl<C> Alpha<C> {
@@ -39,7 +39,7 @@ impl<C> Alpha<C> {
         }
         Ok(Self {
             color,
-            alpha: color_channel("alpha", alpha, 0.0..=1.0),
+            alpha: Channel::color_channel("alpha", alpha, 0.0..=1.0),
         })
     }
     pub fn color(&self) -> &C {
@@ -64,7 +64,7 @@ impl<C> Alpha<C> {
     }
 
     /// Borrows the opacity channel and its bounds.
-    pub fn alpha_channel(&self) -> &ColorChannel<f32> {
+    pub fn alpha_channel(&self) -> &Channel<f32> {
         &self.alpha
     }
 
@@ -96,7 +96,7 @@ impl<C> Alpha<C> {
     pub fn opaque(color: C) -> Self {
         Self {
             color,
-            alpha: color_channel("alpha", 1.0, 0.0..=1.0),
+            alpha: Channel::color_channel("alpha", 1.0, 0.0..=1.0),
         }
     }
 }

@@ -138,3 +138,57 @@ fn packed_color_hex_dispatches_by_value() {
 fn color_hex_propagates_parse_errors(#[case] input: &str, #[case] error: ColorError) {
     assert_eq!(ferriswatch::color::Color::from_hex_str(input), Err(error));
 }
+
+#[test]
+fn const_color_construction_matches_runtime_decoding() {
+    use ferriswatch::color::{Color, Rgba};
+
+    const ROSEWATER: Color = Color::hex(0xf5e0dc);
+    const PACKED: ferriswatch::color::ColorResult<Color> = Color::from_hex(0xf5e0dc80);
+    const BLACK: Color = Color::from_rgba8(0, 0, 0, 128);
+    assert_eq!(ROSEWATER, Color::from(Rgb::hex(0xf5e0dc)));
+    assert_eq!(PACKED.unwrap(), Color::from(Rgba::hex(0xf5e0dc80)));
+    assert_eq!(BLACK.a(), 128.0 / 255.0);
+    assert_eq!(BLACK.r(), 0.0);
+
+    for byte in 0..=255_u8 {
+        let color = Color::from_rgba8(byte, 255 - byte, byte / 2, byte);
+        let expected = LinearSrgb::from(Rgb::new(byte, 255 - byte, byte / 2));
+        // powf may differ slightly across platforms; the table must agree to f32 precision.
+        for (actual, expected) in [
+            (color.r(), expected.r()),
+            (color.g(), expected.g()),
+            (color.b(), expected.b()),
+        ] {
+            assert!((actual - expected).abs() <= f32::EPSILON);
+        }
+        assert_eq!(color.a(), f32::from(byte) / 255.0);
+        assert_eq!(Rgb::from(color), Rgb::new(byte, 255 - byte, byte / 2));
+    }
+}
+
+#[test]
+#[should_panic(expected = "RGB hex value must fit in 24 bits")]
+fn color_hex_rejects_more_than_24_bits() {
+    ferriswatch::color::Color::hex(0x01000000);
+}
+
+#[test]
+fn color_hex_bounds_are_opaque() {
+    use ferriswatch::color::Color;
+    const BLACK: Color = Color::hex(0x000000);
+    const WHITE: Color = Color::hex(0xffffff);
+    assert_eq!(BLACK, Color::new(0.0, 0.0, 0.0, 1.0).unwrap());
+    assert_eq!(WHITE, Color::new(1.0, 1.0, 1.0, 1.0).unwrap());
+}
+
+#[rstest]
+#[case(0x00000000)]
+#[case(0x00000080)]
+#[case(0x00123456)]
+#[case(0xf5e0dc80)]
+#[case(0xffffffff)]
+fn color_hex_alpha_decodes_rgba(#[case] packed: u32) {
+    use ferriswatch::color::{Color, Rgba};
+    assert_eq!(Color::hex_alpha(packed), Color::from(Rgba::hex(packed)));
+}

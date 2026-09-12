@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 use super::ColorSpace;
 use crate::color::{Clamp, ColorError, ColorResult, floats_eq};
@@ -14,11 +14,11 @@ use crate::color::{Clamp, ColorError, ColorResult, floats_eq};
 #[derive(Debug, Clone, Copy)]
 pub struct LinearSrgb {
     /// Red channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) r: ColorChannel<f32>,
+    pub(in crate::color) r: Channel<f32>,
     /// Green channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) g: ColorChannel<f32>,
+    pub(in crate::color) g: Channel<f32>,
     /// Blue channel, nominally `0.0..=1.0`; must be finite.
-    pub(in crate::color) b: ColorChannel<f32>,
+    pub(in crate::color) b: Channel<f32>,
 }
 
 impl LinearSrgb {
@@ -34,14 +34,14 @@ impl LinearSrgb {
         }
 
         Ok(Self {
-            r: color_channel("r", r, 0.0..=1.0),
-            g: color_channel("g", g, 0.0..=1.0),
-            b: color_channel("b", b, 0.0..=1.0),
+            r: Channel::color_channel("r", r, 0.0..=1.0),
+            g: Channel::color_channel("g", g, 0.0..=1.0),
+            b: Channel::color_channel("b", b, 0.0..=1.0),
         })
     }
 
     /// Borrows the r channel and its bounds.
-    pub fn r_channel(&self) -> &ColorChannel<f32> {
+    pub fn r_channel(&self) -> &Channel<f32> {
         &self.r
     }
 
@@ -50,7 +50,7 @@ impl LinearSrgb {
     }
 
     /// Borrows the g channel and its bounds.
-    pub fn g_channel(&self) -> &ColorChannel<f32> {
+    pub fn g_channel(&self) -> &Channel<f32> {
         &self.g
     }
 
@@ -59,7 +59,7 @@ impl LinearSrgb {
     }
 
     /// Borrows the b channel and its bounds.
-    pub fn b_channel(&self) -> &ColorChannel<f32> {
+    pub fn b_channel(&self) -> &Channel<f32> {
         &self.b
     }
 

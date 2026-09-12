@@ -1,4 +1,4 @@
-use crate::color::{ColorChannel, channel::color_channel};
+use crate::color::Channel;
 
 /// CIE XYZ tristimulus coordinates relative to a D50 reference white.
 ///
@@ -14,20 +14,20 @@ use crate::color::{ColorChannel, channel::color_channel};
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct XyzD50 {
     /// X tristimulus value, normally nonnegative, with no fixed upper bound.
-    pub x: ColorChannel<f32>,
+    pub x: Channel<f32>,
     /// Relative luminance, nominally `0.0..=1.0`; values above white may exceed one.
-    pub y: ColorChannel<f32>,
+    pub y: Channel<f32>,
     /// Z tristimulus value, normally nonnegative, with no fixed upper bound.
-    pub z: ColorChannel<f32>,
+    pub z: Channel<f32>,
 }
 
 impl XyzD50 {
     /// Creates channels with this color space's bounds, without validating or clamping values.
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self {
-            x: color_channel("x", x, 0.0..),
-            y: color_channel("y", y, 0.0..),
-            z: color_channel("z", z, 0.0..),
+            x: Channel::color_channel("x", x, 0.0..),
+            y: Channel::color_channel("y", y, 0.0..),
+            z: Channel::color_channel("z", z, 0.0..),
         }
     }
 }
