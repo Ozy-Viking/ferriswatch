@@ -1,0 +1,401 @@
+[
+  {
+    "repository": "https://github.com/altercation/solarized",
+    "revision": "62f656a02f93c5190a8753159e34b385588d5ff3",
+    "path": "gimp-palette-solarized/solarized.gpl",
+    "fixture": "tests/fixtures/upstream/solarized/gimp-palette-solarized/solarized.gpl",
+    "sha256": "8911c4134912d50fd390980e5e501795c246678dd70478de0a9ed6497dac5ada"
+  },
+  {
+    "repository": "https://github.com/nordtheme/nord",
+    "revision": "1cef71605416a222e57225b544540ce0fcec18d4",
+    "path": "src/nord.scss",
+    "fixture": "tests/fixtures/upstream/nord/src/nord.scss",
+    "sha256": "03d9dd98ff983308d10a9a4820c870e9eed7183a2d8aa689e3041e6d7cf1511b"
+  },
+  {
+    "repository": "https://github.com/tinted-theming/base16-schemes",
+    "revision": "2b6f2d0677216ddda50c9cabd6ee70fae4665f81",
+    "path": "ocean.yaml",
+    "fixture": "tests/fixtures/upstream/base16/ocean.yaml",
+    "sha256": "a03275676ebf5fbac6a4623fa4e11838c1b9a3079f5db08f383f7ec23bd51ffc"
+  },
+  {
+    "repository": "https://github.com/atom/one-dark-syntax",
+    "revision": "9c96f4454362267ac45322063e193ccf9d2debb1",
+    "path": "styles/colors.less",
+    "fixture": "tests/fixtures/upstream/one_dark/styles/colors.less",
+    "sha256": "3f060ae1d0f2ebb27ccb60cf5088bd68ddaa8f38288569bf4ac47015b4595438"
+  },
+  {
+    "repository": "https://github.com/atom/one-light-syntax",
+    "revision": "d84579027410c576086dfca14d934c4bd74b0438",
+    "path": "styles/colors.less",
+    "fixture": "tests/fixtures/upstream/one_light/styles/colors.less",
+    "sha256": "f22d02919b3986ed73484eb6d6ae706a7d8781244ce71c3a85194d50118b9937"
+  },
+  {
+    "repository": "https://github.com/ayu-theme/ayu-colors",
+    "revision": "0f8a14da078dcafd62a47e60162a9f7722c55f49",
+    "path": "src/dark.ts",
+    "fixture": "tests/fixtures/upstream/ayu_release/src/dark.ts",
+    "sha256": "1bbffcb798b6431719ae78c0a40d183130789e9fd1e1984360a738f6e59344f6"
+  },
+  {
+    "repository": "https://github.com/ayu-theme/ayu-colors",
+    "revision": "0f8a14da078dcafd62a47e60162a9f7722c55f49",
+    "path": "src/mirage.ts",
+    "fixture": "tests/fixtures/upstream/ayu_release/src/mirage.ts",
+    "sha256": "4025c39cdb7bc54f5f338a729895d7e5169529a88c9d71d369b36945af3ea7a6"
+  },
+  {
+    "repository": "https://github.com/ayu-theme/ayu-colors",
+    "revision": "0f8a14da078dcafd62a47e60162a9f7722c55f49",
+    "path": "src/light.ts",
+    "fixture": "tests/fixtures/upstream/ayu_release/src/light.ts",
+    "sha256": "ee222db135cd16c29bbd6e5d22daa2e0ca2302972a9511643fe383f7cb306e2e"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/nightfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/nightfox.lua",
+    "sha256": "78b787bb79226de1b92b550dcb2942c9f56e3994363b591448bdbf1bc6bcaaf5"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/dayfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/dayfox.lua",
+    "sha256": "9fbf77ca954bcb13b3415f51743954854184fecf9f695486fd3c353d8d3c34e0"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/dawnfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/dawnfox.lua",
+    "sha256": "0d1cde912fb0efd83d7c721858261fa420571e7534e1a636e9097229af29e30a"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/duskfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/duskfox.lua",
+    "sha256": "e02b41c64b297ab1020ac98f2fba171e803b0784210de94ddf9188a70206967c"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/nordfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/nordfox.lua",
+    "sha256": "3aef3d3b078c76946e269913204702139e7de4a2c3a107d028f24c47e61734a4"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/terafox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/terafox.lua",
+    "sha256": "344b68368bc0d39e22735c3e4692cbee1430052c4fe1e428a077847dd190fa52"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/palette/carbonfox.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/palette/carbonfox.lua",
+    "sha256": "79092f52e2dd5dd886c1fa82aa2a85a780b291133b2a633a7c1dbe8e4acf8416"
+  },
+  {
+    "repository": "https://github.com/EdenEast/nightfox.nvim",
+    "revision": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
+    "path": "lua/nightfox/lib/color.lua",
+    "fixture": "tests/fixtures/upstream/nightfox/lua/nightfox/lib/color.lua",
+    "sha256": "62b6949d92f537125f28fa97eded708cc02ab5501010570b5d6ce6b4de4459b9"
+  },
+  {
+    "repository": "https://github.com/marko-cerovac/material.nvim",
+    "revision": "92f7366a9315cd386bc4fa4d716fde375dda210f",
+    "path": "lua/material/colors/init.lua",
+    "fixture": "tests/fixtures/upstream/material/lua/material/colors/init.lua",
+    "sha256": "6985b025c5a3cbe951a6ae11c40341dc45d2f481181d5f2c2192f0438a68ea78"
+  },
+  {
+    "repository": "https://github.com/PandaTheme/Panda-Theme",
+    "revision": "3a117beab16c1326ee543335fdd4f4081ea2a75b",
+    "path": "theme.less",
+    "fixture": "tests/fixtures/upstream/panda/theme.less",
+    "sha256": "8cf45c0f5a942af728b86d46788530b2b080f708749d0a5258b28d581853ad59"
+  },
+  {
+    "repository": "https://github.com/chriskempson/tomorrow-theme",
+    "revision": "ccf6666d888198d341b26b3a99d0bc96500ad503",
+    "path": "textmate/Tomorrow.tmTheme",
+    "fixture": "tests/fixtures/upstream/tomorrow/textmate/Tomorrow.tmTheme",
+    "sha256": "23a21513b311b1d90177d4e806b30aeb0cdd6bd84aab7ca28e0de426bf63dfb6"
+  },
+  {
+    "repository": "https://github.com/chriskempson/tomorrow-theme",
+    "revision": "ccf6666d888198d341b26b3a99d0bc96500ad503",
+    "path": "textmate/Tomorrow-Night.tmTheme",
+    "fixture": "tests/fixtures/upstream/tomorrow/textmate/Tomorrow-Night.tmTheme",
+    "sha256": "58efcadb5f4717a86209f6ef6dca9f9581cd73585305a4921eaa783e817f4d15"
+  },
+  {
+    "repository": "https://github.com/voronianski/oceanic-next-color-scheme",
+    "revision": "44a1eca851f86d4cc82f5c41734c917c65fa5710",
+    "path": "Oceanic Next.tmTheme",
+    "fixture": "tests/fixtures/upstream/oceanic_next/Oceanic Next.tmTheme",
+    "sha256": "784251e523c7e393650ad6aa3945d6925e2b1e0746ecd208f029871a37ff14f5"
+  },
+  {
+    "repository": "https://github.com/sdras/night-owl-vscode-theme",
+    "revision": "cc291eba7976b20d7c66bde6883c27b902196b07",
+    "path": "themes/Night Owl-color-theme.json",
+    "fixture": "tests/fixtures/upstream/night_owl/themes/Night Owl-color-theme.json",
+    "sha256": "5f7a6aebcb28e803f30b54dc4d401a8c5f9ca42d83a31d1fadcb2494fe1dc78b"
+  },
+  {
+    "repository": "https://github.com/drcmda/poimandres-theme",
+    "revision": "fafa97959af95bd2cdbcff151c3e9c537d355f37",
+    "path": "themes/poimandres-color-theme.json",
+    "fixture": "tests/fixtures/upstream/poimandres/themes/poimandres-color-theme.json",
+    "sha256": "a45613e950907647080442d142181aa127b18ad0e39ffa7a9e6975c785861006"
+  },
+  {
+    "repository": "https://github.com/robb0wen/synthwave-vscode",
+    "revision": "ecfa2fe1279f7233663fa3f98a96e6756000567b",
+    "path": "themes/synthwave-color-theme.json",
+    "fixture": "tests/fixtures/upstream/synthwave_84/themes/synthwave-color-theme.json",
+    "sha256": "cc2361fa174b34f5c8b17ecc6b7a3d64040677c50936bff2f955000ae84e999b"
+  },
+  {
+    "repository": "https://github.com/wesbos/cobalt2-vscode",
+    "revision": "c4e9574372b85afad1682ed0fdd1ac0411c62512",
+    "path": "theme/cobalt2.json",
+    "fixture": "tests/fixtures/upstream/cobalt2/theme/cobalt2.json",
+    "sha256": "9f5862db4e9424f65f5b7a3a36b70c2e66374fd8fbfd67b42c18480f7231a71e"
+  },
+  {
+    "repository": "https://github.com/ahmadawais/shades-of-purple-vscode",
+    "revision": "e8eb49f33e5db05ceba6677367b33ddb27ad821c",
+    "path": "themes/shades-of-purple-color-theme.json",
+    "fixture": "tests/fixtures/upstream/shades_of_purple/themes/shades-of-purple-color-theme.json",
+    "sha256": "5db19e01c34362177809c351f9c8db9985a80d7ec28d941b9dec617e5bbffb78"
+  },
+  {
+    "repository": "https://github.com/jolaleye/horizon-theme-vscode",
+    "revision": "5ae91b6d49bf291e0a34c0a1cb277d9738aadd90",
+    "path": "themes/horizon.json",
+    "fixture": "tests/fixtures/upstream/horizon/themes/horizon.json",
+    "sha256": "94ff253e0d9d6b19565b90799baa9b355075c58c92ab4f323828c7898bd0104e"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-monokai/themes/monokai-color-theme.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-monokai/themes/monokai-color-theme.json",
+    "sha256": "5869805561c08f2df3cd1a1d6cddb771baaf2f54e96f247106c42683a1c6397a"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-quietlight/themes/quietlight-color-theme.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-quietlight/themes/quietlight-color-theme.json",
+    "sha256": "58f0c752c261d88f12a9dd7714c93e17ac715ede53220a15985630f34fc74626"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-defaults/themes/dark_vs.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-defaults/themes/dark_vs.json",
+    "sha256": "a2b2a99947e5e68e318d10942f969cd54d445cdaf93634e8246932745de4b62e"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-defaults/themes/dark_plus.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-defaults/themes/dark_plus.json",
+    "sha256": "409f33088a5cfd6589384900ef80627787c568d367c25b12f31bc7940936e573"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-defaults/themes/light_vs.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-defaults/themes/light_vs.json",
+    "sha256": "1c397d2d4fd7e15fbf6b9804cd2ac2e75c45506dfce097705bb76c53d71257b1"
+  },
+  {
+    "repository": "https://github.com/microsoft/vscode",
+    "revision": "a8f49160195d9e967d2d51e8544dc895207518e7",
+    "path": "extensions/theme-defaults/themes/light_plus.json",
+    "fixture": "tests/fixtures/upstream/vscode/extensions/theme-defaults/themes/light_plus.json",
+    "sha256": "26fbb053bec8ce2b65706d5fcb993da8c19174cfdbf35a49b465236b5ed26203"
+  },
+  {
+    "repository": "https://github.com/dracula/visual-studio-code",
+    "revision": "1b9ecf4d7e0c8cc2e2e890a7a41ad1db5fff1e6c",
+    "path": "src/dracula.yml",
+    "fixture": "tests/fixtures/upstream/dracula/src/dracula.yml",
+    "sha256": "c0b212b19bdaab789d56322783dd0ac32b43ee9a30ed5bd4d1e4b8a45dbe2c63"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/themes/dark.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/themes/dark.ts",
+    "sha256": "967c3f98b81b7dad1add35a2b46f48390c868971c14db28bd3e9c851d98f5eaa"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/vars/global_dark.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/vars/global_dark.ts",
+    "sha256": "4dbb3bf7bc1ac4ae28d9eb4a0991dc412dc0a5d84f62074bd5bc00417bfbb20a"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/vars/component_dark.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/vars/component_dark.ts",
+    "sha256": "733c2153772b7afbead2b398bd2c96fe6e5a3841a4d96a3ea621538e42399cb0"
+  },
+  {
+    "repository": "https://github.com/primer/github-vscode-theme",
+    "revision": "cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf",
+    "path": "src/colors.js",
+    "fixture": "tests/fixtures/upstream/github/src/colors.js",
+    "sha256": "d45100e84ee24fe488c56714f2ee59274f5332e73459d1b55bd0dc9c477ecfd9"
+  },
+  {
+    "repository": "https://github.com/primer/github-vscode-theme",
+    "revision": "cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf",
+    "path": "src/theme.js",
+    "fixture": "tests/fixtures/upstream/github/src/theme.js",
+    "sha256": "a1fa66e9bb4b8fcf5ca8d627e5462d91b7a0187ee0ce99243d358824dc7c7256"
+  },
+  {
+    "repository": "https://github.com/primer/github-vscode-theme",
+    "revision": "cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf",
+    "path": "package.json",
+    "fixture": "tests/fixtures/upstream/github/package.json",
+    "sha256": "60b15b3e62eba9d8e16ce2551d52277dfdd1fde47a4ac883caa0c0f0d5f2cd3d"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/themes/light.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/themes/light.ts",
+    "sha256": "c3e87ae9c59d9b32264d54e1f1233ebc71b9e37f75e7f0572e00b162b3f9b52f"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/vars/global_light.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/vars/global_light.ts",
+    "sha256": "e793de0988c2b98b70962a2aaa2edc98fb775363446c9f5c71b61baa16f339df"
+  },
+  {
+    "repository": "https://github.com/primer/primitives",
+    "revision": "f82864eb33c37f8624704bd996bc21b97d3c311b",
+    "path": "data/colors/vars/component_light.ts",
+    "fixture": "tests/fixtures/upstream/primer/data/colors/vars/component_light.ts",
+    "sha256": "6e3a7dc13dcfedd2dd709b3f7efcfe8818717a78967840ced7f9ac19ac2efcb5"
+  },
+  {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "revision": "9fc75e389cab8af1041095694549316c26e6df1f",
+    "path": "platform/platform-resources/src/DefaultColorSchemesManager.xml",
+    "fixture": "tests/fixtures/upstream/jetbrains/platform/platform-resources/src/DefaultColorSchemesManager.xml",
+    "sha256": "e8eef86e79a25de2ab827c6535280019c1428afe7ff4688af94a7a50e3c9ea08"
+  },
+  {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "revision": "9fc75e389cab8af1041095694549316c26e6df1f",
+    "path": "platform/platform-resources/src/themes/darcula.theme.json",
+    "fixture": "tests/fixtures/upstream/jetbrains/platform/platform-resources/src/themes/darcula.theme.json",
+    "sha256": "858efbd6afdb12f26b4757c4ff7b1bccb8bdefc286797fa6344769496b6c59cb"
+  },
+  {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "revision": "9fc75e389cab8af1041095694549316c26e6df1f",
+    "path": "platform/platform-resources/src/themes/expUI/expUI_darkScheme.xml",
+    "fixture": "tests/fixtures/upstream/jetbrains/platform/platform-resources/src/themes/expUI/expUI_darkScheme.xml",
+    "sha256": "dd8c12c5138b7fbd06c9251da5003ddf02d3d6392770d9b8ca8d169670dc7070"
+  },
+  {
+    "repository": "https://github.com/JetBrains/intellij-community",
+    "revision": "9fc75e389cab8af1041095694549316c26e6df1f",
+    "path": "platform/platform-resources/src/themes/expUI/expUI_dark.theme.json",
+    "fixture": "tests/fixtures/upstream/jetbrains/platform/platform-resources/src/themes/expUI/expUI_dark.theme.json",
+    "sha256": "aeb714d70acebca4b37a3c5e7926294bfcd22f33dd6658f05eec367c55c376d1"
+  },
+  {
+    "repository": "https://github.com/catppuccin/palette",
+    "revision": "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd",
+    "path": "palette.json",
+    "fixture": "tests/fixtures/upstream/catppuccin/palette.json",
+    "sha256": "4bc114bb6b3c9a9c9e156564aa84625aef32c5da514d9dd431cf1fcad433a05f"
+  },
+  {
+    "repository": "https://github.com/folke/tokyonight.nvim",
+    "revision": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+    "path": "lua/tokyonight/colors/storm.lua",
+    "fixture": "tests/fixtures/upstream/tokyo_night/lua/tokyonight/colors/storm.lua",
+    "sha256": "a96775b3b2bae3da751322806f7daaf2f8c9242cf4b52493732c62dc45c8894c"
+  },
+  {
+    "repository": "https://github.com/folke/tokyonight.nvim",
+    "revision": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+    "path": "lua/tokyonight/colors/night.lua",
+    "fixture": "tests/fixtures/upstream/tokyo_night/lua/tokyonight/colors/night.lua",
+    "sha256": "a8d87bf7aeb44617de4168d26fd9c1167bf3e7278acb0e155855caf6267b9c2d"
+  },
+  {
+    "repository": "https://github.com/folke/tokyonight.nvim",
+    "revision": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+    "path": "lua/tokyonight/colors/moon.lua",
+    "fixture": "tests/fixtures/upstream/tokyo_night/lua/tokyonight/colors/moon.lua",
+    "sha256": "16ea5a874f8833b0204da774153988e576a9d76ee1373e827f03d000c96483a5"
+  },
+  {
+    "repository": "https://github.com/folke/tokyonight.nvim",
+    "revision": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+    "path": "extras/lua/tokyonight_day.lua",
+    "fixture": "tests/fixtures/upstream/tokyo_night/extras/lua/tokyonight_day.lua",
+    "sha256": "32e64b3fa2788d66a5fe87e16d5b0ce58520227f4eccc5dc89572de606f59a2e"
+  },
+  {
+    "repository": "https://github.com/rose-pine/neovim",
+    "revision": "ff483051a47e27d84bdef47703538df1ed9f4a47",
+    "path": "lua/rose-pine/palette.lua",
+    "fixture": "tests/fixtures/upstream/rose_pine/lua/rose-pine/palette.lua",
+    "sha256": "b0b59c541255f25e3558aa7789dc7ff002ea4fd5b762f0ff341d349a077c914a"
+  },
+  {
+    "repository": "https://github.com/morhetz/gruvbox",
+    "revision": "5d15b2765f59754d7ac263c88a0f6e3e58124951",
+    "path": "colors/gruvbox.vim",
+    "fixture": "tests/fixtures/upstream/gruvbox/colors/gruvbox.vim",
+    "sha256": "55116926ba2b625837d9ae89349a5688d60d0b32acdbd8887e1c0d225f079c3d"
+  },
+  {
+    "repository": "https://github.com/sainnhe/everforest",
+    "revision": "85a86eb62409e3ec88713bff3d1b9d7374e112e4",
+    "path": "autoload/everforest.vim",
+    "fixture": "tests/fixtures/upstream/everforest/autoload/everforest.vim",
+    "sha256": "4ddab3c8d96e29310a21441a797e69a2c520ec074db9c20a7eaea866d8b5a8c4"
+  },
+  {
+    "repository": "https://github.com/rebelot/kanagawa.nvim",
+    "revision": "bb85e4bfc8d89b0e62c8fa53ccdd13d12e2f77b3",
+    "path": "lua/kanagawa/colors.lua",
+    "fixture": "tests/fixtures/upstream/kanagawa/lua/kanagawa/colors.lua",
+    "sha256": "bad6ccb01c34f16d38083c4df2ead9f03536de81d6ab5d95b1bdf4b0f8129240"
+  },
+  {
+    "repository": "https://github.com/rebelot/kanagawa.nvim",
+    "revision": "bb85e4bfc8d89b0e62c8fa53ccdd13d12e2f77b3",
+    "path": "lua/kanagawa/themes.lua",
+    "fixture": "tests/fixtures/upstream/kanagawa/lua/kanagawa/themes.lua",
+    "sha256": "da4cbc68ac2b25a1dcea325da3354396068bb007674c51fac5a9184f08a697cf"
+  }
+]

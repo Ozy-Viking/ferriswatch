@@ -1,0 +1,84 @@
+//! Base16 Ocean. See `REGISTRATION` for pinned upstream sources.
+//!
+//! Base16 background and foreground slots retain their hexadecimal names. Base0F marks critical; Base03 marks trace.
+
+define_palette! {
+    Ocean, "Base16 Ocean",
+    identity("base16/ocean", "base16", "Base16", "ocean", "Ocean", Dark, None);
+    sources: crate::palette::sources::BASE_16_OCEAN;
+    colors {
+        BASE_00 = crate::color::Color::hex(0x2b303b),
+        BASE_01 = crate::color::Color::hex(0x343d46),
+        BASE_02 = crate::color::Color::hex(0x4f5b66),
+        BASE_03 = crate::color::Color::hex(0x65737e),
+        BASE_04 = crate::color::Color::hex(0xa7adba),
+        BASE_05 = crate::color::Color::hex(0xc0c5ce),
+        BASE_06 = crate::color::Color::hex(0xdfe1e8),
+        BASE_07 = crate::color::Color::hex(0xeff1f5),
+        BASE_08 = crate::color::Color::hex(0xbf616a),
+        BASE_09 = crate::color::Color::hex(0xd08770),
+        BASE_0A = crate::color::Color::hex(0xebcb8b),
+        BASE_0B = crate::color::Color::hex(0xa3be8c),
+        BASE_0C = crate::color::Color::hex(0x96b5b4),
+        BASE_0D = crate::color::Color::hex(0x8fa1b3),
+        BASE_0E = crate::color::Color::hex(0xb48ead),
+        BASE_0F = crate::color::Color::hex(0xab7967),
+    }
+    accents {
+        Base08 = BASE_08 => ("base_08", "Base 08"),
+        Base09 = BASE_09 => ("base_09", "Base 09"),
+        Base0A = BASE_0A => ("base_0a", "Base 0A"),
+        Base0B = BASE_0B => ("base_0b", "Base 0B"),
+        Base0C = BASE_0C => ("base_0c", "Base 0C"),
+        Base0D = BASE_0D => ("base_0d", "Base 0D"),
+        Base0E = BASE_0E => ("base_0e", "Base 0E"),
+        Base0F = BASE_0F => ("base_0f", "Base 0F"),
+    }
+    default BASE_0D => "base_0d";
+    roles(primary) {
+        surface: crate::theme_variant::SurfaceColors {
+            background: Self::BASE_00,
+            surface: Self::BASE_01,
+            raised: Self::BASE_02,
+            overlay: Self::BASE_01,
+            hover: Self::BASE_02,
+        },
+        surface_alt: crate::theme_variant::SurfaceColors {
+            background: Self::BASE_01,
+            surface: Self::BASE_00,
+            raised: Self::BASE_01,
+            overlay: Self::BASE_01,
+            hover: Self::BASE_02,
+        },
+        text: crate::theme_variant::TextColors {
+            normal: Self::BASE_05,
+            muted: Self::BASE_04,
+            subtle: Self::BASE_03,
+            on_primary: crate::palette::action_text(primary),
+            on_secondary: crate::palette::action_text(Self::BASE_0E),
+        },
+        primary: crate::theme_variant::ActionColors {
+            normal: primary,
+            hover: crate::palette::primary_hover(primary),
+            pressed: crate::palette::action_pressed(primary),
+            muted: Self::BASE_01,
+        },
+        secondary: crate::theme_variant::ActionColors {
+            normal: Self::BASE_0E,
+            hover: crate::palette::primary_hover(Self::BASE_0E),
+            pressed: crate::palette::action_pressed(Self::BASE_0E),
+            muted: Self::BASE_01,
+        },
+        status: crate::theme_variant::StatusColors {
+            success: Self::BASE_0B,
+            warning: Self::BASE_0A,
+            error: Self::BASE_08,
+            critical: Self::BASE_0F,
+            info: Self::BASE_0D,
+            trace: Self::BASE_03,
+        },
+        border: Self::BASE_03,
+        border_muted: Self::BASE_01,
+        focus: primary,
+    }
+}

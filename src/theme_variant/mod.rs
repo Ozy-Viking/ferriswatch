@@ -1,3 +1,6 @@
+mod identity;
+pub use identity::{Appearance, Contrast, IdentityError, ResolvedAccent, ThemeMetadata};
+
 use crate::{
     color::Color,
     palette::{Accent, Palette},
@@ -61,42 +64,88 @@ pub struct StatusColors {
 /// Resolved semantic colours, independent of the factory's palette and accent types.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ThemeVariant {
-    name: String,
+    metadata: ThemeMetadata,
     colors: ThemeVariantColors,
-    accent: Option<Color>,
-    accent_name: Option<String>,
+    accent: Option<ResolvedAccent>,
 }
 
 impl ThemeVariant {
-    /// Builds a named variant with its explicitly selected accent, if any.
-    /// Semantic colours already include any palette fallback.
+    /// Creates a custom theme with a caller-supplied `custom/identifier`.
+    ///
+    /// # Errors
+    /// Rejects malformed custom IDs and empty display labels.
     pub fn new(
+        id: impl Into<String>,
         name: impl Into<String>,
+        appearance: Appearance,
         colors: ThemeVariantColors,
-        accent: Option<Color>,
-        accent_name: Option<String>,
-    ) -> Self {
-        Self {
-            name: name.into(),
+        accent: Option<ResolvedAccent>,
+    ) -> Result<Self, IdentityError> {
+        let id = id.into();
+        let variant = id
+            .strip_prefix("custom/")
+            .filter(|v| identity::valid_segment(v))
+            .ok_or(IdentityError::InvalidCustomId)?
+            .to_owned();
+        let name = name.into();
+        if name.trim().is_empty() {
+            return Err(IdentityError::EmptyName);
+        }
+        Ok(Self {
+            metadata: ThemeMetadata {
+                id: id.into(),
+                family_id: "custom".into(),
+                family_name: "Custom".into(),
+                variant_id: variant.into(),
+                variant_name: name.clone().into(),
+                name: name.into(),
+                appearance,
+                contrast: None,
+            },
             colors,
             accent,
-            accent_name,
+        })
+    }
+
+    pub(crate) fn from_palette(
+        metadata: &ThemeMetadata,
+        colors: ThemeVariantColors,
+        accent: Option<ResolvedAccent>,
+    ) -> Self {
+        Self {
+            metadata: metadata.clone(),
+            colors,
+            accent,
         }
     }
 
-    /// The display name supplied by the palette or custom theme.
+    /// Stable theme identity and display metadata.
+    pub const fn metadata(&self) -> &ThemeMetadata {
+        &self.metadata
+    }
+    /// Canonical ID for persistence.
+    pub fn id(&self) -> &str {
+        &self.metadata.id
+    }
+    /// Complete display label supplied by the palette or application.
     pub fn name(&self) -> &str {
-        &self.name
+        &self.metadata.name
     }
-
-    /// The explicit accent selection; `None` means palette defaults were used.
-    pub const fn accent(&self) -> Option<Color> {
-        self.accent
+    /// Explicit accent metadata, absent for `NoAccent`.
+    pub const fn selected_accent(&self) -> Option<&ResolvedAccent> {
+        self.accent.as_ref()
     }
-
-    /// Display name of the explicit accent, if one was supplied.
+    /// Explicit accent colour, including transparency.
+    pub fn accent(&self) -> Option<Color> {
+        self.accent.as_ref().map(ResolvedAccent::color)
+    }
+    /// Explicit accent's display label.
     pub fn accent_name(&self) -> Option<&str> {
-        self.accent_name.as_deref()
+        self.accent.as_ref().map(ResolvedAccent::name)
+    }
+    /// Explicit accent's persisted ID.
+    pub fn accent_id(&self) -> Option<&str> {
+        self.accent.as_ref().map(ResolvedAccent::id)
     }
 
     /// All resolved colour groups, including the alternate surfaces.
@@ -188,6 +237,10 @@ impl ThemeVariant {
 /// A palette that can produce a [`ThemeVariant`].
 pub trait ThemePalette: Palette {
     /// Semantic colors for this palette, with `A` as the accent.
+    ///
+    /// # Panics
+    /// Built-in implementations panic if a custom accent violates the
+    /// [`Accent`] metadata contract.
     fn variant<A>() -> ThemeVariant
     where
         A: Accent<Self>,

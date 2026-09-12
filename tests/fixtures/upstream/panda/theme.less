@@ -1,0 +1,123 @@
+/* Colors */
+@background: #292A2B;
+@foreground: #ff2c6d;
+
+@comment: #676B79;
+@error: #FF2C6D;
+@keyword: #FF75B5;
+
+@white: #f3f3f3;
+@light: #E6E6E6;
+
+@blue                  : #45A9F9;
+@light-blue            : #6FC1FF;
+@purple                : #B084EB;
+@green                 : #19f9d8;
+@red                   : #FF2C6D;
+
+@orange                : #FFB86C;
+@light-orange          : lighten(@orange, 8%);
+
+@pink                  : #FF75B5;
+@light-pink            : #FF9AC1;
+
+
+/* SWATCHES ---------------------------------------------------------------------- */
+.cm-builtin     { color: @blue; }
+.cm-def			{ color: @purple; }
+.cm-header      { color: @light; }
+.cm-meta		{ color: @light; }
+.cm-operator	{ color: @light-orange; }
+.cm-qualifier	{ color: @orange; }
+
+.cm-atom		{ color: @orange; }
+.cm-link		{ color: @orange; }
+.cm-number		{ color: @orange; }
+.cm-string      { color: @green; }
+.cm-string-2    { color: @orange; }
+
+.cm-variable    { color: @orange; }
+.cm-variable-2  { color: @pink; }
+.cm-variable-3  { color: @light-pink; }
+
+.cm-bracket		{ color: @light-orange; }
+.cm-tag			{ color: @red; }
+
+.cm-attribute   { color: @orange; }
+.cm-property    { color: @light; }
+
+.cm-comment     { color: @comment; }
+.cm-error       { color: @red; }
+.cm-keyword     { color: @pink; }
+
+/* MISC ---------------------------------------------------------------------- */
+
+.CodeMirror, .CodeMirror-scroll {
+    background-color: @background;
+    color: @white;
+}
+
+.CodeMirror-gutters {
+	background: @background;
+}
+
+.CodeMirror-linenumber {
+	color: @comment;
+}
+
+.CodeMirror-cursor {
+    border-left-color: white !important;
+}
+
+.CodeMirror-selected {
+    background: rgba(99, 123, 156, 0.25) !important;
+}
+
+/* Active Line */
+.CodeMirror-activeline-background {
+	background: @background !important;
+}
+
+.CodeMirror-focused .CodeMirror-activeline .CodeMirror-gutter-elt {
+	color: rgba(99, 123, 156, 0.12);
+	background-color: transparent !important;
+}
+
+/* Matching Brackets and Tags */
+.CodeMirror-matchingbracket {
+	color: @light !important;
+	background: transparent !important;
+	border-bottom: 1px dashed @green !important;
+}
+
+.CodeMirror-matchingtag {
+	background: transparent !important;
+	border-bottom: 1px solid @comment !important;
+}
+
+/* Search Match */
+.CodeMirror-searching {
+    background: rgba(99, 123, 156, 0.1) !important;
+    outline: 1px solid rgba(255,255,255,0.5);
+}
+
+.CodeMirror-searching.searching-current-match {
+    background-color: @light-orange !important;
+}
+.CodeMirror-searching.searching-last {
+	color: @light !important;
+}
+.CodeMirror-searching.searching-first {
+	color: @light !important;
+}
+
+/* Non-editor styling */
+
+#image-holder,
+#not-editor {
+    background-color: @background;
+}
+
+#image-holder {
+    color: @light;
+}

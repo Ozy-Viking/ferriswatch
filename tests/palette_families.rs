@@ -6,6 +6,7 @@ use ferriswatch::theme_variant::ThemePalette;
 struct Transparent;
 impl<P: Palette> Accent<P> for Transparent {
     const ACCENT: Option<Color> = Some(Color::TRANSPARENT);
+    const ID: Option<&'static str> = Some("transparent");
     const NAME: Option<&'static str> = Some("Transparent");
 }
 
@@ -23,7 +24,7 @@ macro_rules! check_variant {
             assert_eq!(default.accent_name(), None);
             assert_eq!(default.primary(), Color::hex($default));
             assert_eq!(default.focus(), default.primary());
-            let variants = [$(($ty::variant::<$accent>(), Color::hex($hex), stringify!($accent))),+];
+            let variants = [$(($ty::variant::<$accent>(), Color::hex($hex), <$accent as Accent<$ty>>::NAME.unwrap())),+];
             for (theme, colour, name) in variants {
                 assert_eq!(theme.name(), $name);
                 assert_eq!(theme.accent_name(), Some(name));
@@ -60,7 +61,7 @@ check_variant!(
     tokyo_night,
     night,
     Night,
-    "Tokyo Night Night",
+    "Tokyo Night",
     0x7aa2f7,
     0x1a1b26,
     0xc0caf5,
@@ -164,7 +165,7 @@ check_variant!(
     rose_pine,
     main,
     Main,
-    "Rosé Pine Main",
+    "Rosé Pine",
     0xc4a7e7,
     0x191724,
     0xe0def4,
@@ -608,7 +609,7 @@ fn families_can_share_runtime_theme_selection() {
     assert_eq!(
         names,
         [
-            "Tokyo Night Night",
+            "Tokyo Night",
             "Rosé Pine Dawn",
             "Gruvbox Dark Medium",
             "Kanagawa Dragon",

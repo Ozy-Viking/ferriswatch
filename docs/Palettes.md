@@ -1,119 +1,141 @@
 # Palette families
 
-All factories return `ThemeVariant`. Choose an accent type from the variant's
-module or use `NoAccent` for its default primary colour. `NoAccent` retains
-`None` for both accent colour and accent name. Explicit transparent accents
-remain transparent.
+Ferriswatch includes 64 concrete palettes across 28 families. All factories return
+`ThemeVariant`. The [generated catalogue](Catalogue.md) lists every stable theme ID,
+accent ID, default accent and pinned upstream source. [Source attribution](PaletteSources.md)
+links the retained upstream licenses.
+
+## Typed factories and runtime selection
 
 ```rust
-use ferriswatch::palette::{tokyo_night, rose_pine, gruvbox, kanagawa, everforest, NoAccent};
+use ferriswatch::palette::{kanagawa, everforest, NoAccent};
 use ferriswatch::theme_variant::ThemePalette;
+use ferriswatch::catalogue;
 
-let themes = [
-    tokyo_night::Night::variant::<tokyo_night::night::Blue>(),
-    rose_pine::Dawn::variant::<rose_pine::dawn::Iris>(),
-    gruvbox::DarkMedium::variant::<gruvbox::dark_medium::Orange>(),
-    kanagawa::Wave::variant::<kanagawa::wave::CrystalBlue>(),
-    everforest::LightMedium::variant::<everforest::light_medium::Green>(),
-];
-assert_eq!(themes[3].name(), "Kanagawa Wave");
-assert_eq!(themes[3].accent_name(), Some("CrystalBlue"));
-assert_eq!(rose_pine::Moon::variant::<NoAccent>().accent_name(), None);
+let typed = kanagawa::Wave::variant::<kanagawa::wave::CrystalBlue>();
+assert_eq!(typed.id(), "kanagawa/wave");
+assert_eq!(typed.accent_id(), Some("crystal_blue"));
+assert_eq!(typed.accent_name(), Some("Crystal Blue"));
+let selected = catalogue::resolve("kanagawa/wave", Some("crystal_blue"))?;
+assert_eq!(typed, selected);
+
+let default = everforest::LightSoft::variant::<NoAccent>();
+assert_eq!(default.id(), "everforest/light/soft");
+assert!(default.selected_accent().is_none());
+# Ok::<(), ferriswatch::catalogue::ResolveError>(())
 ```
 
-Types are re-exported from each family module. Constants use uppercase snake
-case, including numbered shades such as `BG_0`, `BLUE_2`, and `SUMI_INK_3`.
-Kanagawa exposes its shared raw colour palette on all three variant types.
-Accent names retain the Rust type spelling, such as `CrystalBlue`.
+Palette types are re-exported from their family modules. Single-variant families
+use `main::Main`. Typed accents remain local to each concrete palette module.
+Raw constants preserve source vocabulary, such as `SUMI_INK_3`, `NORD_0`,
+`BASE_0A`, and editor keys normalized to uppercase snake_case.
 
-## Variants and defaults
+`catalogue::PALETTES` is the single runtime registration list. Each entry owns its
+metadata, supported accents, default factory, raw colours and source references.
+`catalogue::get(id)` exposes that entry for menus and discovery;
+`catalogue::resolve(id, accent_id)` creates the selected theme. Unknown theme IDs,
+unsupported contrasts and unknown accents return distinct typed errors.
+An empty accent ID is an error. Omit the accent ID to choose `NoAccent`.
 
-| Module | Type | Default accent |
-| --- | --- | --- |
-| `tokyo_night::night` | `Night` | Blue |
-| `tokyo_night::storm` | `Storm` | Blue |
-| `tokyo_night::moon` | `Moon` | Blue |
-| `tokyo_night::day` | `Day` | Blue |
-| `rose_pine::main` | `Main` | Iris |
-| `rose_pine::moon` | `Moon` | Iris |
-| `rose_pine::dawn` | `Dawn` | Iris |
-| `gruvbox::dark_hard` | `DarkHard` | Orange |
-| `gruvbox::dark_medium` | `DarkMedium` | Orange |
-| `gruvbox::dark_soft` | `DarkSoft` | Orange |
-| `gruvbox::light_hard` | `LightHard` | Orange |
-| `gruvbox::light_medium` | `LightMedium` | Orange |
-| `gruvbox::light_soft` | `LightSoft` | Orange |
-| `kanagawa::wave` | `Wave` | CrystalBlue |
-| `kanagawa::dragon` | `Dragon` | DragonBlue2 |
-| `kanagawa::lotus` | `Lotus` | LotusBlue4 |
-| `everforest::dark_hard` | `DarkHard` | Green |
-| `everforest::light_hard` | `LightHard` | Green |
-| `everforest::dark_medium` | `DarkMedium` | Green |
-| `everforest::light_medium` | `LightMedium` | Green |
-| `everforest::dark_soft` | `DarkSoft` | Green |
-| `everforest::light_soft` | `LightSoft` | Green |
+## Identity
 
-## Colour sources
+Persist `family/variant[/contrast]` plus an optional accent ID. Gruvbox and
+Everforest always include contrast, including `medium`. Appearance is independent
+metadata: Ayu Mirage is variant `mirage` with dark appearance. Display labels never
+act as identifiers. `ThemeVariant::name()` returns the full label; `metadata()`
+provides family, variant, appearance and contrast separately.
 
-Ferriswatch stores literal colours from the following upstream definitions, so
-builds do not fetch palettes or depend on editor plugins.
-
-- Tokyo Night uses [Storm](https://github.com/folke/tokyonight.nvim/blob/main/lua/tokyonight/colors/storm.lua), [Night overrides](https://github.com/folke/tokyonight.nvim/blob/main/lua/tokyonight/colors/night.lua), [Moon](https://github.com/folke/tokyonight.nvim/blob/main/lua/tokyonight/colors/moon.lua), and the [generated Day palette](https://github.com/folke/tokyonight.nvim/blob/main/extras/lua/tokyonight_day.lua). Day's values already include upstream's colour inversion.
-- Rosé Pine uses its [Neovim palette](https://github.com/rose-pine/neovim/blob/main/lua/rose-pine/palette.lua), including the Leaf accent.
-- Gruvbox uses the [original palette and mode mappings](https://github.com/morhetz/gruvbox/blob/master/colors/gruvbox.vim). Dark uses bright accents and light uses faded accents. Medium is the default background contrast; hard and soft change `BG_0`.
-- Kanagawa uses its [raw palette](https://github.com/rebelot/kanagawa.nvim/blob/master/lua/kanagawa/colors.lua) and [theme roles](https://github.com/rebelot/kanagawa.nvim/blob/master/lua/kanagawa/themes.lua).
-- Everforest combines the [contrast backgrounds and dark/light foregrounds](https://github.com/sainnhe/everforest/blob/master/autoload/everforest.vim).
-
-## Semantic mappings
-
-Raw colours come from upstream. The selection of defaults and assignment to
-Ferriswatch's semantic roles are library policy, rather than an exact reproduction
-of every editor highlight. Each variant's `roles` block records the mapping.
-
-Primary and focus use the selected accent. Hover scales linear RGB by 0.85 and
-preserves alpha, consistently with Catppuccin. Status colours stay fixed when
-switching accents. Kanagawa uses upstream diagnostic colours for success,
-warning, error, and info. Rosé Pine uses Leaf, Gold, Love, and Foam for those roles.
-
-No contrast ratio is implied by a role name; applications still need to choose
-foreground/background pairings appropriate to their controls.
+`selected_accent()` returns one optional `ResolvedAccent`, keeping its stable ID,
+display label and colour together. `accent()`, `accent_name()` and `accent_id()`
+remain convenience accessors. Explicit transparent accents retain all metadata;
+`NoAccent` has none, while using the documented palette-default semantic colours.
+Custom `Accent<P>` implementations must provide `ACCENT`, `ID` and `NAME` together,
+or make all three absent. Factories reject inconsistent implementations by panicking.
 
 ## Resolved colour groups
 
-`ThemeVariantColors` contains concrete `Color` values grouped into `surface`,
-`surface_alt`, `text`, `primary`, `secondary`, and `status`, alongside `border`,
-`border_muted`, and `focus`. `surface` and `surface_alt` are independent
-`SurfaceColors` values, each containing `background`, `surface`, `raised`,
-`overlay`, and `hover`. There are no alternate fields inside `SurfaceColors`.
+`ThemeVariantColors` stores concrete values throughout:
 
-`TextColors` contains `normal`, `muted`, `subtle`, `on_primary`, and
-`on_secondary`. `ActionColors` contains `normal`, `hover`, `pressed`, and `muted`.
-`StatusColors` contains `success`, `warning`, `error`, `critical`, `info`, and
-`trace`, with no alternates.
+| Group | Fields |
+| --- | --- |
+| `surface`, `surface_alt` | `background`, `surface`, `raised`, `overlay`, `hover` |
+| `text` | `normal`, `muted`, `subtle`, `on_primary`, `on_secondary` |
+| `primary`, `secondary` | `normal`, `hover`, `pressed`, `muted` |
+| `status` | `success`, `warning`, `error`, `critical`, `info`, `trace` |
+| Ungrouped | `border`, `border_muted`, `focus` |
+
+The two surface groups are independent. Placement does not imply brightness order.
+Factories supply every colour; simple palettes deliberately repeat source colours.
+There is no optional-colour fallback during rendering, and transparency is never
+replaced with a default. Existing convenience getters expose the normal groups;
+`colors()` exposes every field.
+
+Primary and focus use the selected accent. Derived hover scales linear RGB by
+0.85, and pressed scales it by 0.70, preserving alpha. Secondary states use explicit
+upstream interaction colours where mapped, including JetBrains controls.
+Foreground selection chooses the black or white colour with the best minimum
+contrast over the derived normal/hover/pressed range. A fixed secondary action
+keeps its foreground when only the primary accent changes.
+
+This is a mapping policy, not a claim that every role can be used as small text on
+every background. The [mapping review](PaletteValidation.md) records repeated
+assignments, source-specific decisions and measured limitations. Rendering an
+application with transparent fills requires checking its actual composited canvas.
+
+## Custom themes
+
+Custom themes require a stable, caller-supplied `custom/identifier`. Labels may be
+owned strings loaded at runtime. They need not be registry entries.
 
 ```rust
-use ferriswatch::palette::catppuccin::mocha::{Mocha, Mauve};
-use ferriswatch::theme_variant::{ThemePalette, ThemeVariant};
+use ferriswatch::{catalogue, color::Color};
+use ferriswatch::theme_variant::{ThemeVariant, ResolvedAccent};
 
-let theme = Mocha::variant::<Mauve>();
-let mut colors = *theme.colors();
-colors.surface_alt.background = Mocha::MANTLE;
-colors.surface_alt.raised = Mocha::SURFACE_2;
-colors.status.critical = Mocha::MAROON;
-let custom = ThemeVariant::new("Custom Mocha", colors, theme.accent(),
-    theme.accent_name().map(str::to_owned));
-assert_eq!(custom.colors().surface_alt.background, Mocha::MANTLE);
-assert_eq!(custom.background(), Mocha::BASE);
+let original = catalogue::resolve("catppuccin/mocha", None)?;
+let mut colors = *original.colors();
+colors.surface_alt.background = Color::TRANSPARENT;
+let accent = ResolvedAccent::new("clear", "Clear", Color::TRANSPARENT)?;
+let custom = ThemeVariant::new(
+    "custom/my_workspace", "My workspace", original.metadata().appearance,
+    colors, Some(accent),
+)?;
+assert_eq!(custom.colors().surface, original.colors().surface);
+assert_eq!(custom.colors().surface_alt.background, Color::TRANSPARENT);
+assert_eq!(custom.accent_id(), Some("clear"));
+# Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-Initial built-in mappings repeat the normal surfaces in `surface_alt`, use the
-existing surface hover for `raised`, use `error` for `critical`, and subtle text
-for `trace`. Pressed actions repeat their normal colour; secondary muted repeats
-secondary normal. These are explicit assignments that each palette can change.
-Existing getters still return their original roles; `colors()` exposes all groups.
+## Migration
 
-Factories select black or white action text using the action's linear RGB
-luminance. Transparent fills depend on the final composited background, so those
-foreground choices must be reviewed in the application. Colour fields never use
-`None` or resolve fallbacks during rendering. Optional accent metadata still
-represents whether an accent was explicitly selected.
+The incomplete `ThemeName` enum has been removed. Use stable catalogue IDs and
+`ThemeMetadata`; `theme` re-exports the new lookup and identity API. No persisted
+legacy ID format was present in this repository, so no guessed aliases are added.
+
+`ThemeVariant::new` now accepts an explicit custom ID, name, appearance, colours,
+and optional `ResolvedAccent`, and returns a `Result`. Typed built-in factory paths
+are unchanged. The display labels `Tokyo Night Night`, `Rosé Pine Main`, and joined
+accent labels such as `CrystalBlue` become `Tokyo Night`, `Rosé Pine`, and
+`Crystal Blue`. Persist IDs rather than these labels.
+
+## Verification and visual inspection
+
+```sh
+cargo test --locked
+cargo test --locked --doc
+cargo clippy --locked --all-targets
+cargo doc --locked --no-deps
+cargo run --locked --example catalogue -- docs > docs/Catalogue.md
+cargo run --locked --example catalogue -- html > target/palette-inspector.html
+cargo run --locked --example catalogue -- contrast > target/palette-contrast.tsv
+python tools/check_palette_sources.py
+```
+
+Open the standalone inspector in a browser to compare all palettes or search for
+one family. Its accent menus are generated from registrations. The TSV reports
+text tiers over both surface groups, action foregrounds over normal/hover/pressed
+fills, and all status colours over the canvas, for every registered accent and
+`NoAccent`. It composites alpha in sRGB before measuring relative luminance.
+
+Pinned source snapshots and independently imported expected literals live under
+`tests/fixtures`. Source code, snapshots and fixtures are checked in together.
+Normal builds and tests do not fetch upstream resources.

@@ -1,0 +1,7 @@
+</main><script>
+const themes=[...document.querySelectorAll('.theme')];
+const search=document.getElementById('search');
+function filter(){let count=0;for(const el of themes){const matches=(el.dataset.id+' '+el.querySelector('h2').textContent).toLowerCase().includes(search.value.toLowerCase());el.hidden=!matches;if(matches)count++;}document.getElementById('count').textContent=count+' of '+themes.length+' palettes';}
+search.addEventListener('input',filter);filter();
+for(const el of themes){el.querySelector('select').addEventListener('change',event=>{el.style.cssText=event.target.selectedOptions[0].dataset.css;});}
+</script></html>

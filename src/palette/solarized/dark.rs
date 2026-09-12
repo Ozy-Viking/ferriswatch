@@ -1,0 +1,84 @@
+//! Solarized Dark. See `REGISTRATION` for pinned upstream sources.
+//!
+//! The two neutral background steps repeat for raised content and hover. Solarized has no separate critical hue; critical repeats red.
+
+define_palette! {
+    Dark, "Solarized Dark",
+    identity("solarized/dark", "solarized", "Solarized", "dark", "Dark", Dark, None);
+    sources: crate::palette::sources::SOLARIZED_DARK;
+    colors {
+        BASE_03 = crate::color::Color::hex(0x002b36),
+        BASE_02 = crate::color::Color::hex(0x073642),
+        BASE_01 = crate::color::Color::hex(0x586e75),
+        BASE_00 = crate::color::Color::hex(0x657b83),
+        BASE_0 = crate::color::Color::hex(0x839496),
+        BASE_1 = crate::color::Color::hex(0x93a1a1),
+        BASE_2 = crate::color::Color::hex(0xeee8d5),
+        BASE_3 = crate::color::Color::hex(0xfdf6e3),
+        YELLOW = crate::color::Color::hex(0xb58900),
+        ORANGE = crate::color::Color::hex(0xcb4b16),
+        RED = crate::color::Color::hex(0xdc322f),
+        MAGENTA = crate::color::Color::hex(0xd33682),
+        VIOLET = crate::color::Color::hex(0x6c71c4),
+        BLUE = crate::color::Color::hex(0x268bd2),
+        CYAN = crate::color::Color::hex(0x2aa198),
+        GREEN = crate::color::Color::hex(0x859900),
+    }
+    accents {
+        Yellow = YELLOW => ("yellow", "Yellow"),
+        Orange = ORANGE => ("orange", "Orange"),
+        Red = RED => ("red", "Red"),
+        Magenta = MAGENTA => ("magenta", "Magenta"),
+        Violet = VIOLET => ("violet", "Violet"),
+        Blue = BLUE => ("blue", "Blue"),
+        Cyan = CYAN => ("cyan", "Cyan"),
+        Green = GREEN => ("green", "Green"),
+    }
+    default BLUE => "blue";
+    roles(primary) {
+        surface: crate::theme_variant::SurfaceColors {
+            background: Self::BASE_03,
+            surface: Self::BASE_02,
+            raised: Self::BASE_02,
+            overlay: Self::BASE_02,
+            hover: Self::BASE_02,
+        },
+        surface_alt: crate::theme_variant::SurfaceColors {
+            background: Self::BASE_02,
+            surface: Self::BASE_03,
+            raised: Self::BASE_02,
+            overlay: Self::BASE_02,
+            hover: Self::BASE_02,
+        },
+        text: crate::theme_variant::TextColors {
+            normal: Self::BASE_0,
+            muted: Self::BASE_1,
+            subtle: Self::BASE_01,
+            on_primary: crate::palette::action_text(primary),
+            on_secondary: crate::palette::action_text(Self::CYAN),
+        },
+        primary: crate::theme_variant::ActionColors {
+            normal: primary,
+            hover: crate::palette::primary_hover(primary),
+            pressed: crate::palette::action_pressed(primary),
+            muted: Self::BASE_02,
+        },
+        secondary: crate::theme_variant::ActionColors {
+            normal: Self::CYAN,
+            hover: crate::palette::primary_hover(Self::CYAN),
+            pressed: crate::palette::action_pressed(Self::CYAN),
+            muted: Self::BASE_02,
+        },
+        status: crate::theme_variant::StatusColors {
+            success: Self::GREEN,
+            warning: Self::YELLOW,
+            error: Self::RED,
+            critical: Self::RED,
+            info: Self::BLUE,
+            trace: Self::BASE_01,
+        },
+        border: Self::BASE_01,
+        border_muted: Self::BASE_02,
+        focus: primary,
+    }
+}

@@ -76,6 +76,7 @@ fn transparent_accent_is_preserved_without_defaulting() {
     struct Transparent;
     impl Accent<Mocha> for Transparent {
         const ACCENT: Option<Color> = Some(Color::TRANSPARENT);
+        const ID: Option<&'static str> = Some("transparent");
         const NAME: Option<&'static str> = Some("Transparent");
     }
     let theme = Mocha::variant::<Transparent>();
@@ -134,7 +135,14 @@ fn alternate_surfaces_and_statuses_are_independent_concrete_values() {
     };
     colors.status.critical = Mocha::MAROON;
     colors.status.trace = Mocha::OVERLAY_2;
-    let theme = ThemeVariant::new("Custom", colors, None, None);
+    let theme = ThemeVariant::new(
+        "custom/test",
+        "Custom",
+        original.metadata().appearance,
+        colors,
+        None,
+    )
+    .unwrap();
     assert_eq!(theme.colors().surface, original.colors().surface);
     assert_eq!(theme.colors().surface_alt.background, Color::TRANSPARENT);
     assert_eq!(theme.colors().surface_alt.surface, Mocha::MANTLE);
@@ -151,11 +159,13 @@ fn action_foregrounds_follow_explicit_accent_colours() {
     struct Black;
     impl Accent<Mocha> for Black {
         const ACCENT: Option<Color> = Some(Color::hex(0x000000));
+        const ID: Option<&'static str> = Some("black");
         const NAME: Option<&'static str> = Some("Black");
     }
     struct White;
     impl Accent<Mocha> for White {
         const ACCENT: Option<Color> = Some(Color::hex(0xffffff));
+        const ID: Option<&'static str> = Some("white");
         const NAME: Option<&'static str> = Some("White");
     }
     let dark = Mocha::variant::<Black>();
@@ -168,4 +178,18 @@ fn action_foregrounds_follow_explicit_accent_colours() {
         dark.colors().text.on_secondary,
         light.colors().text.on_secondary
     );
+}
+
+#[test]
+fn action_text_uses_linear_channels_without_decoding_srgb_twice() {
+    struct MidGray;
+    impl Accent<Mocha> for MidGray {
+        const ACCENT: Option<Color> = Some(Color::hex(0x808080));
+        const ID: Option<&'static str> = Some("mid_gray");
+        const NAME: Option<&'static str> = Some("Mid Gray");
+    }
+    // sRGB 128 has linear luminance about 0.21586. With a 30% darker pressed
+    // fill, black's worst contrast is about 4.022, versus white's 3.949.
+    let theme = Mocha::variant::<MidGray>();
+    assert_eq!(theme.colors().text.on_primary, Color::hex(0));
 }
