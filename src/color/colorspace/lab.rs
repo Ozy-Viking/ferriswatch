@@ -1,16 +1,48 @@
+use crate::color::{ColorChannel, channel::color_channel};
+
 /// A CIELAB color expressed as lightness and two opponent axes.
 ///
-/// Coordinates require a reference white, which this struct does not encode.
+/// Conversions use the D50 reference white, matching CSS Lab.
 /// The opponent axes have no fixed mathematical bounds; the ranges below
 /// are nominal reference ranges, not gamut limits.
-/// Expected ranges describe the color model; public fields do not validate or clamp values.
+/// Use `new` to configure channel names and bounds. Values are not automatically clamped.
 /// Use finite channel values.
+///
+/// `Display` writes CSS `lab(...)` with three decimal places by default;
+/// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
+/// CSS output interprets these coordinates relative to D50.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Lab {
     /// Lightness, nominally `0.0..=100.0`, from black to reference white.
-    pub l: f32,
+    pub l: ColorChannel,
     /// Green-negative/red-positive axis, nominally `-125.0..=125.0`.
-    pub a: f32,
+    pub a: ColorChannel,
     /// Blue-negative/yellow-positive axis, nominally `-125.0..=125.0`.
-    pub b: f32,
+    pub b: ColorChannel,
 }
+
+impl Lab {
+    /// Creates channels with this color space's bounds, without validating or clamping values.
+    pub fn new(l: f32, a: f32, b: f32) -> Self {
+        Self {
+            l: color_channel("l", l, 0.0..=100.0),
+            a: color_channel("a", a, ..),
+            b: color_channel("b", b, ..),
+        }
+    }
+}
+
+crate::color::formatting::impl_display!(
+    Lab, "lab(", |color| [
+        *color.l => "",
+        *color.a => "",
+        *color.b => ""
+    ]
+);
+
+crate::color::conversions::impl_colorspace!(
+    Lab,
+    [l, a, b],
+    crate::color::perceptual_conversion::lab_to_linear,
+    crate::color::perceptual_conversion::linear_to_lab
+);

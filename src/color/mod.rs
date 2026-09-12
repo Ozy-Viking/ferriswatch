@@ -1,3 +1,15 @@
+mod channel;
+pub use channel::{
+    AdjacentValue, Channel, ChannelBuilder, ChannelError, ColorChannel, RangeErrorReason,
+    WrappingRangeErrorReason, WrappingValue,
+};
+mod conversions;
+mod cylindrical_conversion;
+mod formatting;
+mod matrices;
+mod perceptual_conversion;
+mod rgb_conversion;
+
 pub mod colorspace;
 pub use colorspace::*;
 mod alpha;
@@ -44,6 +56,8 @@ pub enum ColorError {
     InvalidColorChannel(&'static str, f32),
     #[error("color channel out of sRGB gamut: {0}={1}")]
     OutOfSrgbGamut(&'static str, f32),
+    #[error("{0}")]
+    ChannelError(#[from] ChannelError),
 }
 
 impl PartialEq for ColorError {
@@ -85,6 +99,10 @@ fn floats_eq(a: &f32, b: &f32) -> bool {
     }
 }
 
+/// Applies the bounds of each channel, wrapping circular values with modulo.
+///
+/// Hue wraps into `0.0..360.0`; unbounded channels are left unchanged.
+/// This operation does not validate values or perform perceptual gamut mapping.
 pub trait Clamp {
     fn clamp(self) -> Self;
 }
@@ -114,8 +132,6 @@ where
 {
     fn clamped_from(value: T) -> ColorResult<Self> {
         let linear = value.try_into_linear_srgb_raw()?;
-        let color = U::try_from_linear_srgb_raw(linear)?;
-
-        Ok(color.clamp())
+        U::try_from_linear_srgb_clamped(linear)
     }
 }
