@@ -1,0 +1,90 @@
+//! Everforest Light Soft. See the family module for its upstream source.
+
+define_palette! {
+    LightSoft, "Everforest Light Soft",
+    colors {
+        BG_DIM = 0xe5dfc5,
+        BG_0 = 0xf3ead3,
+        BG_1 = 0xeae4ca,
+        BG_2 = 0xe5dfc5,
+        BG_3 = 0xddd8be,
+        BG_4 = 0xd8d3ba,
+        BG_5 = 0xb9c0ab,
+        BG_VISUAL = 0xe1e4bd,
+        BG_RED = 0xfadbd0,
+        BG_YELLOW = 0xf1e4c5,
+        BG_GREEN = 0xe5e6c5,
+        BG_BLUE = 0xe1e7dd,
+        BG_PURPLE = 0xf1ddd4,
+        FG = 0x5c6a72,
+        RED = 0xf85552,
+        ORANGE = 0xf57d26,
+        YELLOW = 0xdfa000,
+        GREEN = 0x8da101,
+        AQUA = 0x35a77c,
+        BLUE = 0x3a94c5,
+        PURPLE = 0xdf69ba,
+        GREY_0 = 0xa6b0a0,
+        GREY_1 = 0x939f91,
+        GREY_2 = 0x829181,
+        STATUSLINE_1 = 0x93b259,
+        STATUSLINE_2 = 0x708089,
+        STATUSLINE_3 = 0xe66868,
+    }
+    accents {
+        Red = RED,
+        Orange = ORANGE,
+        Yellow = YELLOW,
+        Green = GREEN,
+        Aqua = AQUA,
+        Blue = BLUE,
+        Purple = PURPLE,
+    }
+    default GREEN;
+    roles(primary) {
+        surface: crate::theme_variant::SurfaceColors {
+            background: Self::BG_0,
+            surface: Self::BG_1,
+            raised: Self::BG_2,
+            overlay: Self::BG_DIM,
+            hover: Self::BG_2,
+        },
+        surface_alt: crate::theme_variant::SurfaceColors {
+            background: Self::BG_0,
+            surface: Self::BG_1,
+            raised: Self::BG_2,
+            overlay: Self::BG_DIM,
+            hover: Self::BG_2,
+        },
+        text: crate::theme_variant::TextColors {
+            normal: Self::FG,
+            muted: Self::GREY_2,
+            subtle: Self::GREY_0,
+            on_primary: crate::palette::action_text(primary),
+            on_secondary: crate::palette::action_text(Self::BLUE),
+        },
+        primary: crate::theme_variant::ActionColors {
+            normal: primary,
+            hover: crate::palette::primary_hover(primary),
+            pressed: primary,
+            muted: Self::BG_2,
+        },
+        secondary: crate::theme_variant::ActionColors {
+            normal: Self::BLUE,
+            hover: crate::palette::primary_hover(Self::BLUE),
+            pressed: Self::BLUE,
+            muted: Self::BLUE,
+        },
+        status: crate::theme_variant::StatusColors {
+            success: Self::GREEN,
+            warning: Self::YELLOW,
+            error: Self::RED,
+            critical: Self::RED,
+            info: Self::BLUE,
+            trace: Self::GREY_0,
+        },
+        border: Self::BG_4,
+        border_muted: Self::BG_3,
+        focus: primary,
+    }
+}

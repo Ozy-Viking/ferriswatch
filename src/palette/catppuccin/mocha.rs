@@ -1,5 +1,9 @@
 use crate::color::Color;
+use crate::palette::{Accent, Palette};
+use crate::theme_variant::{ThemePalette, ThemeVariant, ThemeVariantColors};
 
+/// Catppuccin Mocha palette.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct Mocha;
 
 impl Mocha {
@@ -17,20 +21,18 @@ impl Mocha {
     pub const SAPPHIRE: Color = Color::hex(0x74c7ec);
     pub const BLUE: Color = Color::hex(0x89b4fa);
     pub const LAVENDER: Color = Color::hex(0xb4befe);
-
     pub const TEXT: Color = Color::hex(0xcdd6f4);
     pub const SUBTEXT_1: Color = Color::hex(0xbac2de);
     pub const SUBTEXT_0: Color = Color::hex(0xa6adc8);
-
     pub const OVERLAY_2: Color = Color::hex(0x9399b2);
     pub const OVERLAY_1: Color = Color::hex(0x7f849c);
     pub const OVERLAY_0: Color = Color::hex(0x6c7086);
-
     pub const SURFACE_2: Color = Color::hex(0x585b70);
     pub const SURFACE_1: Color = Color::hex(0x45475a);
     pub const SURFACE_0: Color = Color::hex(0x313244);
-
     pub const BASE: Color = Color::hex(0x1e1e2e);
     pub const MANTLE: Color = Color::hex(0x181825);
     pub const CRUST: Color = Color::hex(0x11111b);
 }
+
+catppuccin_variant!(Mocha, "Catppuccin Mocha");

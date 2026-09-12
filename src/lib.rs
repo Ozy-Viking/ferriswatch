@@ -1,5 +1,5 @@
 pub mod color;
 pub mod error;
-pub mod pallet;
+pub mod palette;
 pub mod theme;
 pub mod theme_variant;
