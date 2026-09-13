@@ -4,6 +4,8 @@
 
 pub mod catalogue;
 pub mod color;
+#[cfg(feature = "dioxus")]
+pub mod dioxus;
 pub mod error;
 pub mod palette;
 pub mod theme;
