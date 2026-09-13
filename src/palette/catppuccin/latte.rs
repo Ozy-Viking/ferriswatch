@@ -3,7 +3,7 @@
 define_palette! {
     Latte, "Catppuccin Latte",
     identity("catppuccin/latte", "catppuccin", "Catppuccin", "latte", "Latte", Light, None);
-    sources: crate::palette::sources::CATPPUCCIN;
+    sources: super::SOURCE;
     colors {
         ROSEWATER = crate::color::Color::hex(0xdc8a78),
         FLAMINGO = crate::color::Color::hex(0xdd7878),

@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Quiet Light",
     identity("quiet_light/main", "quiet_light", "Quiet Light", "main", "Main", Light, None);
-    sources: crate::palette::sources::QUIET_LIGHT_MAIN;
+    sources: super::SOURCE;
     colors {
         FOCUS_BORDER = crate::color::Color::hex(0x9769dc),
         AGENTS_BACKGROUND = crate::color::Color::hex(0xededf5),

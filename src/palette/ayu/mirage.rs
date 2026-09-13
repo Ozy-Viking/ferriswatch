@@ -5,7 +5,7 @@
 define_palette! {
     Mirage, "Ayu Mirage",
     identity("ayu/mirage", "ayu", "Ayu", "mirage", "Mirage", Dark, None);
-    sources: crate::palette::sources::AYU_MIRAGE;
+    sources: super::SOURCE_MIRAGE;
     colors {
         COMMON_ACCENT = crate::color::Color::hex(0xffcc66),
         COMMON_BG = crate::color::Color::hex(0x212733),

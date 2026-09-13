@@ -5,7 +5,7 @@
 define_palette! {
     Dark, "JetBrains Dark",
     identity("jetbrains/dark", "jetbrains", "JetBrains", "dark", "Dark", Dark, None);
-    sources: crate::palette::sources::JETBRAINS_DARK;
+    sources: super::SOURCE_DARK;
     colors {
         EDITOR_SELECTION_BACKGROUND = crate::color::Color::hex(0x214283),
         EDITOR_SELECTION_BACKGROUND_INACTIVE = crate::color::Color::hex(0x4c4f56),

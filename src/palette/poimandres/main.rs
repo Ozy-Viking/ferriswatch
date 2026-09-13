@@ -6,7 +6,7 @@
 define_palette! {
     Main, "Poimandres",
     identity("poimandres/main", "poimandres", "Poimandres", "main", "Main", Dark, None);
-    sources: crate::palette::sources::POIMANDRES_MAIN;
+    sources: super::SOURCE;
     colors {
         ACTIVITY_BAR_BACKGROUND = crate::color::Color::hex(0x1b1e28),
         ACTIVITY_BAR_FOREGROUND = crate::color::Color::hex(0xa6accd),

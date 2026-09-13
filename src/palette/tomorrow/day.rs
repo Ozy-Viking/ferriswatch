@@ -5,7 +5,7 @@
 define_palette! {
     Day, "Tomorrow",
     identity("tomorrow/day", "tomorrow", "Tomorrow", "day", "Day", Light, None);
-    sources: crate::palette::sources::TOMORROW_DAY;
+    sources: super::SOURCE_DAY;
     colors {
         DEFAULT_BACKGROUND = crate::color::Color::hex(0xffffff),
         DEFAULT_CARET = crate::color::Color::hex(0xaeafad),

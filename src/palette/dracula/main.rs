@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Dracula",
     identity("dracula/main", "dracula", "Dracula", "main", "Main", Dark, None);
-    sources: crate::palette::sources::DRACULA_MAIN;
+    sources: super::SOURCE;
     colors {
         BG = crate::color::Color::hex(0x282a36),
         FG = crate::color::Color::hex(0xf8f8f2),

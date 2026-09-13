@@ -6,7 +6,7 @@
 define_palette! {
     Main, "Horizon",
     identity("horizon/main", "horizon", "Horizon", "main", "Main", Dark, None);
-    sources: crate::palette::sources::HORIZON_MAIN;
+    sources: super::SOURCE;
     colors {
         FOCUS_BORDER = crate::color::Color::hex(0x1a1c23),
         FOREGROUND = crate::color::Color::hex(0xd5d8da),

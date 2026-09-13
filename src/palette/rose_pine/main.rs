@@ -3,7 +3,7 @@
 define_palette! {
     Main, "Rosé Pine",
     identity("rose_pine/main", "rose_pine", "Rosé Pine", "main", "Main", Dark, None);
-    sources: crate::palette::sources::ROSE_PINE;
+    sources: super::SOURCE;
     colors {
         NC = crate::color::Color::hex(0x16141f),
         BASE = crate::color::Color::hex(0x191724),

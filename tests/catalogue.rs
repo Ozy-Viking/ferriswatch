@@ -314,6 +314,7 @@ fn source_permalinks_encode_path_characters_without_losing_directories() {
         repository: "https://github.com/example/palettes",
         revision: "0123456789abcdef0123456789abcdef01234567",
         path: "themes/Rosé Pine #1.json",
+        licence: None,
     };
     assert_eq!(
         source.permalink(),

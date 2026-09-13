@@ -5,7 +5,7 @@
 define_palette! {
     Carbonfox, "Carbonfox",
     identity("nightfox/carbonfox", "nightfox", "Nightfox", "carbonfox", "Carbonfox", Dark, None);
-    sources: crate::palette::sources::NIGHTFOX_CARBONFOX;
+    sources: super::SOURCE_CARBONFOX;
     colors {
         BLACK = crate::color::Color::hex(0x282828),
         RED = crate::color::Color::hex(0xee5396),

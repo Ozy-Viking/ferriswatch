@@ -5,7 +5,7 @@
 define_palette! {
     Light, "One Light",
     identity("one/light", "one", "One", "light", "Light", Light, None);
-    sources: crate::palette::sources::ONE_LIGHT;
+    sources: super::SOURCE_LIGHT;
     colors {
         MONO_1 = crate::color::Color::hex(0x383a42),
         MONO_2 = crate::color::Color::hex(0x696c77),

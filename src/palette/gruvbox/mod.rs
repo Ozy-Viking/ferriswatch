@@ -1,6 +1,8 @@
 //! Palettes sourced from <https://github.com/morhetz/gruvbox>.
 //! Semantic roles and default accents are Ferriswatch mappings.
 
+use crate::catalogue::PaletteSource;
+
 pub mod dark_hard;
 pub use dark_hard::DarkHard;
 pub mod dark_medium;
@@ -13,3 +15,11 @@ pub mod light_medium;
 pub use light_medium::LightMedium;
 pub mod light_soft;
 pub use light_soft::LightSoft;
+
+/// Pinned upstream palette resources.
+pub(super) const SOURCE: &[PaletteSource] = &[PaletteSource {
+    repository: "https://github.com/morhetz/gruvbox",
+    revision: "5d15b2765f59754d7ac263c88a0f6e3e58124951",
+    path: "colors/gruvbox.vim",
+    licence: Some("MIT"),
+}];

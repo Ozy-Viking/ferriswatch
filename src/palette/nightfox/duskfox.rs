@@ -5,7 +5,7 @@
 define_palette! {
     Duskfox, "Duskfox",
     identity("nightfox/duskfox", "nightfox", "Nightfox", "duskfox", "Duskfox", Dark, None);
-    sources: crate::palette::sources::NIGHTFOX_DUSKFOX;
+    sources: super::SOURCE_DUSKFOX;
     colors {
         BLACK = crate::color::Color::hex(0x393552),
         RED = crate::color::Color::hex(0xeb6f92),

@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Cobalt2",
     identity("cobalt2/main", "cobalt2", "Cobalt2", "main", "Main", Dark, None);
-    sources: crate::palette::sources::COBALT_2_MAIN;
+    sources: super::SOURCE;
     colors {
         MENU_SELECTION_FOREGROUND = crate::color::Color::hex(0xffffff),
         MENUBAR_SELECTION_BACKGROUND = crate::color::Color::hex(0x0d3a58),

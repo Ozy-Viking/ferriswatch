@@ -5,7 +5,7 @@
 define_palette! {
     Dark, "Solarized Dark",
     identity("solarized/dark", "solarized", "Solarized", "dark", "Dark", Dark, None);
-    sources: crate::palette::sources::SOLARIZED_DARK;
+    sources: super::SOURCE_DARK;
     colors {
         BASE_03 = crate::color::Color::hex(0x002b36),
         BASE_02 = crate::color::Color::hex(0x073642),

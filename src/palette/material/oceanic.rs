@@ -5,7 +5,7 @@
 define_palette! {
     Oceanic, "Material Oceanic",
     identity("material/oceanic", "material", "Material", "oceanic", "Oceanic", Dark, None);
-    sources: crate::palette::sources::MATERIAL_OCEANIC;
+    sources: super::SOURCE_OCEANIC;
     colors {
         MAIN_WHITE = crate::color::Color::hex(0xeeffff),
         MAIN_GRAY = crate::color::Color::hex(0x717cb4),

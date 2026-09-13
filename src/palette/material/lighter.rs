@@ -5,7 +5,7 @@
 define_palette! {
     Lighter, "Material Lighter",
     identity("material/lighter", "material", "Material", "lighter", "Lighter", Light, None);
-    sources: crate::palette::sources::MATERIAL_LIGHTER;
+    sources: super::SOURCE_LIGHTER;
     colors {
         MAIN_WHITE = crate::color::Color::hex(0xeeffff),
         MAIN_GRAY = crate::color::Color::hex(0x717cb4),

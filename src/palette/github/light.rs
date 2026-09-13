@@ -5,7 +5,7 @@
 define_palette! {
     Light, "GitHub Light",
     identity("github/light", "github", "GitHub", "light", "Light", Light, None);
-    sources: crate::palette::sources::GITHUB_LIGHT;
+    sources: super::SOURCE_LIGHT;
     colors {
         SCALE_GRAY_0 = crate::color::Color::hex(0xf6f8fa),
         SCALE_GRAY_1 = crate::color::Color::hex(0xeaeef2),

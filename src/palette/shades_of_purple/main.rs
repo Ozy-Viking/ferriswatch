@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Shades of Purple",
     identity("shades_of_purple/main", "shades_of_purple", "Shades of Purple", "main", "Main", Dark, None);
-    sources: crate::palette::sources::SHADES_OF_PURPLE_MAIN;
+    sources: super::SOURCE;
     colors {
         ACTIVITY_BAR_BACKGROUND = crate::color::Color::hex(0x28284e),
         ACTIVITY_BAR_BORDER = crate::color::Color::hex(0x222244),

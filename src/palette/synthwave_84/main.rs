@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Synthwave '84",
     identity("synthwave_84/main", "synthwave_84", "Synthwave '84", "main", "Main", Dark, None);
-    sources: crate::palette::sources::SYNTHWAVE_84_MAIN;
+    sources: super::SOURCE;
     colors {
         FOCUS_BORDER = crate::color::Color::hex(0x1f212b),
         FOREGROUND = crate::color::Color::hex(0xffffff),

@@ -5,7 +5,7 @@
 define_palette! {
     Dark, "Ayu Dark",
     identity("ayu/dark", "ayu", "Ayu", "dark", "Dark", Dark, None);
-    sources: crate::palette::sources::AYU_DARK;
+    sources: super::SOURCE_DARK;
     colors {
         COMMON_ACCENT = crate::color::Color::hex(0xf29718),
         COMMON_BG = crate::color::Color::hex(0x0d131a),

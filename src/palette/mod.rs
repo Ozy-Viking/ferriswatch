@@ -4,7 +4,6 @@
 use crate::color::Color;
 #[macro_use]
 mod macros;
-mod sources;
 
 pub mod catppuccin;
 pub mod everforest;

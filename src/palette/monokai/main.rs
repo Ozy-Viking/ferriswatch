@@ -5,7 +5,7 @@
 define_palette! {
     Main, "Monokai",
     identity("monokai/main", "monokai", "Monokai", "main", "Main", Dark, None);
-    sources: crate::palette::sources::MONOKAI_MAIN;
+    sources: super::SOURCE;
     colors {
         DROPDOWN_BACKGROUND = crate::color::Color::hex(0x414339),
         LIST_ACTIVE_SELECTION_BACKGROUND = crate::color::Color::hex(0x75715e),

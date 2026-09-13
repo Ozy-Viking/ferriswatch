@@ -21,6 +21,10 @@ pub struct PaletteSource {
     pub revision: &'static str,
     /// Exact path relative to the repository root.
     pub path: &'static str,
+    /// Upstream licence identifier or descriptive name at the pinned revision.
+    /// `None` means unverified, not permission to use the source.
+    /// This records the upstream notice, not a legal compatibility assessment.
+    pub licence: Option<&'static str>,
 }
 impl PaletteSource {
     /// Permanent source link for inspecting the imported revision.
