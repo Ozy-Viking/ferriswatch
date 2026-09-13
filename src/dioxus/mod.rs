@@ -2,6 +2,7 @@
 //! The consuming application selects its Dioxus renderer.
 #![doc = include_str!("../../docs/Dioxus.md")]
 mod components;
+mod dx_theme;
 mod theme_combobox;
 mod theme_config;
 mod theme_provider;

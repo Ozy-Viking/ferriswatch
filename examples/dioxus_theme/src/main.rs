@@ -21,6 +21,7 @@ fn App() -> Element {
             Appearance::Dark,
         )
         .available(ThemeSelection::all())
+        .override_dx_components_theme(true)
         .build()
         .expect("valid theme configuration")
     });

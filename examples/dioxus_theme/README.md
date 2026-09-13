@@ -77,3 +77,13 @@ uv run --with playwright python test_css_browser.py
 
 Run one `dx` server/build at a time in this example directory. The fixture is a
 separate Cargo example and does not add controls to the workbench.
+
+The workbench also opts into `.override_dx_components_theme(true)` for components
+using upstream color variables. To test that adapter against the pinned upstream
+stylesheet, including load order, mode switches, nesting, and opt-out behavior:
+
+```sh
+dx serve --example dx_theme --web --port 8081
+# In another terminal:
+uv run --with playwright python test_dx_theme.py
+```

@@ -26,6 +26,34 @@ fn single_default(variant: ThemeVariant) -> ferriswatch::dioxus::ThemeConfigBuil
 }
 
 #[test]
+fn dx_component_colors_are_explicitly_opt_in() {
+    let builder = single_default(Mocha::variant::<Mauve>());
+    assert!(
+        !builder
+            .clone()
+            .build()
+            .unwrap()
+            .override_dx_components_theme()
+    );
+    assert!(
+        builder
+            .clone()
+            .override_dx_components_theme(true)
+            .build()
+            .unwrap()
+            .override_dx_components_theme()
+    );
+    assert!(
+        !builder
+            .override_dx_components_theme(true)
+            .override_dx_components_theme(false)
+            .build()
+            .unwrap()
+            .override_dx_components_theme()
+    );
+}
+
+#[test]
 fn selection_is_additive_ordered_and_deduplicated() {
     let selected = ThemeSelection::new()
         .with_palette::<Mocha>()

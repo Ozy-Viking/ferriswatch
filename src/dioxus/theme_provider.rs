@@ -102,8 +102,23 @@ pub fn ThemeProvider(
         Appearance::Dark => "dark",
         Appearance::Light => "light",
     };
-    let declarations = format!("{}color-scheme:{scheme};", theme_css(&current));
+    let mut declarations = format!("{}color-scheme:{scheme};", theme_css(&current));
+    let override_dx = state.config().override_dx_components_theme();
+    if override_dx {
+        declarations.push_str(&super::dx_theme::declarations(
+            current.metadata().appearance,
+        ));
+    }
+    // Outrank upstream :root and html[data-theme] without !important or DOM mutation.
+    let root_selector = if override_dx { ":root:root" } else { ":root" };
     let scoped = scope == ThemeScope::Scoped;
+    // Upstream assigns these switches directly on .dxc-system descendants, so
+    // inherited provider declarations alone cannot override them.
+    let system_selector = if scoped {
+        ".fs-theme[data-fs-dx-theme][data-fs-dx-theme] .dxc-system"
+    } else {
+        ":root:root .dxc-system"
+    };
     // Keep longhand background-color: Dioxus style preservation can clear a
     // variable-based background shorthand on subsequent theme updates.
     let style = format!(
@@ -112,9 +127,15 @@ pub fn ThemeProvider(
     );
     rsx! {
         if !scoped {
-            style { "data-fs-root": "", ":root {{{declarations}}}" }
+            style { "data-fs-root": "", "{root_selector} {{{declarations}}}" }
         }
-        div { class: "fs-theme", style, {children} }
+        if override_dx {
+            style {
+                "data-fs-dx-switches": "",
+                "{system_selector} {{ --dxc-dark-on:var(--dark);--dxc-light-on:var(--light); }}"
+            }
+        }
+        div { class: "fs-theme", "data-fs-dx-theme": override_dx.then_some("true"), style, {children} }
     }
 }
 

@@ -206,6 +206,60 @@ The combobox's separate component stylesheet supplies its joined layout and
 scrollable popups, using `--fs-*` colors. It does not extend `DEFAULT_CSS` with
 component layout or require the Dioxus Components global theme stylesheet.
 
+## Override Dioxus Components colors
+
+Opt in when constructing the provider config:
+
+```rust
+use ferriswatch::{
+    dioxus::ThemeConfig,
+    palette::{NoAccent, catppuccin::{Latte, Mocha}},
+    theme::{Appearance, Theme},
+    theme_variant::ThemePalette,
+};
+
+let config = ThemeConfig::with_default(
+    Theme::new(Latte::variant::<NoAccent>(), Mocha::variant::<NoAccent>()),
+    Appearance::Dark,
+)
+.override_dx_components_theme(true)
+.build()?;
+# Ok::<(), ferriswatch::dioxus::ThemeError>(())
+```
+
+This overrides the color variables from `dx-components-theme.css` in the
+provider's `ThemeScope`, without rewriting the file. Continue loading the
+upstream stylesheet when other components need it. The setting defaults to
+false and is captured on provider mount, like the rest of `ThemeConfig`.
+
+The adapter targets [Dioxus Components revision 9a758255](https://github.com/DioxusLabs/components/blob/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/preview/assets/dx-components-theme.css).
+Upstream `primary-color*` variables describe neutral backgrounds and borders;
+`secondary-color*` describe foregrounds and borders. They do not map to
+Ferriswatch's primary and secondary action colors.
+
+| Upstream variables | Ferriswatch roles |
+| --- | --- |
+| `primary-color`, `primary-color-2` | background, alternate background |
+| `primary-color-1`, `primary-color-3` | surface |
+| `primary-color-4`, `primary-color-5` | hover, raised |
+| `primary-color-6`, `primary-color-7` | muted border, border |
+| `secondary-color` through `secondary-color-4` | text |
+| `secondary-color-5`, `secondary-color-6` | muted text, border |
+| `focused-border-color` | focus |
+| `primary-success/warning/info-color` | 15% status color mixed with surface |
+| `secondary-success/warning/info-color` | status foreground |
+| `primary-error-color` | error |
+| `secondary-error-color` | 85% error mixed with text |
+| `contrast-error-color` | background |
+
+The `--light`/`--dark` and `--dxc-light-on`/`--dxc-dark-on` switches follow the
+variant's actual appearance. Root mode outranks upstream `:root` and
+`html[data-theme]` rules even when the upstream stylesheet loads later. Scoped
+mode sets aliases on the provider wrapper. Nested providers should enable the
+adapter too when their DX components need the nested palette; disabling the
+adapter does not erase CSS inherited from an ancestor. Layout, animations,
+typography, and Ferriswatch's default semantic stylesheet are unchanged.
+
 ## Run the example
 
 From `examples/dioxus_theme`, run `dx serve --web`. The standalone example

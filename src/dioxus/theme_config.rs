@@ -111,6 +111,7 @@ struct ConfigData {
     default: Theme,
     mode: Appearance,
     available: ThemeSelection,
+    override_dx_components_theme: bool,
 }
 
 /// Validated provider configuration. Construct through `with_default(...).build()`.
@@ -128,6 +129,7 @@ pub struct ThemeConfigBuilder {
     default: Theme,
     mode: Appearance,
     available: ThemeSelection,
+    override_dx_components_theme: bool,
 }
 impl ThemeConfig {
     /// Starts the builder with a mandatory default and all built-in palettes available.
@@ -136,7 +138,12 @@ impl ThemeConfig {
             default,
             mode,
             available: ThemeSelection::all(),
+            override_dx_components_theme: false,
         }
+    }
+    /// Whether the provider overrides Dioxus Components' color variables.
+    pub fn override_dx_components_theme(&self) -> bool {
+        self.0.override_dx_components_theme
     }
     pub fn default_theme(&self) -> &Theme {
         &self.0.default
@@ -173,6 +180,13 @@ impl ThemeConfig {
     }
 }
 impl ThemeConfigBuilder {
+    /// Map dx-components-theme.css colors and mode switches to this provider.
+    /// Disabled by default. Uses the provider's configured CSS scope.
+    pub fn override_dx_components_theme(mut self, enabled: bool) -> Self {
+        self.override_dx_components_theme = enabled;
+        self
+    }
+
     /// Sets the allowed selection. The selection's `with_*` methods are additive.
     pub fn available(mut self, available: ThemeSelection) -> Self {
         self.available = available;
@@ -215,6 +229,7 @@ impl ThemeConfigBuilder {
             default: self.default,
             mode: self.mode,
             available: self.available,
+            override_dx_components_theme: self.override_dx_components_theme,
         }));
         for default in [&config.default_theme().light, &config.default_theme().dark] {
             if config.resolve(default.id(), default.accent_id())? != *default {
