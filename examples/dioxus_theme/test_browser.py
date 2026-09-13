@@ -24,9 +24,65 @@ with sync_playwright() as p:
     expect(mode).to_have_attribute('aria-checked', 'true')
     theme = page.get_by_label('Theme', exact=True)
     accent = page.get_by_label('Accent', exact=True)
-    expect(theme).to_have_value('catppuccin/mocha')
-    expect(accent).to_have_value('mauve')
-    assert theme.locator('option').count() >= 5
+    def select_option(combo, value, label):
+        """Choose a connected combobox option by stable ID and assert its label."""
+        combo.click()
+        option = page.locator(f'[role="option"][data-value="{value}"]')
+        expect(option).to_be_visible()
+        option.click()
+        expect(combo).to_have_value(label)
+
+    def option_values(list_label):
+        return page.get_by_role('listbox', name=list_label).get_by_role('option').evaluate_all(
+            '(options) => options.map(o => o.dataset.value)'
+        )
+
+    expect(theme).to_have_value('Catppuccin Mocha')
+    expect(accent).to_have_value('Mauve')
+    theme.click()
+    themes = page.get_by_role('listbox', name='Themes')
+    expect(themes).to_be_visible()
+    assert len(option_values('Themes')) >= 5
+    themes_box = themes.bounding_box()
+    page.mouse.move(themes_box['x'] + themes_box['width'] / 2, themes_box['y'] + themes_box['height'] / 2)
+    page.mouse.wheel(0, 260)
+    page.wait_for_function("""(label) => {
+        const el = [...document.querySelectorAll('[role="listbox"]')].find((node) => node.getAttribute('aria-label') === label);
+        return el && el.scrollTop > 0;
+    }""", arg='Themes')
+    # Search has a real empty state, and Escape restores the selected label.
+    theme.fill('zzzz-no-such-theme')
+    expect(page.get_by_text('No themes found', exact=True)).to_be_visible()
+    theme.press('Escape')
+    expect(themes).to_be_hidden()
+    expect(theme).to_have_value('Catppuccin Mocha')
+    # Opening one connected combobox closes the other popup.
+    theme.click()
+    expect(themes).to_be_visible()
+    accent.click()
+    expect(themes).to_be_hidden()
+    accents = page.get_by_role('listbox', name='Accents')
+    expect(accents).to_be_visible()
+    accents_box = accents.bounding_box()
+    page.mouse.move(accents_box['x'] + accents_box['width'] / 2, accents_box['y'] + accents_box['height'] / 2)
+    page.mouse.wheel(0, 260)
+    page.wait_for_function("""(label) => {
+        const el = [...document.querySelectorAll('[role="listbox"]')].find((node) => node.getAttribute('aria-label') === label);
+        return el && el.scrollTop > 0;
+    }""", arg='Accents')
+    accent.press('Escape')
+    # Both connected controls support searching and selecting with the keyboard.
+    theme.click()
+    theme.fill('Mocha')
+    theme.press('ArrowDown')
+    theme.press('Enter')
+    expect(theme).to_have_value('Catppuccin Mocha')
+    accent.click()
+    accent.fill('Blue')
+    accent.press('ArrowDown')
+    accent.press('Enter')
+    expect(accent).to_have_value('Blue')
+    select_option(accent, 'mauve', 'Mauve')
     page.get_by_role('button', name='Color reference', exact=True).click()
     expect(page.locator('.project')).to_be_hidden()
     expect(page.locator('.reference')).to_be_visible()
@@ -44,44 +100,60 @@ with sync_playwright() as p:
         }'''), 'Theme background must match its palette after every update'
 
     assert_theme_background()
+    assert page.locator('.project').evaluate('''(el) => {
+        const s = getComputedStyle(el);
+        return s.borderTopWidth === '1px' && s.borderTopStyle === 'solid';
+    }'''), 'Application-owned card border geometry must survive class migration'
+    assert page.locator('.badge').evaluate('''(el) => {
+        const probe = document.createElement('span');
+        probe.style.color = 'var(--fs-secondary)';
+        el.append(probe);
+        const s = getComputedStyle(el);
+        const matches = s.color === getComputedStyle(probe).color && s.borderTopColor === s.color;
+        probe.remove();
+        return matches;
+    }'''), 'In-progress badge and its border must use secondary'
     page.get_by_role('textbox', name='Project name').fill('preserved')
     original = page.locator('button.primary').evaluate('(el) => getComputedStyle(el).backgroundColor')
-    accent.select_option('blue')
+    select_option(accent, 'blue', 'Blue')
     page.wait_for_function('(original) => getComputedStyle(document.querySelector("button.primary")).backgroundColor !== original', arg=original)
     assert_theme_background()
-    dark_options = theme.locator('option').evaluate_all('(options) => options.map(o => o.value)')
+    theme.click()
+    dark_options = option_values('Themes')
+    theme.press('Escape')
     assert 'catppuccin/latte' not in dark_options
     assert 'catppuccin/mocha' in dark_options
     set_mode('light')
-    expect(theme).to_have_value('catppuccin/latte')
-    expect(accent).to_have_value('blue')
-    light_options = theme.locator('option').evaluate_all('(options) => options.map(o => o.value)')
+    expect(theme).to_have_value('Catppuccin Latte')
+    expect(accent).to_have_value('Blue')
+    theme.click()
+    light_options = option_values('Themes')
+    theme.press('Escape')
     assert 'catppuccin/mocha' not in light_options
     assert 'nord/main' not in light_options
-    accent.select_option('green')
-    theme.select_option('rose_pine/dawn')
-    expect(theme).to_have_value('rose_pine/dawn')
-    expect(accent).to_have_value('')
-    accent.select_option('rose')
+    select_option(accent, 'green', 'Green')
+    select_option(theme, 'rose_pine/dawn', 'Rosé Pine Dawn')
+    expect(accent).to_have_value('Palette default')
+    select_option(accent, 'rose', 'Rose')
     set_mode('dark')
-    expect(theme).to_have_value('catppuccin/mocha')
-    expect(accent).to_have_value('blue')
+    expect(theme).to_have_value('Catppuccin Mocha')
+    expect(accent).to_have_value('Blue')
     set_mode('light')
-    expect(theme).to_have_value('rose_pine/dawn')
-    expect(accent).to_have_value('rose')
+    expect(theme).to_have_value('Rosé Pine Dawn')
+    expect(accent).to_have_value('Rose')
     page.wait_for_function('getComputedStyle(document.querySelector(".fs-theme")).colorScheme === "light"')
     assert_theme_background()
     set_mode('dark')
-    theme.select_option('nord/main')
-    expect(accent).to_have_value('')
+    select_option(theme, 'nord/main', 'Nord')
+    expect(accent).to_have_value('Palette default')
     assert_theme_background()
     page.get_by_role('button', name='Reset theme').click()
-    expect(theme).to_have_value('catppuccin/mocha')
-    expect(accent).to_have_value('mauve')
+    expect(theme).to_have_value('Catppuccin Mocha')
+    expect(accent).to_have_value('Mauve')
     expect(mode).to_have_attribute('aria-checked', 'true')
     set_mode('light')
-    expect(theme).to_have_value('catppuccin/latte')
-    expect(accent).to_have_value('blue')
+    expect(theme).to_have_value('Catppuccin Latte')
+    expect(accent).to_have_value('Blue')
     set_mode('dark')
     assert_theme_background()
     expect(page.get_by_role('textbox', name='Project name')).to_have_value('preserved')
@@ -94,6 +166,25 @@ with sync_playwright() as p:
     new_task.check()
     expect(page.get_by_role('progressbar')).to_have_attribute('value', '2')
     expect(page.get_by_role('progressbar')).to_have_attribute('max', '4')
+    expect(page.locator('.badge')).to_have_text('In progress')
+    for checkbox in page.get_by_role('checkbox').all():
+        checkbox.check()
+    expect(page.locator('.badge')).to_have_text('Completed')
+    assert page.locator('.badge').evaluate('''el => {
+        const probe = document.createElement('span');
+        probe.style.color = 'var(--fs-success)';
+        el.append(probe);
+        const matches = getComputedStyle(el).color === getComputedStyle(probe).color;
+        probe.remove();
+        return matches;
+    }''')
+    new_task.uncheck()
+    expect(page.locator('.badge')).to_have_text('In progress')
+    new_task.check()
+    expect(page.locator('.badge')).to_have_text('Completed')
+    page.get_by_role('textbox', name='New task').fill('Follow-up review')
+    page.get_by_role('button', name='Add task', exact=True).click()
+    expect(page.locator('.badge')).to_have_text('In progress')
     expect(page.get_by_role('button', name='Add task', exact=True)).to_be_disabled()
     page.get_by_role('button', name='Color reference', exact=True).click()
     expect(page.locator('.swatch')).to_have_count(32)
@@ -118,13 +209,15 @@ with sync_playwright() as p:
     for width in [1440, 768, 390, 320]:
         page.set_viewport_size({'width': width, 'height': 900})
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Overflow at {width}px'
-        if width <= 640:
-            mode_box = mode.bounding_box()
-            theme_box = theme.bounding_box()
-            assert theme_box['y'] >= mode_box['y'] + mode_box['height']
-            accent_box = accent.bounding_box()
-            assert accent_box['y'] >= theme_box['y'] + theme_box['height'], 'Mobile selectors must stack'
-            assert abs(theme_box['width'] - accent_box['width']) < 1
+        theme_box = theme.bounding_box()
+        accent_box = accent.bounding_box()
+        group_box = page.get_by_role('group', name='Theme and accent').bounding_box()
+        assert abs(theme_box['y'] - accent_box['y']) < 1, 'Connected comboboxes must stay side by side'
+        assert theme_box['x'] + theme_box['width'] <= accent_box['x'] + 1
+        assert page.get_by_role('group', name='Theme and accent').locator(':scope > div').nth(1).evaluate(
+            '(el) => getComputedStyle(el).borderLeftStyle === "solid"'
+        )
+        assert group_box['x'] <= theme_box['x'] and accent_box['x'] + accent_box['width'] <= group_box['x'] + group_box['width']
         page.get_by_role('button', name='Color reference', exact=True).click()
         expect(page.locator('.swatch')).to_have_count(32)
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Reference overflow at {width}px'

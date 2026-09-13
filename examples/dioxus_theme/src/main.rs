@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{ThemeConfig, ThemePicker, ThemeProvider, ThemeSelection, use_theme},
+    dioxus::{
+        DEFAULT_STYLESHEET, ThemeConfig, ThemePicker, ThemeProvider, ThemeScope, ThemeSelection,
+        use_theme,
+    },
     palette::catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
     theme::{Appearance, Theme},
     theme_variant::ThemePalette,
@@ -22,9 +25,10 @@ fn App() -> Element {
         .expect("valid theme configuration")
     });
     rsx! {
+        document::Stylesheet { href: DEFAULT_STYLESHEET }
         style { {include_str!("style.css")} }
         script { src: asset!("/assets/scrollbar.js") }
-        ThemeProvider { config, Workbench {} }
+        ThemeProvider { config, scope: ThemeScope::Root, Workbench {} }
     }
 }
 
@@ -32,19 +36,22 @@ fn App() -> Element {
 fn Workbench() -> Element {
     let mut theme = use_theme();
     let active = theme.current();
+    let saved = theme.theme();
+    let config = theme.config();
+    let accent_count = config
+        .palettes()
+        .iter()
+        .find(|palette| palette.metadata.id == active.id())
+        .expect("active palette is configured")
+        .accents
+        .len();
     let mut tokens = use_signal(|| false);
-    let scheme = match active.metadata().appearance {
-        ferriswatch::theme_variant::Appearance::Dark => "dark",
-        ferriswatch::theme_variant::Appearance::Light => "light",
-    };
     rsx! {
-        style { "html {{ color-scheme: {scheme}; }}" }
-        div { class: "workbench", id: "workbench-content",
+        div { class: "workbench fs-page", id: "workbench-content",
             overlay-scrollbar {}
             header { class: "masthead",
                 a { class: "wordmark", href: "#", span { class: "mark", "f" } "ferriswatch" }
                 span { class: "edition", "DIOXUS / THEME WORKBENCH" }
-                span { class: "live", span {} "Live preview" }
             }
             main {
                 div { class: "intro",
@@ -66,8 +73,18 @@ fn Workbench() -> Element {
                             span { class: "dot" }
                             div { strong { "{active.name()}" } small { "Accent: {active.accent_id().unwrap_or(\"palette default\")}" } }
                         }
-                        button { class: "secondary reset", onclick: move |_| theme.reset(), "Reset theme" }
-                        div { class: "aside-footer", span { "{theme.config().palettes_for(theme.mode()).count()} palettes" } span { "32 semantic colors" } }
+                        button { class: "secondary fs-panel reset", onclick: move |_| theme.reset(), "Reset theme" }
+                        dl { class: "saved-themes",
+                            div { class: "saved-dark",
+                                dt { "Dark theme" }
+                                dd { "{saved.dark.name()}" small { {saved.dark.accent_name().unwrap_or("Palette default")} } }
+                            }
+                            div { class: "saved-light",
+                                dt { "Light theme" }
+                                dd { "{saved.light.name()}" small { {saved.light.accent_name().unwrap_or("Palette default")} } }
+                            }
+                        }
+                        div { class: "aside-footer", span { "{theme.config().palettes_for(theme.mode()).count()} palettes" } span { "{accent_count} accent colors" } }
                     }
                     div { class: "stage",
                         div { class: "stage-bar",
@@ -101,9 +118,10 @@ fn ProjectPreview() -> Element {
     let mut saved = use_signal(|| false);
     let done = tasks.read().iter().filter(|(_, done)| *done).count();
     let total = tasks.read().len();
+    let completed = total > 0 && done == total;
     rsx! {
-        section { class: "project",
-            div { class: "project-top", span { class: "eyebrow", "STUDIO / PROJECT 024" } span { class: "badge", "In progress" } }
+        section { class: "project fs-card fs-border",
+            div { class: "project-top", span { class: "eyebrow", "STUDIO / PROJECT 024" } span { class: if completed { "badge completed fs-success" } else { "badge" }, aria_live: "polite", if completed { "Completed" } else { "In progress" } } }
             h2 { "{project_name}" }
             div { class: "progress-heading", span { "Project progress" } strong { "{done} of {total} complete" } }
             progress { value: done as f64, max: total as f64, aria_label: "Project progress" }
@@ -122,21 +140,21 @@ fn ProjectPreview() -> Element {
                 if !title.is_empty() { tasks.write().push((title, false)); draft.set(String::new()); }
             },
                 input { aria_label: "New task", placeholder: "New task", value: draft(), oninput: move |event| draft.set(event.value()), maxlength: 100 }
-                button { class: "secondary", r#type: "submit", disabled: draft().trim().is_empty(), "Add task" }
+                button { class: "secondary fs-panel", r#type: "submit", disabled: draft().trim().is_empty(), "Add task" }
             }
             div { class: "project-settings",
                 label { r#for: "project-name", "Project name" }
                 div { class: "save-row",
                     input { id: "project-name",  value: name(), maxlength: 80, oninput: move |event| { name.set(event.value()); saved.set(false); } }
-                    button { class: "primary", disabled: name().trim().is_empty(), onclick: move |_| { project_name.set(name().trim().to_owned()); saved.set(true); }, "Save changes" }
+                    button { class: "primary fs-primary fs-focus", disabled: name().trim().is_empty(), onclick: move |_| { project_name.set(name().trim().to_owned()); saved.set(true); }, "Save changes" }
                 }
-                p { class: "save-status", role: "status", if saved() { "Saved for this session." } }
+                        p { class: "save-status fs-text-muted", role: "status", if saved() { "Saved for this session." } }
             }
             div { class: "feedback-grid",
-                div { class: "feedback success", strong { "Ready to review" } p { "Your latest changes are in place." } }
-                div { class: "feedback warning", strong { "Review needed" } p { "Test your colors in both light and dark." } }
+                div { class: "feedback success fs-success", strong { "Ready to review" } p { class: "fs-text-muted", "Your latest changes are in place." } }
+                div { class: "feedback warning fs-warning", strong { "Review needed" } p { class: "fs-text-muted", "Test your colors in both light and dark." } }
             }
-            details { class: "error-example", open: true, summary { "Preview an error message" } p { "We couldn't publish this project. This is a sample error state; your edits are still here." } }
+            details { class: "error-example", open: true, summary { "Preview an error message" } p { class: "fs-error", "We couldn't publish this project. This is a sample error state; your edits are still here." } }
         }
     }
 }
@@ -146,12 +164,12 @@ fn ColorReference() -> Element {
     let mut copy_status = use_signal(String::new);
     let mut copying = use_signal(|| false);
     rsx! {
-        section { class: "reference",
+        section { class: "reference fs-card fs-border",
             div { class: "reference-heading",
                 h2 { "Color reference" }
-                p { class: "copy-status", role: "status", "{copy_status}" }
+            p { class: "copy-status fs-text-muted", role: "status", "{copy_status}" }
             }
-            p { class: "muted", "Click a swatch to copy its CSS variable name." }
+            p { class: "muted fs-text-muted", "Click a swatch to copy its CSS variable name." }
             for (group, roles) in [
                 ("Surfaces", vec!["background", "surface", "raised", "overlay", "hover", "alt-background", "alt-surface", "alt-raised", "alt-overlay", "alt-hover"]),
                 ("Text", vec!["text", "muted", "subtle", "on-primary", "on-secondary"]),

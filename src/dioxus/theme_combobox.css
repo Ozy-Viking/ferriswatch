@@ -1,0 +1,12 @@
+.fs-theme-combobox {
+  display: flex;
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--fs-border);
+  border-radius: 7px;
+  background-color: var(--fs-alt-surface);
+  color: var(--fs-text);
+}
+.fs-theme-half { flex: 1.8; min-width: 0; }
+.fs-accent-half { flex: 1; min-width: 0; border-left: 1px solid var(--fs-border); }
+.fs-accent-half [role="listbox"] { left: auto; right: 0; }

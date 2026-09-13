@@ -191,7 +191,20 @@ fn ThemedApp(config: ThemeConfig) -> Element {
 ```
 
 See [`crate::css`] for class mappings, overrides, generation, and commit checks.
-`ThemePicker` provides labeled native selects for themes and accents.
+`ThemePicker` combines the light/dark slider with `ThemeCombobox`, a joined
+theme/accent control built from `dx components add combobox`. Click the left
+half to browse or search themes for the active mode; use the right half to
+browse or search its accents. Arrow keys navigate, Enter selects, and Escape
+closes without changing the selection. Only one dropdown opens at a time.
+
+Use `ThemeCombobox {}` directly within a provider when your application has its
+own mode control. Changing theme retains a compatible accent, otherwise it
+uses the palette default. Each mode keeps its own saved selection. Explicitly
+selected out-of-mode themes remain visible because support is advisory.
+
+The combobox's separate component stylesheet supplies its joined layout and
+scrollable popups, using `--fs-*` colors. It does not extend `DEFAULT_CSS` with
+component layout or require the Dioxus Components global theme stylesheet.
 
 ## Run the example
 

@@ -36,11 +36,15 @@ Status messages are illustrative; there is no backend or publishing operation.
 
 `src/main.rs` keeps configuration in `App`, theme controls in `Workbench`,
 independent application state in `ProjectPreview`, and color samples in
-`ColorReference`. `src/style.css` uses the provider's semantic CSS variables
-for surfaces, text, controls, focus, and feedback. It also owns the page reset
-and responsive layout; the library provider does not change global page styles.
+`ColorReference`. `App` opts into Ferriswatch's generated default classes and
+uses a root-scoped provider so the semantic variables and color scheme are
+available throughout the document. `src/style.css` owns the page reset and
+responsive layout while the default classes provide semantic surfaces, text,
+actions, focus, borders, and feedback colors.
 
-The example deliberately uses the library's `ThemePicker`. Styling its
+The example uses the library's `ThemePicker`, which combines the mode slider
+with `ThemeCombobox`. Its left half searches themes and its right half searches
+accents; both lists support scrolling and keyboard selection. Styling its
 `.fs-theme-picker` class shows how an application can customize its presentation
 without replacing selection behavior.
 
@@ -58,3 +62,18 @@ reset, saving edits, task progress, state retention, all 32 swatches, and
 horizontal overflow at desktop, tablet, and phone widths. Use
 `FERRISWATCH_EXAMPLE_URL` for another address or
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium installation.
+
+### CSS integration checks
+
+The separate browser fixture checks root/scoped updates, unmount cleanup,
+child-state preservation, optional stylesheet loading, class precedence, and
+hover/pressed/disabled/focus behavior without application CSS overrides:
+
+```sh
+dx serve --example css_scope --web --port 8081
+# In another terminal:
+uv run --with playwright python test_css_browser.py
+```
+
+Run one `dx` server/build at a time in this example directory. The fixture is a
+separate Cargo example and does not add controls to the workbench.

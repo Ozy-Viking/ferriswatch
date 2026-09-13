@@ -122,16 +122,7 @@ pub fn ThemeProvider(
 #[component]
 pub fn ThemePicker() -> Element {
     let mut state = use_theme();
-    let theme = state.current();
     let mode = state.mode();
-    let config = state.config();
-    let entry = config
-        .palettes()
-        .iter()
-        .find(|p| p.metadata.id == theme.id())
-        .copied()
-        .expect("provider only permits configured themes");
-    let mut error = use_signal(|| None::<String>);
     rsx! {
         div { class: "fs-theme-picker",
             div { class: "fs-mode-control",
@@ -141,44 +132,12 @@ pub fn ThemePicker() -> Element {
                     aria_label: "Dark mode", aria_checked: mode == Appearance::Dark,
                     onclick: move |_| {
                         state.set_mode(if state.mode() == Appearance::Dark { Appearance::Light } else { Appearance::Dark });
-                        error.set(None);
                     },
                     span { class: "fs-mode-thumb", aria_hidden: "true" }
                 }
                 span { "Dark" }
             }
-            label { "Theme"
-                select { aria_label: "Theme", value: theme.id().to_owned(),
-                    onchange: move |event| {
-                        let id = event.value();
-                        let config = state.config();
-                        let current = state.current();
-                        let accent = current.accent_id().filter(|accent| config.resolve(&id, Some(accent)).is_ok());
-                        error.set(state.select(&id, accent).err().map(|e| e.to_string()));
-                    },
-                    // Keep an explicitly selected out-of-mode palette visible; support is advisory.
-                    if !theme.supports(mode) {
-                        option { value: theme.id().to_owned(), selected: true, "{theme.name()} (current selection)" }
-                    }
-                    for palette in config.palettes_for(mode) {
-                        option { value: palette.metadata.id.to_string(), selected: palette.metadata.id == theme.id(), "{palette.metadata.name}" }
-                    }
-                }
-            }
-            label { "Accent"
-                select { aria_label: "Accent", value: theme.accent_id().unwrap_or("").to_owned(),
-                    onchange: move |event| {
-                        let accent = event.value();
-                        let id = state.current().id().to_owned();
-                        error.set(state.select(&id, (!accent.is_empty()).then_some(accent.as_str())).err().map(|e| e.to_string()));
-                    },
-                    option { value: "", selected: theme.accent_id().is_none(), "Palette default" }
-                    for accent in entry.accents {
-                        option { value: accent.id, selected: theme.accent_id() == Some(accent.id), "{accent.name}" }
-                    }
-                }
-            }
-            if let Some(message) = error() { p { role: "alert", "{message}" } }
+            super::ThemeCombobox {}
         }
     }
 }
