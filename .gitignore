@@ -1,3 +1,5 @@
 /target
 /tools/__pycache__/
 /THEME_PLAN.md
+/examples/dioxus_theme/__pycache__
+__pycache__
