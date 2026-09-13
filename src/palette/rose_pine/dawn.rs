@@ -3,6 +3,7 @@
 define_palette! {
     Dawn, "Rosé Pine Dawn",
     identity("rose_pine/dawn", "rose_pine", "Rosé Pine", "dawn", "Dawn", Light, None);
+    support(Light);
     sources: super::SOURCE;
     colors {
         NC = crate::color::Color::hex(0xf8f0e7),

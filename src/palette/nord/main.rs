@@ -5,6 +5,7 @@
 define_palette! {
     Main, "Nord",
     identity("nord/main", "nord", "Nord", "main", "Main", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         NORD_0 = crate::color::Color::hex(0x2e3440),

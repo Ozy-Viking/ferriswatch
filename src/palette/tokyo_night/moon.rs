@@ -3,6 +3,7 @@
 define_palette! {
     Moon, "Tokyo Night Moon",
     identity("tokyo_night/moon", "tokyo_night", "Tokyo Night", "moon", "Moon", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BG = crate::color::Color::hex(0x222436),

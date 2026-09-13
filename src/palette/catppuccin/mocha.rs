@@ -3,6 +3,7 @@
 define_palette! {
     Mocha, "Catppuccin Mocha",
     identity("catppuccin/mocha", "catppuccin", "Catppuccin", "mocha", "Mocha", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         ROSEWATER = crate::color::Color::hex(0xf5e0dc),

@@ -3,6 +3,7 @@
 define_palette! {
     Day, "Tokyo Night Day",
     identity("tokyo_night/day", "tokyo_night", "Tokyo Night", "day", "Day", Light, None);
+    support(Light);
     sources: super::SOURCE;
     colors {
         BG = crate::color::Color::hex(0xe1e2e7),

@@ -3,6 +3,7 @@
 define_palette! {
     Wave, "Kanagawa Wave",
     identity("kanagawa/wave", "kanagawa", "Kanagawa", "wave", "Wave", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         SUMI_INK_0 = crate::color::Color::hex(0x16161d),

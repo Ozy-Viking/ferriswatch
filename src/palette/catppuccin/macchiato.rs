@@ -3,6 +3,7 @@
 define_palette! {
     Macchiato, "Catppuccin Macchiato",
     identity("catppuccin/macchiato", "catppuccin", "Catppuccin", "macchiato", "Macchiato", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         ROSEWATER = crate::color::Color::hex(0xf4dbd6),

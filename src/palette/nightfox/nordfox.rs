@@ -5,6 +5,7 @@
 define_palette! {
     Nordfox, "Nordfox",
     identity("nightfox/nordfox", "nightfox", "Nightfox", "nordfox", "Nordfox", Dark, None);
+    support(Dark);
     sources: super::SOURCE_NORDFOX;
     colors {
         BLACK = crate::color::Color::hex(0x3b4252),

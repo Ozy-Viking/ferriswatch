@@ -108,7 +108,11 @@ fn accent_choices_can_be_selected_at_runtime() {
 #[test]
 fn custom_palette_returns_the_same_runtime_type() {
     struct CustomPalette;
-    impl ferriswatch::palette::Palette for CustomPalette {}
+    impl ferriswatch::palette::Palette for CustomPalette {
+        fn registration() -> &'static ferriswatch::catalogue::PaletteRegistration {
+            &Mocha::REGISTRATION
+        }
+    }
     impl ThemePalette for CustomPalette {
         fn variant<A: Accent<Self>>() -> ThemeVariant {
             Mocha::variant::<NoAccent>()

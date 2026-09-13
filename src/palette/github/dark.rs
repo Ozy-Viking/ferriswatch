@@ -5,6 +5,7 @@
 define_palette! {
     Dark, "GitHub Dark",
     identity("github/dark", "github", "GitHub", "dark", "Dark", Dark, None);
+    support(Dark);
     sources: super::SOURCE_DARK;
     colors {
         SCALE_GRAY_0 = crate::color::Color::hex(0xf0f6fc),

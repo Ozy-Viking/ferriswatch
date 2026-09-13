@@ -3,6 +3,7 @@
 define_palette! {
     Lotus, "Kanagawa Lotus",
     identity("kanagawa/lotus", "kanagawa", "Kanagawa", "lotus", "Lotus", Light, None);
+    support(Light);
     sources: super::SOURCE;
     colors {
         SUMI_INK_0 = crate::color::Color::hex(0x16161d),

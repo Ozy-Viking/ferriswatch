@@ -9,7 +9,7 @@
 //! ```
 use crate::{
     color::Color,
-    theme_variant::{ThemeMetadata, ThemeVariant},
+    theme_variant::{Appearance, ThemeMetadata, ThemeVariant},
 };
 
 /// A pinned upstream resource used to import a palette or its UI mappings.
@@ -51,7 +51,8 @@ pub struct AccentRegistration {
     pub name: &'static str,
     /// Raw accent colour.
     pub color: Color,
-    pub(crate) factory: fn() -> ThemeVariant,
+    /// Factory producing the registered theme selection.
+    pub factory: fn() -> ThemeVariant,
 }
 
 /// One valid variant/contrast combination. This drives menus and resolution.
@@ -67,7 +68,8 @@ pub struct PaletteRegistration {
     pub sources: &'static [PaletteSource],
     /// Raw source colours, independently available from semantic roles.
     pub raw_colors: &'static [(&'static str, Color)],
-    pub(crate) factory: fn() -> ThemeVariant,
+    /// Factory producing the registered theme selection.
+    pub factory: fn() -> ThemeVariant,
 }
 impl PaletteRegistration {
     /// Resolves a supported accent, or the palette default without accent metadata.
@@ -106,6 +108,20 @@ pub enum ResolveError {
 
 mod registrations;
 pub use registrations::PALETTES;
+
+/// Built-in registrations eligible for a mode, including palettes supporting both.
+/// Resolution remains unrestricted by mode.
+pub fn palettes_for(mode: Appearance) -> impl Iterator<Item = &'static PaletteRegistration> {
+    PALETTES
+        .iter()
+        .copied()
+        .filter(move |entry| entry.metadata.support.supports(mode))
+}
+
+/// Resolves the default variant of each palette eligible for a mode.
+pub fn variants_for(mode: Appearance) -> impl Iterator<Item = ThemeVariant> {
+    palettes_for(mode).map(|entry| (entry.factory)())
+}
 
 /// Looks up one declared theme ID. Labels and aliases are not accepted.
 ///

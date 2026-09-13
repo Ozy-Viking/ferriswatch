@@ -5,6 +5,7 @@
 define_palette! {
     Dawnfox, "Dawnfox",
     identity("nightfox/dawnfox", "nightfox", "Nightfox", "dawnfox", "Dawnfox", Light, None);
+    support(Light);
     sources: super::SOURCE_DAWNFOX;
     colors {
         BLACK = crate::color::Color::hex(0x575279),

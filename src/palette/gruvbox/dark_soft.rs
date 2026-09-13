@@ -3,6 +3,7 @@
 define_palette! {
     DarkSoft, "Gruvbox Dark Soft",
     identity("gruvbox/dark/soft", "gruvbox", "Gruvbox", "dark", "Dark", Dark, Some(crate::theme_variant::Contrast::Soft));
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BG_0 = crate::color::Color::hex(0x32302f),

@@ -7,6 +7,7 @@ mod macros;
 
 pub mod catppuccin;
 pub mod everforest;
+pub mod families;
 pub mod gruvbox;
 pub mod kanagawa;
 pub mod rose_pine;
@@ -47,7 +48,10 @@ fn primary_hover(accent: Color) -> Color {
 }
 
 /// A collection of raw colours that can back a theme.
-pub trait Palette {}
+pub trait Palette {
+    /// Runtime identity, supported accents and default factory.
+    fn registration() -> &'static crate::catalogue::PaletteRegistration;
+}
 
 /// An accent choice supported by palette `P`.
 ///

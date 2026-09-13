@@ -3,6 +3,7 @@
 define_palette! {
     LightMedium, "Everforest Light Medium",
     identity("everforest/light/medium", "everforest", "Everforest", "light", "Light", Light, Some(crate::theme_variant::Contrast::Medium));
+    support(Light);
     sources: super::SOURCE;
     colors {
         BG_DIM = crate::color::Color::hex(0xefebd4),

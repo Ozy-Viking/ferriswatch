@@ -3,6 +3,7 @@
 define_palette! {
     Frappe, "Catppuccin Frappé",
     identity("catppuccin/frappe", "catppuccin", "Catppuccin", "frappe", "Frappé", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         ROSEWATER = crate::color::Color::hex(0xf2d5cf),

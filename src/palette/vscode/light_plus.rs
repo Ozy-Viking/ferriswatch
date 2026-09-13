@@ -5,6 +5,7 @@
 define_palette! {
     LightPlus, "VS Code Light+",
     identity("vscode/light_plus", "vscode", "VS Code", "light_plus", "Light+", Light, None);
+    support(Light);
     sources: super::SOURCE_LIGHT_PLUS;
     colors {
         CHECKBOX_BORDER = crate::color::Color::hex(0x919191),

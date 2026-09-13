@@ -5,6 +5,7 @@
 define_palette! {
     Darcula, "Darcula",
     identity("jetbrains/darcula", "jetbrains", "JetBrains", "darcula", "Darcula", Dark, None);
+    support(Dark);
     sources: super::SOURCE_DARCULA;
     colors {
         EDITOR_SELECTION_BACKGROUND = crate::color::Color::hex(0x214283),

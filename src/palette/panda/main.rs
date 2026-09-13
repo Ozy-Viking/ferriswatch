@@ -5,6 +5,7 @@
 define_palette! {
     Main, "Panda",
     identity("panda/main", "panda", "Panda", "main", "Main", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BACKGROUND = crate::color::Color::hex(0x292a2b),

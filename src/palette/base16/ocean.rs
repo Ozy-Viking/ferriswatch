@@ -5,6 +5,7 @@
 define_palette! {
     Ocean, "Base16 Ocean",
     identity("base16/ocean", "base16", "Base16", "ocean", "Ocean", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BASE_00 = crate::color::Color::hex(0x2b303b),

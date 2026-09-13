@@ -5,6 +5,7 @@
 define_palette! {
     Night, "Tomorrow Night",
     identity("tomorrow/night", "tomorrow", "Tomorrow", "night", "Night", Dark, None);
+    support(Dark);
     sources: super::SOURCE_NIGHT;
     colors {
         DEFAULT_BACKGROUND = crate::color::Color::hex(0x1d1f21),

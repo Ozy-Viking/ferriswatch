@@ -5,6 +5,7 @@
 define_palette! {
     Terafox, "Terafox",
     identity("nightfox/terafox", "nightfox", "Nightfox", "terafox", "Terafox", Dark, None);
+    support(Dark);
     sources: super::SOURCE_TERAFOX;
     colors {
         BLACK = crate::color::Color::hex(0x2f3239),

@@ -35,6 +35,12 @@ Read [palette usage and migration](docs/Palettes.md) for custom themes, metadata
 source policy and the constructor changes. [Mapping validation](docs/PaletteValidation.md)
 documents visual decisions and remaining pairing limitations.
 
+## Dioxus
+
+Enable the optional `dioxus` feature for typed theme selection, a required-default
+configuration builder, shared theme state, a provider and a basic theme picker.
+See [Dioxus integration](docs/Dioxus.md) for setup and custom palettes.
+
 ## Palette inspector
 
 ```sh

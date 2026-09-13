@@ -5,6 +5,7 @@
 define_palette! {
     Light, "Solarized Light",
     identity("solarized/light", "solarized", "Solarized", "light", "Light", Light, None);
+    support(Light);
     sources: super::SOURCE_LIGHT;
     colors {
         BASE_03 = crate::color::Color::hex(0x002b36),

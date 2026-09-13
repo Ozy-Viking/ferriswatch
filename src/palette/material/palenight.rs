@@ -5,6 +5,7 @@
 define_palette! {
     Palenight, "Material Palenight",
     identity("material/palenight", "material", "Material", "palenight", "Palenight", Dark, None);
+    support(Dark);
     sources: super::SOURCE_PALENIGHT;
     colors {
         MAIN_WHITE = crate::color::Color::hex(0xeeffff),

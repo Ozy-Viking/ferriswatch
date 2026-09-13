@@ -3,6 +3,7 @@
 define_palette! {
     LightMedium, "Gruvbox Light Medium",
     identity("gruvbox/light/medium", "gruvbox", "Gruvbox", "light", "Light", Light, Some(crate::theme_variant::Contrast::Medium));
+    support(Light);
     sources: super::SOURCE;
     colors {
         BG_0 = crate::color::Color::hex(0xfbf1c7),

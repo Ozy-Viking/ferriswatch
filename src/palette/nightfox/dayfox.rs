@@ -5,6 +5,7 @@
 define_palette! {
     Dayfox, "Dayfox",
     identity("nightfox/dayfox", "nightfox", "Nightfox", "dayfox", "Dayfox", Light, None);
+    support(Light);
     sources: super::SOURCE_DAYFOX;
     colors {
         BLACK = crate::color::Color::hex(0x352c24),

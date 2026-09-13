@@ -3,6 +3,7 @@
 define_palette! {
     Moon, "Rosé Pine Moon",
     identity("rose_pine/moon", "rose_pine", "Rosé Pine", "moon", "Moon", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         NC = crate::color::Color::hex(0x1f1d30),

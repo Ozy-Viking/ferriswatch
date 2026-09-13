@@ -3,6 +3,7 @@
 define_palette! {
     LightHard, "Everforest Light Hard",
     identity("everforest/light/hard", "everforest", "Everforest", "light", "Light", Light, Some(crate::theme_variant::Contrast::Hard));
+    support(Light);
     sources: super::SOURCE;
     colors {
         BG_DIM = crate::color::Color::hex(0xf2efdf),

@@ -3,6 +3,7 @@
 define_palette! {
     Dragon, "Kanagawa Dragon",
     identity("kanagawa/dragon", "kanagawa", "Kanagawa", "dragon", "Dragon", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         SUMI_INK_0 = crate::color::Color::hex(0x16161d),

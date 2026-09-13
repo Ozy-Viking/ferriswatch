@@ -3,6 +3,7 @@
 define_palette! {
     DarkSoft, "Everforest Dark Soft",
     identity("everforest/dark/soft", "everforest", "Everforest", "dark", "Dark", Dark, Some(crate::theme_variant::Contrast::Soft));
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BG_DIM = crate::color::Color::hex(0x293136),

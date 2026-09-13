@@ -5,6 +5,7 @@
 define_palette! {
     Main, "Night Owl",
     identity("night_owl/main", "night_owl", "Night Owl", "main", "Main", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         CONTRAST_BORDER = crate::color::Color::hex(0x122d42),

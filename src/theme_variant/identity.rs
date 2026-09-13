@@ -11,6 +11,36 @@ pub enum Appearance {
     Light,
 }
 
+/// Advisory eligibility for the light and dark selections in a theme.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum ThemeSupport {
+    /// Include in light-mode lists.
+    Light,
+    /// Include in dark-mode lists.
+    Dark,
+    /// Include in both lists.
+    Both,
+}
+
+impl ThemeSupport {
+    /// Filters a choice list; it does not restrict theme construction or selection.
+    pub const fn supports(self, mode: Appearance) -> bool {
+        matches!(
+            (self, mode),
+            (Self::Both, _) | (Self::Light, Appearance::Light) | (Self::Dark, Appearance::Dark)
+        )
+    }
+}
+
+impl From<Appearance> for ThemeSupport {
+    fn from(appearance: Appearance) -> Self {
+        match appearance {
+            Appearance::Light => Self::Light,
+            Appearance::Dark => Self::Dark,
+        }
+    }
+}
+
 /// A palette's explicitly supported background contrast.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Contrast {
@@ -50,6 +80,8 @@ pub struct ThemeMetadata {
     pub name: Cow<'static, str>,
     /// Light or dark appearance.
     pub appearance: Appearance,
+    /// Advisory mode eligibility, used to filter palette choices.
+    pub support: ThemeSupport,
     /// Only present for a supported contrast setting.
     pub contrast: Option<Contrast>,
 }

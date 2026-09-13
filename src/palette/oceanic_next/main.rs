@@ -5,6 +5,7 @@
 define_palette! {
     Main, "Oceanic Next",
     identity("oceanic_next/main", "oceanic_next", "Oceanic Next", "main", "Main", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         DEFAULT_ACTIVE_GUIDE = crate::color::Color::hex(0xfbc95a),

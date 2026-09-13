@@ -1,5 +1,7 @@
 mod identity;
-pub use identity::{Appearance, Contrast, IdentityError, ResolvedAccent, ThemeMetadata};
+pub use identity::{
+    Appearance, Contrast, IdentityError, ResolvedAccent, ThemeMetadata, ThemeSupport,
+};
 
 use crate::{
     color::Color,
@@ -100,6 +102,7 @@ impl ThemeVariant {
                 variant_name: name.clone().into(),
                 name: name.into(),
                 appearance,
+                support: appearance.into(),
                 contrast: None,
             },
             colors,
@@ -117,6 +120,22 @@ impl ThemeVariant {
             colors,
             accent,
         }
+    }
+
+    /// Declares which mode lists should include this variant. This is advisory.
+    pub fn with_support(mut self, support: ThemeSupport) -> Self {
+        self.metadata.support = support;
+        self
+    }
+
+    /// Mode eligibility declared by the palette, independent of its appearance.
+    pub const fn support(&self) -> ThemeSupport {
+        self.metadata.support
+    }
+
+    /// Whether this variant belongs in the requested mode's filtered list.
+    pub const fn supports(&self, mode: Appearance) -> bool {
+        self.support().supports(mode)
     }
 
     /// Stable theme identity and display metadata.

@@ -3,6 +3,7 @@
 define_palette! {
     Storm, "Tokyo Night Storm",
     identity("tokyo_night/storm", "tokyo_night", "Tokyo Night", "storm", "Storm", Dark, None);
+    support(Dark);
     sources: super::SOURCE;
     colors {
         BG = crate::color::Color::hex(0x24283b),

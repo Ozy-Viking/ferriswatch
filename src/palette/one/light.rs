@@ -5,6 +5,7 @@
 define_palette! {
     Light, "One Light",
     identity("one/light", "one", "One", "light", "Light", Light, None);
+    support(Light);
     sources: super::SOURCE_LIGHT;
     colors {
         MONO_1 = crate::color::Color::hex(0x383a42),
