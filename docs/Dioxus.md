@@ -46,7 +46,7 @@ fn App() -> Element {
         ThemeProvider { config,
             ThemePicker {}
             button {
-                style: "background:var(--fw-primary);color:var(--fw-on-primary);border:1px solid var(--fw-border)",
+                style: "background:var(--fs-primary);color:var(--fs-on-primary);border:1px solid var(--fs-border)",
                 "Save"
             }
         }
@@ -158,22 +158,40 @@ the mandatory default through `YourPalette::variant::<YourAccent>()`.
 
 Existing custom `Palette` implementations must add `registration()`.
 
-## Styling and current scope
+## Styling and scope
 
-The provider renders a `div.fw-theme` with all 32 semantic colour variables,
-background/text styles and `color-scheme`. Variables use the `--fw-` prefix:
-`--fw-background`, `--fw-alt-surface`, `--fw-primary-hover`, `--fw-on-primary`,
-`--fw-border`, and so on. `theme_css` exposes the same declarations for custom
-wrappers. Colours retain alpha through Ferriswatch's CSS colour formatter.
+The provider renders a `div.fs-theme`. By default, `ThemeScope::Scoped` publishes
+all 32 `--fs-*` variables and `color-scheme` on that wrapper. Its background and
+text colors retain the existing defaults. `scope: ThemeScope::Root` publishes
+variables and scheme on `:root`, including for portals in the same document.
+Use one root provider per document; nested scoped providers override inherited
+values. Provider state remains scoped through Dioxus context in either mode.
 
-The initial `ThemePicker` uses labelled HTML selects. Applications can replace
-these with Dioxus Components controls using `use_theme()` and
-`theme.config().palettes()`. A stylesheet adapter for Dioxus Components is not
-included in this pass.
+`theme_css` now exports only variable declarations. Custom wrappers must set
+background/text and `color-scheme` themselves. Colors preserve alpha.
 
-CSS variables inherit through the rendered DOM subtree. Dialogs or portals
-mounted outside the provider wrapper need a wrapper using `theme_css` and the
-same active theme. The provider does not change document-wide styles or layout.
+Use `DEFAULT_STYLESHEET` to load the optional semantic color classes through
+Dioxus's stylesheet asset integration. It is independent of provider scope and
+is never loaded automatically. `DefaultStyles {}` remains a convenience wrapper.
+For example:
+
+```rust,no_run
+use dioxus::prelude::*;
+use ferriswatch::dioxus::{DEFAULT_STYLESHEET, ThemeConfig, ThemeProvider, ThemeScope};
+
+#[component]
+fn ThemedApp(config: ThemeConfig) -> Element {
+    rsx! {
+        document::Stylesheet { href: DEFAULT_STYLESHEET }
+        ThemeProvider { config, scope: ThemeScope::Root,
+            section { class: "fs-card", "Application-owned layout" }
+        }
+    }
+}
+```
+
+See [`crate::css`] for class mappings, overrides, generation, and commit checks.
+`ThemePicker` provides labeled native selects for themes and accents.
 
 ## Run the example
 

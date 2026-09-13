@@ -13,7 +13,7 @@ pub fn theme_css(theme: &ThemeVariant) -> String {
             ("overlay", group.overlay),
             ("hover", group.hover),
         ] {
-            write!(out, "--fw-{prefix}{name}:{value};").unwrap();
+            write!(out, "--fs-{prefix}{name}:{value};").unwrap();
         }
     }
     for (name, value) in [
@@ -40,14 +40,7 @@ pub fn theme_css(theme: &ThemeVariant) -> String {
         ("info", c.status.info),
         ("trace", c.status.trace),
     ] {
-        write!(out, "--fw-{name}:{value};").unwrap();
+        write!(out, "--fs-{name}:{value};").unwrap();
     }
-    out.push_str(match theme.metadata().appearance {
-        crate::theme_variant::Appearance::Dark => "color-scheme:dark;",
-        crate::theme_variant::Appearance::Light => "color-scheme:light;",
-    });
-    // A variable in the background shorthand leaves empty longhand values that
-    // Dioxus's style preservation can restore, clearing the background on updates.
-    out.push_str("background-color:var(--fw-background);color:var(--fw-text);");
     out
 }

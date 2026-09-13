@@ -37,6 +37,10 @@ documents visual decisions and remaining pairing limitations.
 
 ## Dioxus
 
+Framework-independent CSS variables and optional semantic color classes are
+available through `ferriswatch::css`. See the [CSS guide](docs/Css.md) for
+`DEFAULT_CSS`, generation, and commit-hook setup.
+
 Enable the optional `dioxus` feature for typed theme selection, a required-default
 configuration builder, shared theme state, a provider and a basic theme picker.
 See [Dioxus integration](docs/Dioxus.md) for setup and custom palettes.

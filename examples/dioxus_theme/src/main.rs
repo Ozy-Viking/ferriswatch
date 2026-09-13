@@ -54,7 +54,7 @@ fn Workbench() -> Element {
                     }
                     div { class: "palette-art", aria_hidden: "true",
                         for role in ["primary", "secondary", "info", "success", "warning"] {
-                            span { style: "background-color:var(--fw-{role})" }
+                            span { style: "background-color:var(--fs-{role})" }
                         }
                     }
                 }
@@ -164,25 +164,25 @@ fn ColorReference() -> Element {
                     for role in roles {
                         button {
                             class: "swatch", r#type: "button",
-                            aria_label: "Copy --fw-{role}", disabled: copying(),
+                            aria_label: "Copy --fs-{role}", disabled: copying(),
                             onclick: move |_| async move {
                                 copying.set(true);
                                 let copied = if let Some(window) = web_sys::window().filter(|window| window.is_secure_context()) {
                                     wasm_bindgen_futures::JsFuture::from(
-                                        window.navigator().clipboard().write_text(&format!("--fw-{role}"))
+                                        window.navigator().clipboard().write_text(&format!("--fs-{role}"))
                                     ).await.is_ok()
                                 } else {
                                     false
                                 };
                                 copy_status.set(if copied {
-                                    format!("Copied --fw-{role}")
+                                    format!("Copied --fs-{role}")
                                 } else {
-                                    format!("Couldn't copy. Select and copy --fw-{role} manually.")
+                                    format!("Couldn't copy. Select and copy --fs-{role} manually.")
                                 });
                                 copying.set(false);
                             },
-                            span { style: "background-color:var(--fw-{role})" }
-                            code { "--fw-{role}" }
+                            span { style: "background-color:var(--fs-{role})" }
+                            code { "--fs-{role}" }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-use super::{ThemeConfig, ThemeError, theme_css};
+use super::{ThemeConfig, ThemeError, ThemeScope, theme_css};
 use crate::{
     theme::{Theme, ThemeStoreExt},
     theme_variant::{Appearance, ThemeVariant},
@@ -81,18 +81,41 @@ pub fn use_theme() -> ThemeState {
 
 /// Provides theme state and scoped CSS variables to its descendants.
 /// Configuration is captured on mount. Remount with a new key to replace it.
-/// Place at the application root for application-wide state. Portals rendered
-/// outside this DOM wrapper need their own themed wrapper.
+/// Place at the application root for application-wide state. Scoped mode is
+/// the default. Root mode publishes variables and scheme on `:root`, including
+/// for portals in the same document; use one root provider per document.
+/// Scope controls CSS inheritance, not where component context is available.
 #[component]
-pub fn ThemeProvider(config: ThemeConfig, children: Element) -> Element {
+pub fn ThemeProvider(
+    config: ThemeConfig,
+    children: Element,
+    #[props(default)] scope: ThemeScope,
+) -> Element {
     let data = use_store(|| ProviderData {
         theme: config.default_theme().clone(),
         mode: config.default_mode(),
     });
     let config = use_signal(|| config);
     let state = use_context_provider(|| ThemeState { data, config });
-    let style = theme_css(&state.current());
-    rsx! { div { class: "fw-theme", style, {children} } }
+    let current = state.current();
+    let scheme = match current.metadata().appearance {
+        Appearance::Dark => "dark",
+        Appearance::Light => "light",
+    };
+    let declarations = format!("{}color-scheme:{scheme};", theme_css(&current));
+    let scoped = scope == ThemeScope::Scoped;
+    // Keep longhand background-color: Dioxus style preservation can clear a
+    // variable-based background shorthand on subsequent theme updates.
+    let style = format!(
+        "{}background-color:var(--fs-background);color:var(--fs-text);",
+        if scoped { declarations.as_str() } else { "" }
+    );
+    rsx! {
+        if !scoped {
+            style { "data-fs-root": "", ":root {{{declarations}}}" }
+        }
+        div { class: "fs-theme", style, {children} }
+    }
 }
 
 /// Basic accessible selectors for available palettes and their supported accents.
@@ -110,17 +133,17 @@ pub fn ThemePicker() -> Element {
         .expect("provider only permits configured themes");
     let mut error = use_signal(|| None::<String>);
     rsx! {
-        div { class: "fw-theme-picker",
-            div { class: "fw-mode-control",
+        div { class: "fs-theme-picker",
+            div { class: "fs-mode-control",
                 span { "Light" }
                 button {
-                    class: "fw-mode-toggle", r#type: "button", role: "switch",
+                    class: "fs-mode-toggle", r#type: "button", role: "switch",
                     aria_label: "Dark mode", aria_checked: mode == Appearance::Dark,
                     onclick: move |_| {
                         state.set_mode(if state.mode() == Appearance::Dark { Appearance::Light } else { Appearance::Dark });
                         error.set(None);
                     },
-                    span { class: "fw-mode-thumb", aria_hidden: "true" }
+                    span { class: "fs-mode-thumb", aria_hidden: "true" }
                 }
                 span { "Dark" }
             }

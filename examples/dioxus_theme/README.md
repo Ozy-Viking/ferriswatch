@@ -22,7 +22,7 @@ Open the address printed by `dx`, normally http://localhost:8080.
 - Edit the project name and save it, add a task, or complete an existing task.
   Progress reflects the number of completed tasks.
 - Switch to Color reference to inspect the semantic variables, then return to
-  Interface. Click a swatch to copy its CSS variable name, such as `--fw-primary`.
+  Interface. Click a swatch to copy its CSS variable name, such as `--fs-primary`.
   Clipboard access requires localhost or HTTPS and browser permission.
   The project remains mounted, so its state survives view changes.
 - Reset the theme. This restores both defaults and activates Dark without
@@ -41,7 +41,7 @@ for surfaces, text, controls, focus, and feedback. It also owns the page reset
 and responsive layout; the library provider does not change global page styles.
 
 The example deliberately uses the library's `ThemePicker`. Styling its
-`.fw-theme-picker` class shows how an application can customize its presentation
+`.fs-theme-picker` class shows how an application can customize its presentation
 without replacing selection behavior.
 
 ## Verify

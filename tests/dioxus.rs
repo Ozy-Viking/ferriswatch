@@ -220,11 +220,11 @@ fn css_preserves_transparency_and_every_semantic_role() {
     )
     .unwrap();
     let css = theme_css(&custom);
-    assert!(css.contains(&format!("--fw-overlay:{};", colors.surface.overlay)));
-    assert_eq!(css.matches("--fw-").count(), 34); // 32 declarations and two style references.
-    assert!(css.contains("--fw-alt-raised:"));
-    assert!(css.contains("--fw-primary-pressed:"));
-    assert!(css.contains("color-scheme:dark;"));
+    assert!(css.contains(&format!("--fs-overlay:{};", colors.surface.overlay)));
+    assert_eq!(css.matches("--fs-").count(), 32);
+    assert!(css.contains("--fs-alt-raised:"));
+    assert!(css.contains("--fs-primary-pressed:"));
+    assert!(!css.contains("color-scheme:"));
 }
 
 struct InvalidPalette;

@@ -4,6 +4,7 @@
 
 pub mod catalogue;
 pub mod color;
+pub mod css;
 #[cfg(feature = "dioxus")]
 pub mod dioxus;
 pub mod error;

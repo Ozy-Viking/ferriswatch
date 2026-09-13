@@ -34,9 +34,9 @@ with sync_playwright() as p:
     expect(page.locator('.project')).to_be_visible()
     expect(page.locator('.reference')).to_have_count(0)
     def assert_theme_background():
-        assert page.locator('.fw-theme').evaluate('''(el) => {
+        assert page.locator('.fs-theme').evaluate('''(el) => {
             const expected = document.createElement('div');
-            expected.style.backgroundColor = 'var(--fw-background)';
+            expected.style.backgroundColor = 'var(--fs-background)';
             el.append(expected);
             const matches = getComputedStyle(el).backgroundColor === getComputedStyle(expected).backgroundColor;
             expected.remove();
@@ -69,7 +69,7 @@ with sync_playwright() as p:
     set_mode('light')
     expect(theme).to_have_value('rose_pine/dawn')
     expect(accent).to_have_value('rose')
-    page.wait_for_function('getComputedStyle(document.querySelector(".fw-theme")).colorScheme === "light"')
+    page.wait_for_function('getComputedStyle(document.querySelector(".fs-theme")).colorScheme === "light"')
     assert_theme_background()
     set_mode('dark')
     theme.select_option('nord/main')
@@ -97,15 +97,15 @@ with sync_playwright() as p:
     expect(page.get_by_role('button', name='Add task', exact=True)).to_be_disabled()
     page.get_by_role('button', name='Color reference', exact=True).click()
     expect(page.locator('.swatch')).to_have_count(32)
-    page.get_by_role('button', name='Copy --fw-primary', exact=True).click()
-    expect(page.locator('.copy-status')).to_have_text('Copied --fw-primary')
-    assert page.evaluate('navigator.clipboard.readText()') == '--fw-primary'
-    page.get_by_role('button', name='Copy --fw-alt-background', exact=True).focus()
+    page.get_by_role('button', name='Copy --fs-primary', exact=True).click()
+    expect(page.locator('.copy-status')).to_have_text('Copied --fs-primary')
+    assert page.evaluate('navigator.clipboard.readText()') == '--fs-primary'
+    page.get_by_role('button', name='Copy --fs-alt-background', exact=True).focus()
     page.keyboard.press('Enter')
-    expect(page.locator('.copy-status')).to_have_text('Copied --fw-alt-background')
-    assert page.evaluate('navigator.clipboard.readText()') == '--fw-alt-background'
+    expect(page.locator('.copy-status')).to_have_text('Copied --fs-alt-background')
+    assert page.evaluate('navigator.clipboard.readText()') == '--fs-alt-background'
     page.evaluate("() => { window.originalWriteText = navigator.clipboard.writeText; navigator.clipboard.writeText = () => Promise.reject(new Error('Denied')); }")
-    page.get_by_role('button', name='Copy --fw-error', exact=True).click()
+    page.get_by_role('button', name='Copy --fs-error', exact=True).click()
     expect(page.locator('.copy-status')).to_contain_text("Couldn't copy")
     page.evaluate('navigator.clipboard.writeText = window.originalWriteText; delete window.originalWriteText')
     set_mode('light')

@@ -13,10 +13,19 @@ categories = ["gui"]
 miette = { version = "7.6", features = ["fancy", "serde"] }
 serde = "1.0"
 thiserror = "2.0"
-dioxus = { version = "0.7.10", optional = true, default-features = false, features = ["macro", "html", "signals", "hooks"] }
+dioxus = { version = "0.7.10", optional = true, default-features = false, features = ["macro", "html", "signals", "hooks", "document", "asset"] }
 
 [dev-dependencies]
 rstest = "0.27.0"
 
+# Dioxus 0.7.10's document integration enables web history without its Location
+# binding. Keep this feature-unification fix limited to Dioxus browser builds.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", optional = true, features = ["Location"] }
+
 [features]
-dioxus = ["dep:dioxus"]
+dioxus = ["dep:dioxus", "dep:web-sys"]
+
+[[bin]]
+name = "generate-css"
+path = "tools/generate_css.rs"
