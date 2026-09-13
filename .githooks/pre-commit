@@ -1,0 +1,29 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+snapshot=$(mktemp -d "${TMPDIR:-/tmp}/ferriswatch-css-hook.XXXXXX")
+cleanup() {
+    rm -rf "$snapshot"
+}
+trap cleanup EXIT HUP INT TERM
+
+# Export the index into an empty directory. This deliberately ignores the
+# working tree, so partially staged changes are checked as they will commit.
+if ! git checkout-index --all --prefix="$snapshot/"; then
+    echo "pre-commit: could not export the staged snapshot" >&2
+    exit 1
+fi
+
+binary="$snapshot/generate-css"
+if ! rustc --edition=2024 "$snapshot/tools/generate_css.rs" -o "$binary"; then
+    echo "pre-commit: could not compile the CSS generator from the staged snapshot" >&2
+    exit 1
+fi
+
+if ! (cd "$snapshot" && "$binary" --check); then
+    echo "pre-commit: staged src/css/default.css is missing or stale; run the generator, review, and stage it" >&2
+    exit 1
+fi
