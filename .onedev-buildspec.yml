@@ -82,10 +82,12 @@ jobs:
         import tomllib
         from pathlib import Path
 
-        version = tomllib.loads(Path("Cargo.toml").read_text())["package"]["version"]
-        expected = version
-        if os.environ["RELEASE_TAG"] != expected:
-            raise SystemExit(f"Release tag must be {expected}")
+        data = tomllib.loads(Path("Cargo.toml").read_text())
+        version = data["package"]["version"]
+        if isinstance(version, dict) and version.get("workspace"):
+            version = data["workspace"]["package"]["version"]
+        if os.environ["RELEASE_TAG"] != version:
+            raise SystemExit(f"Release tag must be {version}")
         PY
         rustup component add clippy
         rustup target add wasm32-unknown-unknown
@@ -125,12 +127,16 @@ jobs:
       type: PosixInterpreter
       shell: bash
       commands: |
-        cargo publish -p ferriswatch --registry crates-io --locked --no-verify
+        set -euo pipefail
+        : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
+        cargo publish -p ferriswatch --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify
         cargo publish -p ferriswatch --registry onedev --locked --no-verify
         cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
     runAs: 0:0
     envVars:
     - name: CARGO_REGISTRY_TOKEN
+      value: '@secret:CARGO_REGISTRY_TOKEN@'
+    - name: CARGO_REGISTRIES_CRATES_IO_TOKEN
       value: '@secret:CARGO_REGISTRY_TOKEN@'
     - name: CARGO_REGISTRIES_ONEDEV_TOKEN
       value: '@job_token@:@secret:RUST_TOKEN@'
