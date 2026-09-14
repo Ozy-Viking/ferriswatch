@@ -17,7 +17,7 @@ if ! git checkout-index --all --prefix="$snapshot/"; then
     exit 1
 fi
 
-binary="$snapshot/generate-css"
+binary="$snapshot/ferriswatch-generate-css"
 if ! rustc --edition=2024 "$snapshot/tools/generate_css.rs" -o "$binary"; then
     echo "pre-commit: could not compile the CSS generator from the staged snapshot" >&2
     exit 1

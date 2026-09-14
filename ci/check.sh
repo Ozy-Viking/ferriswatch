@@ -3,7 +3,7 @@ set -euo pipefail
 
 mkdir -p target/clippy
 status=0
-cargo run --locked --release --no-default-features --bin generate-css -- --check || status=1
+cargo run --locked --release --no-default-features --bin ferriswatch-generate-css -- --check || status=1
 cargo nextest run --locked --release --no-default-features --profile ci --no-fail-fast || status=1
 cargo nextest run -p ferriswatch-componant --locked --release --profile ci --no-fail-fast || status=1
 cargo test --locked --release --no-default-features --doc || status=1

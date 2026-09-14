@@ -1,9 +1,17 @@
+//! Syntect highlighting themes from Ferriswatch palettes.
+//!
+//! Enable the `syntect` feature to use this module.
+
 use crate::{
     color::{Color, Rgb, Rgba},
     theme::ThemeVariant,
 };
 
+/// Conversion into a Syntect highlighting [`Theme`](syntect::highlighting::Theme).
+///
+/// Implemented for [`ThemeVariant`].
 pub trait SyntectTheme {
+    /// Returns this theme as a Syntect highlighting theme.
     #[must_use]
     fn syntect(&self) -> syntect::highlighting::Theme;
 }

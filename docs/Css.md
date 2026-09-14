@@ -59,8 +59,8 @@ contract; rearranging HTML class names does not control the cascade.
 Edit `src/css/definitions.rs`, then run from the repository root:
 
 ```sh
-cargo run --no-default-features --bin generate-css
-cargo run --no-default-features --bin generate-css -- --check
+cargo run --no-default-features --bin ferriswatch-generate-css
+cargo run --no-default-features --bin ferriswatch-generate-css -- --check
 ```
 
 The tracked asset is `src/css/default.css`. The build script embeds an identical

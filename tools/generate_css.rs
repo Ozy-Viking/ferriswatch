@@ -16,7 +16,11 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let check = match args.as_slice() {
         [] => false,
         [arg] if arg == "--check" => true,
-        _ => return Err("Usage: generate-css [--check] (run from the repository root)".into()),
+        _ => {
+            return Err(
+                "Usage: ferriswatch-generate-css [--check] (run from the repository root)".into(),
+            );
+        }
     };
     let path = std::path::Path::new("src/css/default.css");
     let expected = definitions::render();
@@ -29,7 +33,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
     if check {
-        return Err("Generated CSS is missing or stale. Run `cargo run --no-default-features --bin generate-css`, review, and stage src/css/default.css.".into());
+        return Err("Generated CSS is missing or stale. Run `cargo run --no-default-features --bin ferriswatch-generate-css`, review, and stage src/css/default.css.".into());
     }
     std::fs::write(path, expected)?;
     println!("Generated {}", path.display());

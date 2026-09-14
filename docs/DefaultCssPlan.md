@@ -67,15 +67,15 @@ background/text and `color-scheme` declarations. Scheme follows actual variant
 
 Keep a small internal declaration model as the source of truth for selector
 mappings, grouping, and rule order. Add a Cargo binary named
-`generate-css` that deterministically writes `src/css/default.css`. The file is
+`ferriswatch-generate-css` that deterministically writes `src/css/default.css`. The file is
 tracked and marked as generated. `DEFAULT_CSS` embeds an identical generated copy. Generation
 does not read a palette or depend on the previous generated contents.
 
 Commands:
 
 ```sh
-cargo run --no-default-features --bin generate-css
-cargo run --no-default-features --bin generate-css -- --check
+cargo run --no-default-features --bin ferriswatch-generate-css
+cargo run --no-default-features --bin ferriswatch-generate-css -- --check
 ```
 
 Normal mode writes only when bytes differ. Check mode generates in memory,

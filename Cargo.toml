@@ -4,7 +4,7 @@ members = ["ferriswatch-componant"]
 default-members = ["."]
 
 [workspace.package]
-version = "0.3.3"
+version = "0.3.4"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
@@ -75,6 +75,13 @@ web-sys = { workspace = true, optional = true }
 dioxus = ["dep:dioxus", "dep:web-sys"]
 syntect = ["dep:syntect"]
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(docsrs)"] }
+
 [[bin]]
-name = "generate-css"
+name = "ferriswatch-generate-css"
 path = "tools/generate_css.rs"

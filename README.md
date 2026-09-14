@@ -68,7 +68,7 @@ cargo test --locked
 cargo test -p ferriswatch-componant --locked
 cargo clippy --locked --all-targets
 cargo clippy -p ferriswatch-componant --locked --all-targets
-cargo doc --locked --no-deps
+cargo doc --locked --no-deps --all-features
 python tools/check_palette_sources.py
 ```
 

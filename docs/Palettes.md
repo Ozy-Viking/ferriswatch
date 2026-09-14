@@ -123,7 +123,7 @@ accent labels such as `CrystalBlue` become `Tokyo Night`, `Rosé Pine`, and
 cargo test --locked
 cargo test --locked --doc
 cargo clippy --locked --all-targets
-cargo doc --locked --no-deps
+cargo doc --locked --no-deps --all-features
 cargo run --locked --example catalogue -- docs > docs/Catalogue.md
 cargo run --locked --example catalogue -- html > target/palette-inspector.html
 cargo run --locked --example catalogue -- contrast > target/palette-contrast.tsv

@@ -1,3 +1,6 @@
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, doc(auto_cfg))]
+
 //! Shared raw palettes and fully resolved application themes.
 //!
 //! See [`catalogue`] for runtime discovery and [`palette`] for typed factories.
