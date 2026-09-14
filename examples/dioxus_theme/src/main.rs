@@ -78,11 +78,11 @@ fn Workbench() -> Element {
                         dl { class: "saved-themes",
                             div { class: "saved-dark",
                                 dt { "Dark theme" }
-                                dd { "{saved.dark.name()}" small { {saved.dark.accent_name().unwrap_or("Palette default")} } }
+                                dd { "{saved.dark.name()}" small { {saved.dark.accent_name().unwrap_or("Default")} } }
                             }
                             div { class: "saved-light",
                                 dt { "Light theme" }
-                                dd { "{saved.light.name()}" small { {saved.light.accent_name().unwrap_or("Palette default")} } }
+                                dd { "{saved.light.name()}" small { {saved.light.accent_name().unwrap_or("Default")} } }
                             }
                         }
                         div { class: "aside-footer", span { "{theme.config().palettes_for(theme.mode()).count()} palettes" } span { "{accent_count} accent colors" } }

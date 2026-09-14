@@ -70,7 +70,7 @@ pub fn ThemeCombobox() -> Element {
                     }
                 }
             }
-            div { class: Styles::fs_accent_half, title: current.accent_name().unwrap_or("Palette default").to_owned(),
+            div { class: Styles::fs_accent_half, title: current.accent_name().unwrap_or("Default").to_owned(),
                 Combobox::<String> {
                     key: "accent-{mode:?}-{current.id()}",
                     value: Some(selected_accent.into()),
@@ -79,7 +79,7 @@ pub fn ThemeCombobox() -> Element {
                         if next { open.set(Some(PickerSide::Accent)); } else if open() == Some(PickerSide::Accent) { open.set(None); }
                     },
                     aria_label: "Accent", list_aria_label: "Accents",
-                    placeholder: current.accent_name().unwrap_or("Palette default").to_owned(),
+                    placeholder: current.accent_name().unwrap_or("Default").to_owned(),
                     on_value_change: move |accent: Option<String>| {
                         if let Some(accent) = accent {
                             let id = state.current().id().to_owned();
@@ -88,8 +88,8 @@ pub fn ThemeCombobox() -> Element {
                     },
                     ComboboxEmpty { "No accents found" }
                     ComboboxOption::<String> {
-                        index: 0usize, value: String::new(), text_value: "Palette default",
-                        "data-value": "", "Palette default"
+                        index: 0usize, value: String::new(), text_value: "Default",
+                        "data-value": "", "Default"
                     }
                     for (index, accent) in entry.accents.iter().enumerate() {
                         ComboboxOption::<String> {

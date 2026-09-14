@@ -7,6 +7,20 @@ runtime catalogue with stable theme and accent IDs. See the [complete catalogue]
 
 ## Usage
 
+Configure the OneDev registry in your application's `.cargo/config.toml`:
+
+```toml
+[registries.onedev]
+index = "sparse+https://onedev.hankin.io/rust/~cargo/"
+credential-provider = "cargo:token"
+```
+
+Authenticate with `cargo login --registry onedev`, then add the package:
+
+```sh
+cargo add ferriswatch --registry onedev
+```
+
 ```rust
 use ferriswatch::palette::catppuccin::mocha::{Mauve, Mocha};
 use ferriswatch::theme_variant::ThemePalette;
@@ -66,6 +80,23 @@ python tools/check_palette_sources.py
 
 Builds use checked-in literals and never download themes. Catalogue documentation
 is generated from the same registrations used by runtime lookup.
+
+## Publishing
+
+OneDev runs the `publish` job for `v*` tags on `main`. The tag must match the
+package version in `Cargo.toml`, for example `v0.2.0`. Bump the version before
+each release; published versions cannot be replaced.
+
+The job uses the inherited `RUST_TOKEN` job secret, as Kora does, to publish to
+the `rust` project's Cargo registry. It verifies generated CSS, runs tests,
+checks the Dioxus library for WebAssembly, and verifies the packaged crate
+before uploading it. Local builds also need OneDev registry credentials.
+
+To check packaging locally without uploading:
+
+```sh
+cargo publish --registry onedev --locked --dry-run
+```
 
 ## License
 

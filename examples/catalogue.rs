@@ -108,7 +108,7 @@ fn html() {
     for (i, p) in PALETTES.iter().enumerate() {
         let theme = p.resolve(None).unwrap();
         println!(
-            "<article class=theme data-id='{}' style='{}'><header><div><span class=eyebrow>{:02} / {:?}</span><h2>{}</h2><code>{}</code></div><label>Accent<select aria-label='Accent for {}'><option value='' data-css='{}'>Palette default</option>",
+            "<article class=theme data-id='{}' style='{}'><header><div><span class=eyebrow>{:02} / {:?}</span><h2>{}</h2><code>{}</code></div><label>Accent<select aria-label='Accent for {}'><option value='' data-css='{}'>Default</option>",
             escape(theme.id()),
             escape(&css(&theme)),
             i + 1,

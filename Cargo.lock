@@ -326,7 +326,8 @@ dependencies = [
 [[package]]
 name = "dioxus-attributes"
 version = "0.1.0"
-source = "git+https://github.com/DioxusLabs/components?rev=9a758255#9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+source = "sparse+https://onedev.hankin.io/rust/~cargo/"
+checksum = "8f7707cdc1b7e907d84c2e31e070a44859b09da7bcf889b8b0b697cce1cef31c"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -552,7 +553,8 @@ dependencies = [
 [[package]]
 name = "dioxus-primitives"
 version = "0.0.1"
-source = "git+https://github.com/DioxusLabs/components?rev=9a758255#9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+source = "sparse+https://onedev.hankin.io/rust/~cargo/"
+checksum = "c12d762c64e2e1c4144570fa3902e1bf23a98b933f6863b7db7453a761adab7d"
 dependencies = [
  "dioxus",
  "dioxus-attributes",

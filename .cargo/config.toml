@@ -1,0 +1,3 @@
+[registries.onedev]
+index = "sparse+https://onedev.hankin.io/rust/~cargo/"
+credential-provider = "cargo:token"

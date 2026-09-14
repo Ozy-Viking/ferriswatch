@@ -22,6 +22,9 @@ jobs:
         cargo run --locked --no-default-features --bin generate-css -- --check
         cargo test --locked --no-default-features --test css
     runAs: 0:0
+    envVars:
+    - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+      value: '@job_token@:@secret:RUST_TOKEN@'
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -36,6 +39,60 @@ jobs:
   includeUpstreamWhenRebuild: false
   includeDownstreamWhenRebuild: false
   timeout: 600
+- name: publish
+  steps:
+  - type: CheckoutStep
+    name: Check out source
+    cloneCredential:
+      type: DefaultCredential
+    withLfs: false
+    withSubmodules: false
+    condition: SUCCESSFUL
+    optional: false
+  - type: CommandStep
+    name: Verify and publish release
+    runInContainer: true
+    image: onedev.hankin.io/docker/rust:latest
+    interpreter:
+      type: PosixInterpreter
+      shell: bash
+      commands: |
+        set -euo pipefail
+        python3 - <<'PY'
+        import os
+        import tomllib
+        from pathlib import Path
+
+        version = tomllib.loads(Path("Cargo.toml").read_text())["package"]["version"]
+        expected = f"v{version}"
+        if os.environ["RELEASE_TAG"] != expected:
+            raise SystemExit(f"Release tag must be {expected}")
+        PY
+        rustup target add wasm32-unknown-unknown
+        cargo run --locked --no-default-features --bin generate-css -- --check
+        cargo test --locked --no-default-features
+        cargo check --locked --target wasm32-unknown-unknown --features dioxus --lib
+        cargo publish --registry onedev --locked
+    runAs: 0:0
+    envVars:
+    - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+      value: '@job_token@:@secret:RUST_TOKEN@'
+    - name: RELEASE_TAG
+      value: '@tag@'
+    useTTY: false
+    condition: SUCCESSFUL
+    optional: false
+  triggers:
+  - type: TagCreateTrigger
+    tags: v*
+    branches: main
+  sequentialGroup: ferriswatch-publish
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  includeUpstreamWhenRebuild: false
+  includeDownstreamWhenRebuild: false
+  timeout: 3600
 - name: Push to GitHub
   steps:
   - type: PushRepository

@@ -133,7 +133,7 @@ with sync_playwright() as p:
     assert 'nord/main' not in light_options
     select_option(accent, 'green', 'Green')
     select_option(theme, 'rose_pine/dawn', 'Rosé Pine Dawn')
-    expect(accent).to_have_value('Palette default')
+    expect(accent).to_have_value('Default')
     select_option(accent, 'rose', 'Rose')
     set_mode('dark')
     expect(theme).to_have_value('Catppuccin Mocha')
@@ -145,7 +145,7 @@ with sync_playwright() as p:
     assert_theme_background()
     set_mode('dark')
     select_option(theme, 'nord/main', 'Nord')
-    expect(accent).to_have_value('Palette default')
+    expect(accent).to_have_value('Default')
     assert_theme_background()
     page.get_by_role('button', name='Reset theme').click()
     expect(theme).to_have_value('Catppuccin Mocha')

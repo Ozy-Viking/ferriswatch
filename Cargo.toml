@@ -6,6 +6,7 @@ license = "MIT"
 description = "Shared themes and colour palettes for consistent styling across applications"
 readme = "README.md"
 repository = "https://onedev.hankin.io/rust/ferriswatch"
+publish = ["onedev"]
 keywords = ["theme", "palette", "colors", "styling"]
 categories = ["gui"]
 
@@ -14,7 +15,7 @@ miette = { version = "7.6", features = ["fancy", "serde"] }
 serde = "1.0"
 thiserror = "2.0"
 dioxus = { version = "0.7.10", optional = true, default-features = false, features = ["macro", "html", "signals", "hooks", "document", "asset"] }
-dioxus-primitives = { git = "https://github.com/DioxusLabs/components", rev = "9a758255", version = "0.0.1", optional = true, default-features = false, features = ["web"] }
+dioxus-primitives = { version = "=0.0.1", registry = "onedev", optional = true, default-features = false, features = ["web"] }
 dioxus-icons = { version = "0.1.0", optional = true, default-features = false }
 
 [dev-dependencies]
