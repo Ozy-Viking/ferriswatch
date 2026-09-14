@@ -4,7 +4,7 @@ members = ["ferriswatch-componant"]
 default-members = ["."]
 
 [workspace.package]
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
@@ -27,7 +27,8 @@ dioxus-primitives = { version = "=0.0.1", registry = "onedev", default-features 
 ] }
 dioxus-icons = { version = "0.1.0", default-features = false }
 web-sys = { version = "0.3", features = ["Location"] }
-ferriswatch = { path = ".", version = "0.3.0" }
+ferriswatch = { path = ".", version = "0.3.1", registry = "onedev" }
+syntect = { version = "5.3", default-features = false }
 
 [package]
 name = "ferriswatch"
@@ -52,6 +53,7 @@ include = [
     "src/color/**",
     "src/css/**",
     "src/dioxus/**",
+    "src/integrations/**",
     "src/palette/**",
     "src/theme/**",
     "src/theme_variant/**",
@@ -69,6 +71,7 @@ miette = { version = "7.6", features = ["fancy", "serde"] }
 serde = "1.0"
 thiserror = "2.0"
 dioxus = { workspace = true, optional = true }
+syntect = { workspace = true, optional = true }
 
 [dev-dependencies]
 rstest = "0.27.0"
@@ -80,6 +83,7 @@ web-sys = { workspace = true, optional = true }
 
 [features]
 dioxus = ["dep:dioxus", "dep:web-sys"]
+syntect = ["dep:syntect"]
 
 [[bin]]
 name = "generate-css"

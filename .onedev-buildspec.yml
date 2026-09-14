@@ -1,214 +1,261 @@
 version: 53
+imports:
+  - projectPath: rust
+    revision: main
+    accessTokenSecret: RUST_READ
 jobs:
-- name: check
-  steps:
-  - type: CheckoutStep
-    name: Check out source
-    cloneCredential:
-      type: DefaultCredential
-    withLfs: false
-    withSubmodules: false
-    condition: SUCCESSFUL
-    optional: false
-  - type: CommandStep
-    name: Release tests and Clippy
-    runInContainer: true
-    image: onedev.hankin.io/docker/rust:latest
-    interpreter:
-      type: PosixInterpreter
-      shell: bash
-      commands: |
-        set -euo pipefail
-        rustup component add clippy
-        rustup target add wasm32-unknown-unknown
-        bash ci/check.sh
-    runAs: 0:0
-    envVars:
-    - name: CARGO_REGISTRIES_ONEDEV_TOKEN
-      value: '@job_token@:@secret:RUST_TOKEN@'
-    useTTY: false
-    condition: SUCCESSFUL
-    optional: false
-  - type: PublishJUnitReportStep
-    name: Publish test results
-    reportName: Ferriswatch tests
-    filePatterns: target/nextest/ci/junit.xml
-    condition: ALWAYS
-    optional: false
-  - type: PublishClippyReportStep
-    name: Publish Clippy diagnostics
-    reportName: Ferriswatch Clippy
-    filePatterns: target/clippy/*.json
-    failThreshold: HIGH
-    condition: ALWAYS
-    optional: false
-  - type: PublishArtifactStep
-    name: Archive test and Clippy reports
-    artifacts: target/nextest/ci/junit.xml target/clippy/*.json
-    condition: ALWAYS
-    optional: false
-  triggers:
-  - type: BranchUpdateTrigger
-    branches: '** -sync/** -ferriswatch-sync-state'
-    userMatch: anyone
-  - type: PullRequestUpdateTrigger
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  includeUpstreamWhenRebuild: false
-  includeDownstreamWhenRebuild: false
-  timeout: 3600
-- name: publish
-  steps:
-  - type: CheckoutStep
-    name: Check out source
-    cloneCredential:
-      type: DefaultCredential
-    withLfs: false
-    withSubmodules: false
-    condition: SUCCESSFUL
-    optional: false
-  - type: CommandStep
-    name: Validate release tag and run checks
-    runInContainer: true
-    image: onedev.hankin.io/docker/rust:latest
-    interpreter:
-      type: PosixInterpreter
-      shell: bash
-      commands: |
-        set -euo pipefail
-        python3 - <<'PY'
-        import os
-        import tomllib
-        from pathlib import Path
+  - name: check
+    steps:
+      - type: CheckoutStep
+        name: Check out source
+        cloneCredential:
+          type: DefaultCredential
+        withLfs: false
+        withSubmodules: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: CommandStep
+        name: Release tests and Clippy
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+            rustup component add clippy
+            rustup target add wasm32-unknown-unknown
+            bash ci/check.sh
+        runAs: 0:0
+        envVars:
+          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+            value: "@job_token@:@secret:RUST_TOKEN@"
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: PublishJUnitReportStep
+        name: Publish test results
+        reportName: Ferriswatch tests
+        filePatterns: target/nextest/ci/junit.xml
+        condition: ALWAYS
+        optional: false
+      - type: PublishClippyReportStep
+        name: Publish Clippy diagnostics
+        reportName: Ferriswatch Clippy
+        filePatterns: target/clippy/*.json
+        failThreshold: HIGH
+        condition: ALWAYS
+        optional: false
+      - type: PublishArtifactStep
+        name: Archive test and Clippy reports
+        artifacts: target/nextest/ci/junit.xml target/clippy/*.json
+        condition: ALWAYS
+        optional: false
+    triggers:
+      - type: BranchUpdateTrigger
+        branches: "** -sync/** -ferriswatch-sync-state"
+        userMatch: anyone
+      - type: PullRequestUpdateTrigger
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 3600
+  - name: publish
+    steps:
+      - type: CheckoutStep
+        name: Check out source
+        cloneCredential:
+          type: DefaultCredential
+        withLfs: false
+        withSubmodules: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: CommandStep
+        name: Validate release tag and run checks
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+            python3 - <<'PY'
+            import os
+            import tomllib
+            from pathlib import Path
 
-        data = tomllib.loads(Path("Cargo.toml").read_text())
-        version = data["package"]["version"]
-        if isinstance(version, dict) and version.get("workspace"):
-            version = data["workspace"]["package"]["version"]
-        if os.environ["RELEASE_TAG"] != version:
-            raise SystemExit(f"Release tag must be {version}")
-        PY
-        rustup component add clippy
-        rustup target add wasm32-unknown-unknown
-        bash ci/check.sh
-    runAs: 0:0
-    envVars:
-    - name: CARGO_REGISTRIES_ONEDEV_TOKEN
-      value: '@job_token@:@secret:RUST_TOKEN@'
-    - name: RELEASE_TAG
-      value: '@tag@'
-    useTTY: false
-    condition: SUCCESSFUL
-    optional: false
-  - type: PublishJUnitReportStep
-    name: Publish test results
-    reportName: Ferriswatch tests
-    filePatterns: target/nextest/ci/junit.xml
-    condition: ALWAYS
-    optional: false
-  - type: PublishClippyReportStep
-    name: Publish Clippy diagnostics
-    reportName: Ferriswatch Clippy
-    filePatterns: target/clippy/*.json
-    failThreshold: HIGH
-    condition: ALWAYS
-    optional: false
-  - type: PublishArtifactStep
-    name: Archive test and Clippy reports
-    artifacts: target/nextest/ci/junit.xml target/clippy/*.json
-    condition: ALWAYS
-    optional: false
-  - type: CommandStep
-    name: Publish verified package
-    runInContainer: true
-    image: onedev.hankin.io/docker/rust:latest
-    interpreter:
-      type: PosixInterpreter
-      shell: bash
-      commands: |
-        set -euo pipefail
-        : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
-        cargo publish -p ferriswatch --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify
-        cargo publish -p ferriswatch --registry onedev --locked --no-verify
-        cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
-    runAs: 0:0
-    envVars:
-    - name: CARGO_REGISTRY_TOKEN
-      value: '@secret:CARGO_REGISTRY_TOKEN@'
-    - name: CARGO_REGISTRIES_CRATES_IO_TOKEN
-      value: '@secret:CARGO_REGISTRY_TOKEN@'
-    - name: CARGO_REGISTRIES_ONEDEV_TOKEN
-      value: '@job_token@:@secret:RUST_TOKEN@'
-    useTTY: false
-    condition: SUCCESSFUL
-    optional: false
-  triggers:
-  - type: TagCreateTrigger
-    tags: '*.*.* -v*'
-    branches: main
-  sequentialGroup: ferriswatch-publish
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  includeUpstreamWhenRebuild: false
-  includeDownstreamWhenRebuild: false
-  timeout: 3600
-- name: Push to GitHub
-  steps:
-  - type: PushRepository
-    name: Push to GitHub
-    remoteUrl: https://github.com/Ozy-Viking/ferriswatch.git
-    userName: Ozy-Viking
-    passwordSecret: GITHUB_TOKEN
-    force: false
-    condition: SUCCESSFUL
-    optional: false
-  triggers:
-  - type: BranchUpdateTrigger
-    branches: '** -sync/** -ferriswatch-sync-state'
-    userMatch: anyone
-  - type: TagCreateTrigger
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  includeUpstreamWhenRebuild: false
-  includeDownstreamWhenRebuild: false
-  timeout: 600
-- name: Sync collaboration
-  steps:
-  - type: CheckoutStep
-    name: Check out trusted sync code
-    cloneCredential:
-      type: DefaultCredential
-    withLfs: false
-    withSubmodules: false
-    condition: SUCCESSFUL
-    optional: false
-  - type: CommandStep
-    name: Test and preflight collaboration sync
-    runInContainer: true
-    image: python:3.13-bookworm
-    interpreter:
-      type: PosixInterpreter
-      shell: sh
-      commands: |
-        set -eu
-        python -m unittest discover -s tools -p 'test_sync*.py'
-        python tools/sync_collaboration.py
-    runAs: 0:0
-    envVars:
-    - name: ONEDEV_TOKEN
-      value: '@secret:ONEDEV_TOKEN@'
-    - name: GITHUB_TOKEN
-      value: '@secret:GITHUB_TOKEN@'
-    useTTY: true
-    condition: SUCCESSFUL
-    optional: false
-  sequentialGroup: ferriswatch-collaboration-sync
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  includeUpstreamWhenRebuild: false
-  includeDownstreamWhenRebuild: false
-  timeout: 600
+            data = tomllib.loads(Path("Cargo.toml").read_text())
+            version = data["package"]["version"]
+            if isinstance(version, dict) and version.get("workspace"):
+                version = data["workspace"]["package"]["version"]
+            if os.environ["RELEASE_TAG"] != version:
+                raise SystemExit(f"Release tag must be {version}")
+            PY
+            rustup component add clippy
+            rustup target add wasm32-unknown-unknown
+            bash ci/check.sh
+        runAs: 0:0
+        envVars:
+          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+            value: "@job_token@:@secret:RUST_TOKEN@"
+          - name: RELEASE_TAG
+            value: "@tag@"
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: PublishJUnitReportStep
+        name: Publish test results
+        reportName: Ferriswatch tests
+        filePatterns: target/nextest/ci/junit.xml
+        condition: ALWAYS
+        optional: false
+      - type: PublishClippyReportStep
+        name: Publish Clippy diagnostics
+        reportName: Ferriswatch Clippy
+        filePatterns: target/clippy/*.json
+        failThreshold: HIGH
+        condition: ALWAYS
+        optional: false
+      - type: PublishArtifactStep
+        name: Archive test and Clippy reports
+        artifacts: target/nextest/ci/junit.xml target/clippy/*.json
+        condition: ALWAYS
+        optional: false
+      - type: CommandStep
+        name: Publish verified package
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+            cargo publish -p ferriswatch --registry crates-io --locked --no-verify
+            cargo publish -p ferriswatch --registry onedev --locked --no-verify
+            cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
+            python3 - <<'PYTHON'
+            import json
+            import subprocess
+            from pathlib import Path
+
+            metadata = json.loads(subprocess.check_output([
+                "cargo", "metadata", "--no-deps", "--format-version", "1", "--locked",
+            ]))
+            packages = {p["name"]: p for p in metadata["packages"]}
+            releases = [f"{name}@@{packages[name]['version']}" for name in (
+                "ferriswatch", "ferriswatch-componant",
+            )]
+            Path("docsrs-publications.txt").write_text(",".join(releases) + "\n")
+            PYTHON
+        runAs: 0:0
+        envVars:
+          - name: CARGO_REGISTRIES_CRATES_IO_TOKEN
+            value: "@secret:CARGO_REGISTRY_TOKEN@"
+          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+            value: "@job_token@:@secret:RUST_TOKEN@"
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: PublishArtifactStep
+        name: Record published crate versions
+        artifacts: docsrs-publications.txt
+        condition: SUCCESSFUL
+        optional: false
+    triggers:
+      - type: TagCreateTrigger
+        tags: "*.*.* -v*"
+        branches: main
+    sequentialGroup: ferriswatch-publish
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 3600
+  - name: notify-docs
+    steps:
+      - type: CommandStep
+        name: notify private docs.rs
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: "@script:notify-rust-docs@"
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+    triggers:
+      - type: TagCreateTrigger
+        tags: "*.*.* -v*"
+        branches: main
+    jobDependencies:
+      - jobName: publish
+        requireSuccessful: true
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 600
+  - name: Push to GitHub
+    steps:
+      - type: PushRepository
+        name: Push to GitHub
+        remoteUrl: https://github.com/Ozy-Viking/ferriswatch.git
+        userName: Ozy-Viking
+        passwordSecret: GITHUB_TOKEN
+        force: false
+        condition: SUCCESSFUL
+        optional: false
+    triggers:
+      - type: BranchUpdateTrigger
+        branches: "** -sync/** -ferriswatch-sync-state"
+        userMatch: anyone
+      - type: TagCreateTrigger
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 600
+  - name: Sync collaboration
+    steps:
+      - type: CheckoutStep
+        name: Check out trusted sync code
+        cloneCredential:
+          type: DefaultCredential
+        withLfs: false
+        withSubmodules: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: CommandStep
+        name: Test and preflight collaboration sync
+        runInContainer: true
+        image: python:3.13-bookworm
+        interpreter:
+          type: PosixInterpreter
+          shell: sh
+          commands: |
+            set -eu
+            python -m unittest discover -s tools -p 'test_sync*.py'
+            python tools/sync_collaboration.py
+        runAs: 0:0
+        envVars:
+          - name: ONEDEV_TOKEN
+            value: "@secret:ONEDEV_TOKEN@"
+          - name: GITHUB_TOKEN
+            value: "@secret:GITHUB_TOKEN@"
+        useTTY: true
+        condition: SUCCESSFUL
+        optional: false
+    sequentialGroup: ferriswatch-collaboration-sync
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 600

@@ -81,6 +81,14 @@ fn rgba(n: u32) -> Color {
 
 fn custom_theme() -> ThemeVariant {
     let colors = ThemeVariantColors {
+        chromatic: ferriswatch::catalogue::resolve("catppuccin/mocha", None)
+            .unwrap()
+            .colors()
+            .chromatic,
+        syntax: ferriswatch::catalogue::resolve("catppuccin/mocha", None)
+            .unwrap()
+            .colors()
+            .syntax,
         surface: SurfaceColors {
             background: rgba(0x01020304),
             surface: rgba(0x11121314),

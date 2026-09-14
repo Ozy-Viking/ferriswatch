@@ -7,12 +7,13 @@ Your application chooses the web, desktop or other renderer.
 
 ```toml
 [dependencies]
-ferriswatch = { version = "0.3.0", features = ["dioxus"] }
+ferriswatch = { version = "0.3.0", registry = "onedev", features = ["dioxus"] }
 ferriswatch-componant = { version = "0.3.0", registry = "onedev" }
 dioxus = { version = "0.7.10", features = ["web"] }
 ```
 
-`ferriswatch-componant` is OneDev-only, because it depends on `dioxus-primitives`.
+`ferriswatch`, `ferriswatch-componant`, `dioxus-primitives`, and its
+`dioxus-attributes` dependency use OneDev.
 Configure the registry in `.cargo/config.toml`:
 
 ```toml

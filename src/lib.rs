@@ -8,6 +8,7 @@ pub mod css;
 #[cfg(feature = "dioxus")]
 pub mod dioxus;
 pub mod error;
+pub mod integrations;
 pub mod palette;
 pub mod theme;
 pub mod theme_variant;

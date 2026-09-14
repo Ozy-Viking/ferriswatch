@@ -20,6 +20,8 @@ pub struct ThemeVariantColors {
     pub border: Color,
     pub border_muted: Color,
     pub focus: Color,
+    pub syntax: SyntaxColors,
+    pub chromatic: ChromaticColors,
 }
 
 /// Backgrounds and interaction colour for one set of surfaces.
@@ -63,6 +65,60 @@ pub struct StatusColors {
     pub trace: Color,
 }
 
+/// Syntax Colors for code blocks
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct SyntaxColors {
+    pub attribute: Color,
+    pub boolean: Color,
+    pub builtin: Color,
+    pub builtin_function: Color,
+    pub builtin_type: Color,
+    pub comment: Color,
+    pub constant: Color,
+    pub control_keyword: Color,
+    pub deleted: Color,
+    pub deprecated: Color,
+    pub documentation: Color,
+    pub escape: Color,
+    pub foreground: Color,
+    pub function: Color,
+    pub heading: Color,
+    pub inserted: Color,
+    pub invalid: Color,
+    pub keyword: Color,
+    pub link: Color,
+    pub markup_bold: Color,
+    pub markup_italic: Color,
+    pub modifier: Color,
+    pub namespace: Color,
+    pub number: Color,
+    pub operator: Color,
+    pub parameter: Color,
+    pub property: Color,
+    pub punctuation: Color,
+    pub string: Color,
+    pub tag: Color,
+    pub type_keyword: Color,
+    pub type_name: Color,
+    pub variable: Color,
+}
+
+/// Generic chromatic colors supplied by the palette.
+///
+/// These represent the palette's closest fitting version of each broad hue.
+/// They are not semantic colors, and do not imply meaning such as error,
+/// success, warning, or information.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ChromaticColors {
+    pub red: Color,
+    pub orange: Color,
+    pub yellow: Color,
+    pub green: Color,
+    pub cyan: Color,
+    pub blue: Color,
+    pub purple: Color,
+    pub pink: Color,
+}
 /// Resolved semantic colours, independent of the factory's palette and accent types.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ThemeVariant {
@@ -250,6 +306,13 @@ impl ThemeVariant {
 
     pub fn focus(&self) -> Color {
         self.colors.focus
+    }
+    pub fn syntax(&self) -> &SyntaxColors {
+        &self.colors.syntax
+    }
+
+    pub fn chromatic(&self) -> &ChromaticColors {
+        &self.colors.chromatic
     }
 }
 

@@ -49,6 +49,8 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
             assert_eq!(selected.colors().surface, default.colors().surface);
             assert_eq!(selected.colors().surface_alt, default.colors().surface_alt);
             assert_eq!(selected.colors().status, default.colors().status);
+            assert_eq!(selected.colors().syntax, default.colors().syntax);
+            assert_eq!(selected.colors().chromatic, default.colors().chromatic);
         }
         let explicit_default = entry.resolve(Some(entry.default_accent)).unwrap();
         assert_eq!(default.colors(), explicit_default.colors());
