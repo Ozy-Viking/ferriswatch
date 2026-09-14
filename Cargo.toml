@@ -4,7 +4,7 @@ members = ["ferriswatch-componant"]
 default-members = ["."]
 
 [workspace.package]
-version = "0.3.1"
+version = "0.3.2"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
