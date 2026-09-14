@@ -132,7 +132,8 @@ jobs:
           shell: bash
           commands: |
             set -euo pipefail
-            cargo publish -p ferriswatch --registry crates-io --locked --no-verify
+            : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
+            cargo publish -p ferriswatch --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify
             cargo publish -p ferriswatch --registry onedev --locked --no-verify
             cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
             python3 - <<'PYTHON'
@@ -151,7 +152,7 @@ jobs:
             PYTHON
         runAs: 0:0
         envVars:
-          - name: CARGO_REGISTRIES_CRATES_IO_TOKEN
+          - name: CARGO_REGISTRY_TOKEN
             value: "@secret:CARGO_REGISTRY_TOKEN@"
           - name: CARGO_REGISTRIES_ONEDEV_TOKEN
             value: "@job_token@:@secret:RUST_TOKEN@"
