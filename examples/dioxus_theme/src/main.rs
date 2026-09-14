@@ -1,13 +1,13 @@
 use dioxus::prelude::*;
 use ferriswatch::{
     dioxus::{
-        DEFAULT_STYLESHEET, ThemeConfig, ThemePicker, ThemeProvider, ThemeScope, ThemeSelection,
-        use_theme,
+        DEFAULT_STYLESHEET, ThemeConfig, ThemeProvider, ThemeScope, ThemeSelection, use_theme,
     },
     palette::catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
     theme::{Appearance, Theme},
     theme_variant::ThemePalette,
 };
+use ferriswatch_componant::ThemePicker;
 
 fn main() {
     dioxus::launch(App);

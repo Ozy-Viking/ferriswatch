@@ -42,7 +42,7 @@ available throughout the document. `src/style.css` owns the page reset and
 responsive layout while the default classes provide semantic surfaces, text,
 actions, focus, borders, and feedback colors.
 
-The example uses the library's `ThemePicker`, which combines the mode slider
+The example uses `ferriswatch-componant::ThemePicker`, which combines the mode slider
 with `ThemeCombobox`. Its left half searches themes and its right half searches
 accents; both lists support scrolling and keyboard selection. Styling its
 `.fs-theme-picker` class shows how an application can customize its presentation

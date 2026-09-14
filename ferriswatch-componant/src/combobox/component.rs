@@ -7,7 +7,7 @@ use dioxus_primitives::combobox::{
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
-#[css_module("/src/dioxus/components/combobox/style.css")]
+#[css_module("/src/combobox/style.css")]
 struct Styles;
 
 #[derive(Props, Clone, PartialEq)]

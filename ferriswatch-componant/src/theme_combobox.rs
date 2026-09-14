@@ -1,7 +1,8 @@
-use super::{components::combobox::*, use_theme};
+use crate::combobox::*;
 use dioxus::prelude::*;
+use ferriswatch::dioxus::use_theme;
 
-#[css_module("/src/dioxus/theme_combobox.css")]
+#[css_module("/src/theme_combobox.css")]
 struct Styles;
 
 #[derive(Clone, Copy, PartialEq, Eq)]

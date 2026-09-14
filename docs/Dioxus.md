@@ -1,12 +1,14 @@
 # Dioxus integration
 
 Enable Ferriswatch's `dioxus` feature alongside the consuming application's Dioxus
-0.7 dependency. Ferriswatch supplies components and hooks; your application
-chooses the web, desktop or other renderer.
+0.7 dependency. Ferriswatch supplies theme configuration, provider state, and
+hooks. Widgets that wrap `dioxus-primitives` live in `ferriswatch-componant`.
+Your application chooses the web, desktop or other renderer.
 
 ```toml
 [dependencies]
 ferriswatch = { path = "../ferriswatch", features = ["dioxus"] }
+ferriswatch-componant = { path = "../ferriswatch/ferriswatch-componant" }
 dioxus = { version = "0.7.10", features = ["web"] }
 ```
 
@@ -15,7 +17,7 @@ dioxus = { version = "0.7.10", features = ["web"] }
 ```rust
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{ThemeConfig, ThemePicker, ThemeProvider, ThemeSelection},
+    dioxus::{ThemeConfig, ThemeProvider, ThemeSelection},
     palette::{
         catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
         families::{Catppuccin, RosePine},
@@ -44,7 +46,6 @@ fn App() -> Element {
 
     rsx! {
         ThemeProvider { config,
-            ThemePicker {}
             button {
                 style: "background:var(--fs-primary);color:var(--fs-on-primary);border:1px solid var(--fs-border)",
                 "Save"
@@ -129,9 +130,10 @@ Accent choices are applied through the usual resolution methods.
 Support is advisory: these methods and provider selection do not reject a
 variant because its support differs from the target mode.
 
-`ThemePicker` includes a Light/Dark switch and filters palette options for that mode.
-If an application explicitly selects an out-of-mode palette, the picker includes
-it as the current selection rather than displaying an unrelated value.
+`ferriswatch_componant::ThemePicker` includes a Light/Dark switch and filters
+palette options for that mode. If an application explicitly selects an
+out-of-mode palette, the picker includes it as the current selection rather than
+displaying an unrelated value.
 
 The provider captures configuration on mount. Remount it with a new Dioxus key
 to replace the configuration and reset the subtree. For SSR, supply matching
@@ -191,11 +193,12 @@ fn ThemedApp(config: ThemeConfig) -> Element {
 ```
 
 See [`crate::css`] for class mappings, overrides, generation, and commit checks.
-`ThemePicker` combines the light/dark slider with `ThemeCombobox`, a joined
-theme/accent control built from `dx components add combobox`. Click the left
-half to browse or search themes for the active mode; use the right half to
-browse or search its accents. Arrow keys navigate, Enter selects, and Escape
-closes without changing the selection. Only one dropdown opens at a time.
+`ferriswatch-componant` provides `ThemePicker` and `ThemeCombobox`. The picker
+combines the light/dark slider with `ThemeCombobox`, a joined theme/accent
+control built from `dx components add combobox`. Click the left half to browse
+or search themes for the active mode; use the right half to browse or search
+its accents. Arrow keys navigate, Enter selects, and Escape closes without
+changing the selection. Only one dropdown opens at a time.
 
 Use `ThemeCombobox {}` directly within a provider when your application has its
 own mode control. Changing theme retains a compatible accent, otherwise it

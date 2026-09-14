@@ -4,8 +4,7 @@ use dioxus::prelude::*;
 use ferriswatch::{
     catalogue::{AccentRegistration, PaletteRegistration},
     dioxus::{
-        ThemeConfig, ThemeError, ThemePicker, ThemeProvider, ThemeSelection, ThemeState, theme_css,
-        use_theme,
+        ThemeConfig, ThemeError, ThemeProvider, ThemeSelection, ThemeState, theme_css, use_theme,
     },
     palette::{
         Accent, NoAccent, Palette,
@@ -194,7 +193,7 @@ fn Observer() -> Element {
             .borrow_mut()
             .push(format!("{}:{:?}", theme.id(), theme.accent_id()))
     });
-    rsx! { ThemePicker {} p { "{theme.name()}" } }
+    rsx! { p { "{theme.name()}" } }
 }
 fn app() -> Element {
     let config = ThemeConfig::with_default(

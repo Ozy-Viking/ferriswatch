@@ -7,20 +7,6 @@ runtime catalogue with stable theme and accent IDs. See the [complete catalogue]
 
 ## Usage
 
-Configure the OneDev registry in your application's `.cargo/config.toml`:
-
-```toml
-[registries.onedev]
-index = "sparse+https://onedev.hankin.io/rust/~cargo/"
-credential-provider = "cargo:token"
-```
-
-Authenticate with `cargo login --registry onedev`, then add the package:
-
-```sh
-cargo add ferriswatch --registry onedev
-```
-
 ```rust
 use ferriswatch::palette::catppuccin::mocha::{Mauve, Mocha};
 use ferriswatch::theme_variant::ThemePalette;
@@ -56,8 +42,10 @@ available through `ferriswatch::css`. See the [CSS guide](docs/Css.md) for
 `DEFAULT_CSS`, generation, and commit-hook setup.
 
 Enable the optional `dioxus` feature for typed theme selection, a required-default
-configuration builder, shared theme state, a provider and a basic theme picker.
-See [Dioxus integration](docs/Dioxus.md) for setup and custom palettes.
+configuration builder, shared theme state, and a provider. `ThemePicker` and
+`ThemeCombobox` live in the `ferriswatch-componant` workspace crate because they
+depend on `dioxus-primitives`. See [Dioxus integration](docs/Dioxus.md) for setup
+and custom palettes.
 
 ## Palette inspector
 
@@ -73,30 +61,15 @@ to compare panels, raised content, popups, text tiers, actions and statuses.
 ```sh
 cargo fmt --check
 cargo test --locked
+cargo test -p ferriswatch-componant --locked
 cargo clippy --locked --all-targets
+cargo clippy -p ferriswatch-componant --locked --all-targets
 cargo doc --locked --no-deps
 python tools/check_palette_sources.py
 ```
 
 Builds use checked-in literals and never download themes. Catalogue documentation
 is generated from the same registrations used by runtime lookup.
-
-## Publishing
-
-OneDev runs the `publish` job for `v*` tags on `main`. The tag must match the
-package version in `Cargo.toml`, for example `v0.2.0`. Bump the version before
-each release; published versions cannot be replaced.
-
-The job uses the inherited `RUST_TOKEN` job secret, as Kora does, to publish to
-the `rust` project's Cargo registry. It verifies generated CSS, runs tests,
-checks the Dioxus library for WebAssembly, and verifies the packaged crate
-before uploading it. Local builds also need OneDev registry credentials.
-
-To check packaging locally without uploading:
-
-```sh
-cargo publish --registry onedev --locked --dry-run
-```
 
 ## License
 

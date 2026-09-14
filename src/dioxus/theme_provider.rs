@@ -138,27 +138,3 @@ pub fn ThemeProvider(
         div { class: "fs-theme", "data-fs-dx-theme": override_dx.then_some("true"), style, {children} }
     }
 }
-
-/// Basic accessible selectors for available palettes and their supported accents.
-#[component]
-pub fn ThemePicker() -> Element {
-    let mut state = use_theme();
-    let mode = state.mode();
-    rsx! {
-        div { class: "fs-theme-picker",
-            div { class: "fs-mode-control",
-                span { "Light" }
-                button {
-                    class: "fs-mode-toggle", r#type: "button", role: "switch",
-                    aria_label: "Dark mode", aria_checked: mode == Appearance::Dark,
-                    onclick: move |_| {
-                        state.set_mode(if state.mode() == Appearance::Dark { Appearance::Light } else { Appearance::Dark });
-                    },
-                    span { class: "fs-mode-thumb", aria_hidden: "true" }
-                }
-                span { "Dark" }
-            }
-            super::ThemeCombobox {}
-        }
-    }
-}

@@ -1,6 +1,17 @@
+[workspace]
+resolver = "3"
+members = ["ferriswatch-componant"]
+default-members = ["."]
+
+[workspace.dependencies]
+dioxus = { version = "0.7.10", default-features = false, features = ["macro", "html", "signals", "hooks", "document", "asset"] }
+dioxus-primitives = { version = "=0.0.1", registry = "onedev", default-features = false, features = ["web"] }
+dioxus-icons = { version = "0.1.0", default-features = false }
+web-sys = { version = "0.3", features = ["Location"] }
+
 [package]
 name = "ferriswatch"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
 license = "MIT"
 description = "Shared themes and colour palettes for consistent styling across applications"
@@ -14,9 +25,7 @@ categories = ["gui"]
 miette = { version = "7.6", features = ["fancy", "serde"] }
 serde = "1.0"
 thiserror = "2.0"
-dioxus = { version = "0.7.10", optional = true, default-features = false, features = ["macro", "html", "signals", "hooks", "document", "asset"] }
-dioxus-primitives = { version = "=0.0.1", registry = "onedev", optional = true, default-features = false, features = ["web"] }
-dioxus-icons = { version = "0.1.0", optional = true, default-features = false }
+dioxus = { workspace = true, optional = true }
 
 [dev-dependencies]
 rstest = "0.27.0"
@@ -24,10 +33,10 @@ rstest = "0.27.0"
 # Dioxus 0.7.10's document integration enables web history without its Location
 # binding. Keep this feature-unification fix limited to Dioxus browser builds.
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "0.3", optional = true, features = ["Location"] }
+web-sys = { workspace = true, optional = true }
 
 [features]
-dioxus = ["dep:dioxus", "dep:web-sys", "dep:dioxus-primitives", "dep:dioxus-icons"]
+dioxus = ["dep:dioxus", "dep:web-sys"]
 
 [[bin]]
 name = "generate-css"
