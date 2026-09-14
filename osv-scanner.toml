@@ -1,0 +1,29 @@
+# Private registry packages have no license metadata in deps.dev.
+# These declarations match the local manifests and retained license texts.
+# Override license metadata only; keep vulnerability scanning enabled.
+
+[[PackageOverrides]]
+name = "ferriswatch"
+ecosystem = "crates.io"
+license.override = ["MIT"]
+reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
+
+[[PackageOverrides]]
+name = "ferriswatch-componant"
+ecosystem = "crates.io"
+license.override = ["MIT"]
+reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
+
+[[PackageOverrides]]
+name = "dioxus-attributes"
+version = "0.1.2"
+ecosystem = "crates.io"
+license.override = ["MIT OR Apache-2.0"]
+reason = "Private OneDev package; upstream license is MIT OR Apache-2.0."
+
+[[PackageOverrides]]
+name = "dioxus-primitives"
+version = "0.0.3"
+ecosystem = "crates.io"
+license.override = ["MIT OR Apache-2.0"]
+reason = "Private OneDev package; upstream license is MIT OR Apache-2.0."
