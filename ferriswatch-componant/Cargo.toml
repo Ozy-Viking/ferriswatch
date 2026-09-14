@@ -1,20 +1,21 @@
 [package]
 name = "ferriswatch-componant"
-version = "0.1.0"
-edition = "2024"
-license = "MIT"
-description = "Dioxus widgets for Ferriswatch that wrap dioxus-primitives"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
 readme = "README.md"
-repository = "https://onedev.hankin.io/rust/ferriswatch"
+repository.workspace = true
 publish = ["onedev"]
-keywords = ["theme", "dioxus", "components", "combobox"]
-categories = ["gui"]
+keywords.workspace = true
+categories.workspace = true
 
 [dependencies]
 dioxus.workspace = true
 dioxus-icons.workspace = true
 dioxus-primitives.workspace = true
-ferriswatch = { path = "..", version = "0.3.0", features = ["dioxus"] }
+ferriswatch = { workspace = true, features = ["dioxus"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys.workspace = true

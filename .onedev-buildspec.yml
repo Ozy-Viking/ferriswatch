@@ -125,9 +125,13 @@ jobs:
       type: PosixInterpreter
       shell: bash
       commands: |
+        cargo publish -p ferriswatch --registry crates-io --locked --no-verify
         cargo publish -p ferriswatch --registry onedev --locked --no-verify
+        cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
     runAs: 0:0
     envVars:
+    - name: CARGO_REGISTRY_TOKEN
+      value: '@secret:CARGO_REGISTRY_TOKEN@'
     - name: CARGO_REGISTRIES_ONEDEV_TOKEN
       value: '@job_token@:@secret:RUST_TOKEN@'
     useTTY: false

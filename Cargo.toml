@@ -3,23 +3,66 @@ resolver = "3"
 members = ["ferriswatch-componant"]
 default-members = ["."]
 
+[workspace.package]
+version = "0.3.0"
+edition = "2024"
+authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
+license = "MIT"
+description = "Shared themes and colour palettes for consistent styling across applications"
+repository = "https://github.com/Ozy-Viking/ferriswatch/"
+keywords = ["theme", "palette", "colors", "styling"]
+categories = ["gui"]
+
 [workspace.dependencies]
-dioxus = { version = "0.7.10", default-features = false, features = ["macro", "html", "signals", "hooks", "document", "asset"] }
-dioxus-primitives = { version = "=0.0.1", registry = "onedev", default-features = false, features = ["web"] }
+dioxus = { version = "0.7.10", default-features = false, features = [
+    "macro",
+    "html",
+    "signals",
+    "hooks",
+    "document",
+    "asset",
+] }
+dioxus-primitives = { version = "=0.0.1", registry = "onedev", default-features = false, features = [
+    "web",
+] }
 dioxus-icons = { version = "0.1.0", default-features = false }
 web-sys = { version = "0.3", features = ["Location"] }
+ferriswatch = { path = ".", version = "0" }
 
 [package]
 name = "ferriswatch"
-version = "0.3.0"
-edition = "2024"
-license = "MIT"
-description = "Shared themes and colour palettes for consistent styling across applications"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
 readme = "README.md"
-repository = "https://onedev.hankin.io/rust/ferriswatch"
-publish = ["onedev"]
-keywords = ["theme", "palette", "colors", "styling"]
-categories = ["gui"]
+repository.workspace = true
+publish = ["crates-io", "onedev"]
+keywords.workspace = true
+categories.workspace = true
+include = [
+    "build.rs",
+    "/LICENSE",
+    "/README.md",
+    "src/lib.rs",
+    "src/error.rs",
+    "src/catalogue.rs",
+    "src/catalogue/**",
+    "src/color/**",
+    "src/css/**",
+    "src/dioxus/**",
+    "src/palette/**",
+    "src/theme/**",
+    "src/theme_variant/**",
+    "docs/Color.md",
+    "docs/Css.md",
+    "docs/Dioxus.md",
+    "docs/Palettes.md",
+    "tools/generate_css.rs",
+    "!tests/**",
+    "!tools/README.md",
+]
 
 [dependencies]
 miette = { version = "7.6", features = ["fancy", "serde"] }

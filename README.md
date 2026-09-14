@@ -7,6 +7,10 @@ runtime catalogue with stable theme and accent IDs. See the [complete catalogue]
 
 ## Usage
 
+```sh
+cargo add ferriswatch
+```
+
 ```rust
 use ferriswatch::palette::catppuccin::mocha::{Mauve, Mocha};
 use ferriswatch::theme_variant::ThemePalette;
