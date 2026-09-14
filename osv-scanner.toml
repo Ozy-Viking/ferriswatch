@@ -16,14 +16,21 @@ reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
 
 [[PackageOverrides]]
 name = "dioxus-attributes"
-version = "0.1.2"
+version = "0.1.0"
 ecosystem = "crates.io"
 license.override = ["MIT OR Apache-2.0"]
 reason = "Private OneDev package; upstream license is MIT OR Apache-2.0."
 
 [[PackageOverrides]]
 name = "dioxus-primitives"
-version = "0.0.3"
+version = "0.0.1"
 ecosystem = "crates.io"
 license.override = ["MIT OR Apache-2.0"]
 reason = "Private OneDev package; upstream license is MIT OR Apache-2.0."
+
+[[PackageOverrides]]
+name = "ferriswatch-dioxus-example"
+version = "0.1.0"
+ecosystem = "crates.io"
+license.override = ["MIT"]
+reason = "Repository example is MIT licensed; see examples/dioxus_theme/Cargo.toml and LICENSE."
