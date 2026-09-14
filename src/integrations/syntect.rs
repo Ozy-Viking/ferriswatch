@@ -3,11 +3,15 @@ use crate::{
     theme::ThemeVariant,
 };
 
-#[cfg(feature = "syntect")]
-impl ThemeVariant {
-    /// Returns this theme variant as a Syntect highlighting theme.
+pub trait SyntectTheme {
     #[must_use]
-    pub fn syntect(&self) -> syntect::highlighting::Theme {
+    fn syntect(&self) -> syntect::highlighting::Theme;
+}
+
+#[cfg(feature = "syntect")]
+impl SyntectTheme for ThemeVariant {
+    /// Returns this theme variant as a Syntect highlighting theme.
+    fn syntect(&self) -> syntect::highlighting::Theme {
         use syntect::highlighting::{FontStyle, StyleModifier, Theme, ThemeItem, ThemeSettings};
 
         let colors = self.colors();

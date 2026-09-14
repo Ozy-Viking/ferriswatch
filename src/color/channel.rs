@@ -567,16 +567,14 @@ impl<T: Copy + PartialOrd> Clamp for Channel<T> {
                 } => apply(self.value, *lower, *upper),
             };
         } else {
-            if let Some(lower) = self.limits.0 {
-                if self.value < lower {
+            if let Some(lower) = self.limits.0
+                && self.value < lower {
                     self.value = lower;
                 }
-            }
-            if let Some(upper) = self.limits.1 {
-                if self.value > upper {
+            if let Some(upper) = self.limits.1
+                && self.value > upper {
                     self.value = upper;
                 }
-            }
         }
         self
     }

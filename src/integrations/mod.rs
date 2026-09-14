@@ -1,2 +1,2 @@
 #[cfg(feature = "syntect")]
-pub mod syntact;
+pub mod syntect;
