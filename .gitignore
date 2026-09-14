@@ -3,3 +3,7 @@
 /THEME_PLAN.md
 /examples/dioxus_theme/__pycache__
 __pycache__
+
+# OneDev Cargo cache and compiler fingerprint
+/.ci-cargo/
+/.ci-rust-version

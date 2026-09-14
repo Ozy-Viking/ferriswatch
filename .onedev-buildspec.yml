@@ -15,6 +15,32 @@ jobs:
         condition: SUCCESSFUL
         optional: false
       - type: CommandStep
+        name: Identify Rust cache compatibility
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+            rustc -vV > .ci-rust-version
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: SetupCacheStep
+        name: Restore Cargo dependencies and build artifacts
+        key: ferriswatch-rust-v1
+        checksumFiles: Cargo.lock .ci-rust-version .onedev-buildspec.yml ci/check.sh
+        entries:
+          - path: .ci-cargo/registry
+          - path: .ci-cargo/git
+          - path: target
+            excludes: clippy nextest
+        uploadStrategy: UPLOAD_IF_NOT_EXACT_MATCH
+        condition: SUCCESSFUL
+        optional: false
+      - type: CommandStep
         name: Release tests and Clippy
         runInContainer: true
         image: onedev.hankin.io/docker/rust:latest
@@ -28,6 +54,8 @@ jobs:
             bash ci/check.sh
         runAs: 0:0
         envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
           - name: CARGO_REGISTRIES_ONEDEV_TOKEN
             value: "@job_token@:@secret:RUST_TOKEN@"
         useTTY: false
@@ -73,6 +101,32 @@ jobs:
         condition: SUCCESSFUL
         optional: false
       - type: CommandStep
+        name: Identify Rust cache compatibility
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+            rustc -vV > .ci-rust-version
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+      - type: SetupCacheStep
+        name: Restore Cargo dependencies and build artifacts
+        key: ferriswatch-rust-v1
+        checksumFiles: Cargo.lock .ci-rust-version .onedev-buildspec.yml ci/check.sh
+        entries:
+          - path: .ci-cargo/registry
+          - path: .ci-cargo/git
+          - path: target
+            excludes: clippy nextest
+        uploadStrategy: UPLOAD_IF_NOT_EXACT_MATCH
+        condition: SUCCESSFUL
+        optional: false
+      - type: CommandStep
         name: Validate release tag and run checks
         runInContainer: true
         image: onedev.hankin.io/docker/rust:latest
@@ -98,6 +152,8 @@ jobs:
             bash ci/check.sh
         runAs: 0:0
         envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
           - name: CARGO_REGISTRIES_ONEDEV_TOKEN
             value: "@job_token@:@secret:RUST_TOKEN@"
           - name: RELEASE_TAG
@@ -152,6 +208,8 @@ jobs:
             PYTHON
         runAs: 0:0
         envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
           - name: CARGO_REGISTRY_TOKEN
             value: "@secret:CARGO_REGISTRY_TOKEN@"
           - name: CARGO_REGISTRIES_ONEDEV_TOKEN

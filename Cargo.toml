@@ -4,7 +4,7 @@ members = ["ferriswatch-componant"]
 default-members = ["."]
 
 [workspace.package]
-version = "0.3.2"
+version = "0.3.3"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
@@ -46,17 +46,7 @@ include = [
     "build.rs",
     "/LICENSE",
     "/README.md",
-    "src/lib.rs",
-    "src/error.rs",
-    "src/catalogue.rs",
-    "src/catalogue/**",
-    "src/color/**",
-    "src/css/**",
-    "src/dioxus/**",
-    "src/integrations/**",
-    "src/palette/**",
-    "src/theme/**",
-    "src/theme_variant/**",
+    "src/**",
     "docs/Color.md",
     "docs/Css.md",
     "docs/Dioxus.md",
