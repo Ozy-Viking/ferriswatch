@@ -17,7 +17,7 @@ use ferriswatch::theme_variant::ThemePalette;
 use ferriswatch::catalogue;
 
 let typed = Mocha::variant::<Mauve>();
-assert_eq!(typed.primary(), Mocha::MAUVE);
+assert_eq!(typed.primary().normal.background, Mocha::MAUVE);
 assert_eq!(typed.id(), "catppuccin/mocha");
 assert_eq!(typed.accent_id(), Some("mauve"));
 

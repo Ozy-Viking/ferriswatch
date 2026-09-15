@@ -34,16 +34,16 @@ define_palette! {
     }
     default PURPLE => "purple";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::BACKGROUND,
-            surface: Self::BACKGROUND,
+            base: Self::BACKGROUND,
             raised: Self::BACKGROUND,
             overlay: Self::BACKGROUND,
             hover: Self::BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::BACKGROUND,
-            surface: Self::BACKGROUND,
+            base: Self::BACKGROUND,
             raised: Self::BACKGROUND,
             overlay: Self::BACKGROUND,
             hover: Self::BACKGROUND,
@@ -52,20 +52,21 @@ define_palette! {
             normal: Self::WHITE,
             muted: Self::LIGHT,
             subtle: Self::COMMENT,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::PURPLE),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::WHITE, Self::BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::PURPLE,
-            hover: crate::palette::primary_hover(Self::PURPLE),
-            pressed: crate::palette::action_pressed(Self::PURPLE),
-            muted: Self::BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), Self::PURPLE),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), crate::palette::primary_hover(Self::PURPLE)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), crate::palette::action_pressed(Self::PURPLE)),
+            muted: crate::theme_variant::ColorPair::new(Self::WHITE, Self::BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
@@ -73,6 +74,7 @@ define_palette! {
             error: Self::ERROR,
             critical: Self::ERROR,
             info: Self::BLUE,
+            debug: Self::LIGHT,
             trace: Self::COMMENT,
         },
         border: Self::COMMENT,
@@ -108,6 +110,7 @@ define_palette! {
             invalid: Self::ERROR,
             keyword: Self::KEYWORD,
             link: Self::BLUE,
+            macro_name: Self::BLUE,
             markup_bold: Self::WHITE,
             markup_italic: Self::WHITE,
             modifier: Self::KEYWORD,

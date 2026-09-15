@@ -1185,16 +1185,16 @@ define_palette! {
     }
     default BLUE_6 => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_TEXT_BACKGROUND,
-            surface: Self::GRAY_2,
+            base: Self::GRAY_2,
             raised: Self::GRAY_3,
             overlay: Self::GRAY_2,
             hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::GRAY_1,
-            surface: Self::EDITOR_TEXT_BACKGROUND,
+            base: Self::EDITOR_TEXT_BACKGROUND,
             raised: Self::GRAY_2,
             overlay: Self::GRAY_2,
             hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
@@ -1203,20 +1203,21 @@ define_palette! {
             normal: Self::EDITOR_TEXT_FOREGROUND,
             muted: Self::GRAY_9,
             subtle: Self::GRAY_8,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::GRAY_3),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::GRAY_2,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::GRAY_2),
+            disabled: crate::theme_variant::ColorPair::new(Self::GRAY_8, Self::GRAY_2),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::GRAY_3,
-            hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
-            pressed: Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND,
-            muted: Self::GRAY_2,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::GRAY_3),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::UI_ACTION_BUTTON_HOVER_BACKGROUND),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::GRAY_2),
+            disabled: crate::theme_variant::ColorPair::new(Self::GRAY_8, Self::GRAY_2),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN_7,
@@ -1224,6 +1225,7 @@ define_palette! {
             error: Self::RED_7,
             critical: Self::RED_8,
             info: Self::BLUE_9,
+            debug: Self::GRAY_9,
             trace: Self::GRAY_8,
         },
         border: Self::GRAY_4,
@@ -1259,6 +1261,7 @@ define_palette! {
             invalid: Self::RED_7,
             keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
             link: Self::GRAY_3,
+            macro_name: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
             markup_bold: Self::EDITOR_TEXT_FOREGROUND,
             markup_italic: Self::EDITOR_TEXT_FOREGROUND,
             modifier: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,

@@ -117,16 +117,16 @@ define_palette! {
     }
     default ACTIVITY_BAR_BADGE_BACKGROUND => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_BACKGROUND,
-            surface: Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND,
+            base: Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND,
             raised: Self::MENU_BACKGROUND,
             overlay: Self::MENU_BACKGROUND,
             hover: Self::LIST_DROP_BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::MENU_BACKGROUND,
-            surface: Self::EDITOR_BACKGROUND,
+            base: Self::EDITOR_BACKGROUND,
             raised: Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND,
             overlay: Self::MENU_BACKGROUND,
             hover: Self::LIST_DROP_BACKGROUND,
@@ -135,20 +135,21 @@ define_palette! {
             normal: Self::EDITOR_FOREGROUND,
             muted: Self::SIDE_BAR_TITLE_FOREGROUND,
             subtle: Self::INPUT_PLACEHOLDER_FOREGROUND,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::INPUT_PLACEHOLDER_FOREGROUND, Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS,
-            hover: crate::palette::primary_hover(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS),
-            pressed: crate::palette::action_pressed(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS),
-            muted: Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS), Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS), crate::palette::primary_hover(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS), crate::palette::action_pressed(Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::INPUT_PLACEHOLDER_FOREGROUND, Self::EDITOR_GROUP_HEADER_TABS_BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::PORTS_ICON_RUNNING_PROCESS_FOREGROUND,
@@ -156,6 +157,7 @@ define_palette! {
             error: Self::TOKEN_9,
             critical: Self::TOKEN_9,
             info: Self::ACTIVITY_BAR_BADGE_BACKGROUND,
+            debug: Self::SIDE_BAR_TITLE_FOREGROUND,
             trace: Self::INPUT_PLACEHOLDER_FOREGROUND,
         },
         border: Self::MENU_BORDER,
@@ -191,6 +193,7 @@ define_palette! {
             invalid: Self::TOKEN_12,
             keyword: Self::TOKEN_40,
             link: Self::TOKEN_CONTROL_FLOW_SPECIAL_KEYWORDS,
+            macro_name: Self::TOKEN_FUNCTION_DECLARATIONS,
             markup_bold: Self::TOKEN_14,
             markup_italic: Self::TOKEN_16,
             modifier: Self::TOKEN_32,

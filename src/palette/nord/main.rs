@@ -38,16 +38,16 @@ define_palette! {
     }
     default NORD_8 => "nord_8";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::NORD_0,
-            surface: Self::NORD_1,
+            base: Self::NORD_1,
             raised: Self::NORD_2,
             overlay: Self::NORD_1,
             hover: Self::NORD_3,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::NORD_1,
-            surface: Self::NORD_0,
+            base: Self::NORD_0,
             raised: Self::NORD_1,
             overlay: Self::NORD_1,
             hover: Self::NORD_3,
@@ -56,20 +56,21 @@ define_palette! {
             normal: Self::NORD_4,
             muted: Self::NORD_5,
             subtle: Self::NORD_3,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::NORD_9),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::NORD_1,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::NORD_4, Self::NORD_1),
+            disabled: crate::theme_variant::ColorPair::new(Self::NORD_3, Self::NORD_1),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::NORD_9,
-            hover: crate::palette::primary_hover(Self::NORD_9),
-            pressed: crate::palette::action_pressed(Self::NORD_9),
-            muted: Self::NORD_1,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), Self::NORD_9),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), crate::palette::primary_hover(Self::NORD_9)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), crate::palette::action_pressed(Self::NORD_9)),
+            muted: crate::theme_variant::ColorPair::new(Self::NORD_4, Self::NORD_1),
+            disabled: crate::theme_variant::ColorPair::new(Self::NORD_3, Self::NORD_1),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::NORD_14,
@@ -77,6 +78,7 @@ define_palette! {
             error: Self::NORD_11,
             critical: Self::NORD_11,
             info: Self::NORD_8,
+            debug: Self::NORD_5,
             trace: Self::NORD_10,
         },
         border: Self::NORD_3,
@@ -112,6 +114,7 @@ define_palette! {
             invalid: Self::NORD_11,
             keyword: Self::NORD_9,
             link: Self::NORD_8,
+            macro_name: Self::NORD_8,
             markup_bold: Self::NORD_4,
             markup_italic: Self::NORD_4,
             modifier: Self::NORD_9,

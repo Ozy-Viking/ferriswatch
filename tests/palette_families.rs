@@ -1,13 +1,17 @@
 //! Regression anchors from the upstream palettes listed in docs/Palettes.md.
+
 use ferriswatch::color::Color;
 use ferriswatch::palette::{self, Accent, NoAccent, Palette};
 use ferriswatch::theme_variant::ThemePalette;
 
 struct Transparent;
+
 impl<P: Palette> Accent<P> for Transparent {
     const ACCENT: Option<Color> = Some(Color::TRANSPARENT);
-    const ID: Option<&'static str> = Some("transparent");
-    const NAME: Option<&'static str> = Some("Transparent");
+
+    const ID: &'static str = "transparent";
+
+    const NAME: &'static str = "Transparent";
 }
 
 macro_rules! check_variant {
@@ -22,36 +26,37 @@ macro_rules! check_variant {
             assert_eq!(default.name(), $name);
             assert_eq!(default.accent(), None);
             assert_eq!(default.accent_name(), None);
-            assert_eq!(default.primary(), Color::hex($default));
-            assert_eq!(default.focus(), default.primary());
-            let variants = [$(($ty::variant::<$accent>(), Color::hex($hex), <$accent as Accent<$ty>>::NAME.unwrap())),+];
-            for (theme, colour, name) in variants {
+            assert_eq!(default.primary().normal.background, Color::hex($default));
+            assert_eq!(default.focus(), default.primary().normal.background);
+            $({
+                let theme = $ty::variant::<$accent>();
+                let colour = Color::hex($hex);
+                let name = <$accent as Accent<$ty>>::NAME;
                 assert_eq!(theme.name(), $name);
                 assert_eq!(theme.accent_name(), Some(name));
                 assert_eq!(theme.accent(), Some(colour));
-                assert_eq!(theme.primary(), colour);
+                assert_eq!(theme.primary().normal.background, colour);
                 assert_eq!(theme.focus(), colour);
-                assert_ne!(theme.primary_hover(), colour);
-                assert_eq!(theme.primary_hover().a(), colour.a());
-                assert!(theme.primary_hover().r() <= colour.r());
-                assert!(theme.primary_hover().g() <= colour.g());
-                assert!(theme.primary_hover().b() <= colour.b());
-                assert_eq!(theme.background(), Color::hex($bg));
-                assert_eq!(theme.text(), Color::hex($fg));
-                assert_eq!(theme.surface(), Color::hex($surface));
-                assert_eq!(theme.success(), Color::hex($success));
-                assert_eq!(theme.warning(), Color::hex($warning));
-                assert_eq!(theme.error(), Color::hex($error));
-                // Accent changes cannot change the surrounding UI colours.
-                assert_eq!(theme.background(), default.background());
-                assert_eq!(theme.text(), default.text());
+                assert_ne!(theme.primary().hover.background, colour);
+                assert_eq!(theme.primary().hover.background.a(), colour.a());
+                assert!(theme.primary().hover.background.r() <= colour.r());
+                assert!(theme.primary().hover.background.g() <= colour.g());
+                assert!(theme.primary().hover.background.b() <= colour.b());
+                assert_eq!(theme.surfaces().background, Color::hex($bg));
+                assert_eq!(theme.text().normal, Color::hex($fg));
+                assert_eq!(theme.surfaces().base, Color::hex($surface));
+                assert_eq!(theme.status().success, Color::hex($success));
+                assert_eq!(theme.status().warning, Color::hex($warning));
+                assert_eq!(theme.status().error, Color::hex($error));
+                assert_eq!(theme.surfaces().background, default.surfaces().background);
+                assert_eq!(theme.text().normal, default.text().normal);
                 assert_eq!(theme.border(), default.border());
-            }
+            })+
             let transparent = $ty::variant::<Transparent>();
             assert_eq!(transparent.accent_name(), Some("Transparent"));
             assert_eq!(transparent.accent(), Some(Color::TRANSPARENT));
-            assert_eq!(transparent.primary(), Color::TRANSPARENT);
-            assert_eq!(transparent.primary_hover(), Color::TRANSPARENT);
+            assert_eq!(transparent.primary().normal.background, Color::TRANSPARENT);
+            assert_eq!(transparent.primary().hover.background, Color::TRANSPARENT);
         }
     };
 }
@@ -596,7 +601,9 @@ check_variant!(
 );
 
 #[test]
+
 fn families_can_share_runtime_theme_selection() {
+
     let themes = [
         palette::tokyo_night::Night::variant::<NoAccent>(),
         palette::rose_pine::Dawn::variant::<NoAccent>(),
@@ -605,7 +612,9 @@ fn families_can_share_runtime_theme_selection() {
         palette::everforest::LightSoft::variant::<NoAccent>(),
         palette::catppuccin::Mocha::variant::<NoAccent>(),
     ];
+
     let names: Vec<_> = themes.iter().map(|theme| theme.name()).collect();
+
     assert_eq!(
         names,
         [

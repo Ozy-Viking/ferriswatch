@@ -63,16 +63,16 @@ define_palette! {
     }
     default FUNCTION_SPECIAL_METHOD_BLOCK_LEVEL_FOREGROUND => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::DEFAULT_BACKGROUND,
-            surface: Self::DEFAULT_BACKGROUND,
+            base: Self::DEFAULT_BACKGROUND,
             raised: Self::DEFAULT_BACKGROUND,
             overlay: Self::DEFAULT_BACKGROUND,
             hover: Self::DEFAULT_LINE_HIGHLIGHT,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::DEFAULT_BACKGROUND,
-            surface: Self::DEFAULT_BACKGROUND,
+            base: Self::DEFAULT_BACKGROUND,
             raised: Self::DEFAULT_BACKGROUND,
             overlay: Self::DEFAULT_BACKGROUND,
             hover: Self::DEFAULT_LINE_HIGHLIGHT,
@@ -81,20 +81,21 @@ define_palette! {
             normal: Self::DEFAULT_FOREGROUND,
             muted: Self::DEFAULT_FOREGROUND,
             subtle: Self::COMMENTS_FOREGROUND,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::KEYWORD_STORAGE_FOREGROUND),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::DEFAULT_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::DEFAULT_FOREGROUND, Self::DEFAULT_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENTS_FOREGROUND, Self::DEFAULT_BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::KEYWORD_STORAGE_FOREGROUND,
-            hover: crate::palette::primary_hover(Self::KEYWORD_STORAGE_FOREGROUND),
-            pressed: crate::palette::action_pressed(Self::KEYWORD_STORAGE_FOREGROUND),
-            muted: Self::DEFAULT_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::KEYWORD_STORAGE_FOREGROUND), Self::KEYWORD_STORAGE_FOREGROUND),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::KEYWORD_STORAGE_FOREGROUND), crate::palette::primary_hover(Self::KEYWORD_STORAGE_FOREGROUND)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::KEYWORD_STORAGE_FOREGROUND), crate::palette::action_pressed(Self::KEYWORD_STORAGE_FOREGROUND)),
+            muted: crate::theme_variant::ColorPair::new(Self::DEFAULT_FOREGROUND, Self::DEFAULT_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENTS_FOREGROUND, Self::DEFAULT_BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::STRING_SYMBOLS_INHERITED_CLASS_MARKUP_HEADING_FOREGROUND,
@@ -102,6 +103,7 @@ define_palette! {
             error: Self::TAG_FOREGROUND,
             critical: Self::DELETED_FOREGROUND,
             info: Self::FUNCTION_SPECIAL_METHOD_BLOCK_LEVEL_FOREGROUND,
+            debug: Self::DEFAULT_FOREGROUND,
             trace: Self::COMMENTS_FOREGROUND,
         },
         border: Self::DEFAULT_SELECTION,
@@ -137,6 +139,7 @@ define_palette! {
             invalid: Self::TAG_FOREGROUND,
             keyword: Self::KEYWORD_STORAGE_FOREGROUND,
             link: Self::KEYWORD_STORAGE_FOREGROUND,
+            macro_name: Self::FUNCTION_SPECIAL_METHOD_BLOCK_LEVEL_FOREGROUND,
             markup_bold: Self::DEFAULT_FOREGROUND,
             markup_italic: Self::DEFAULT_FOREGROUND,
             modifier: Self::KEYWORD_STORAGE_FOREGROUND,

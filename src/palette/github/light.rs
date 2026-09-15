@@ -152,16 +152,16 @@ define_palette! {
     }
     default SCALE_BLUE_5 => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::CANVAS_DEFAULT,
-            surface: Self::CANVAS_SUBTLE,
+            base: Self::CANVAS_SUBTLE,
             raised: Self::CANVAS_OVERLAY,
             overlay: Self::CANVAS_OVERLAY,
             hover: Self::BORDER_DEFAULT,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::CANVAS_INSET,
-            surface: Self::CANVAS_DEFAULT,
+            base: Self::CANVAS_DEFAULT,
             raised: Self::CANVAS_SUBTLE,
             overlay: Self::CANVAS_OVERLAY,
             hover: Self::BORDER_DEFAULT,
@@ -170,20 +170,21 @@ define_palette! {
             normal: Self::FG_DEFAULT,
             muted: Self::FG_MUTED,
             subtle: Self::FG_SUBTLE,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::ACCENT_EMPHASIS),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::CANVAS_SUBTLE,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::FG_DEFAULT, Self::CANVAS_SUBTLE),
+            disabled: crate::theme_variant::ColorPair::new(Self::FG_SUBTLE, Self::CANVAS_SUBTLE),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::ACCENT_EMPHASIS,
-            hover: crate::palette::primary_hover(Self::ACCENT_EMPHASIS),
-            pressed: crate::palette::action_pressed(Self::ACCENT_EMPHASIS),
-            muted: Self::CANVAS_SUBTLE,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ACCENT_EMPHASIS), Self::ACCENT_EMPHASIS),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ACCENT_EMPHASIS), crate::palette::primary_hover(Self::ACCENT_EMPHASIS)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ACCENT_EMPHASIS), crate::palette::action_pressed(Self::ACCENT_EMPHASIS)),
+            muted: crate::theme_variant::ColorPair::new(Self::FG_DEFAULT, Self::CANVAS_SUBTLE),
+            disabled: crate::theme_variant::ColorPair::new(Self::FG_SUBTLE, Self::CANVAS_SUBTLE),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::SUCCESS_FG,
@@ -191,6 +192,7 @@ define_palette! {
             error: Self::DANGER_FG,
             critical: Self::DANGER_EMPHASIS,
             info: Self::ACCENT_FG,
+            debug: Self::FG_MUTED,
             trace: Self::FG_SUBTLE,
         },
         border: Self::BORDER_DEFAULT,
@@ -226,6 +228,7 @@ define_palette! {
             invalid: Self::DANGER_FG,
             keyword: Self::SCALE_RED_5,
             link: Self::SCALE_PURPLE_5,
+            macro_name: Self::SCALE_PURPLE_5,
             markup_bold: Self::FG_DEFAULT,
             markup_italic: Self::FG_DEFAULT,
             modifier: Self::SCALE_RED_5,

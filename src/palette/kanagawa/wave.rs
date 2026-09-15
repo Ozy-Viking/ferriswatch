@@ -122,16 +122,16 @@ define_palette! {
     }
     default CRYSTAL_BLUE => "crystal_blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::SUMI_INK_3,
-            surface: Self::SUMI_INK_4,
+            base: Self::SUMI_INK_4,
             raised: Self::SUMI_INK_5,
             overlay: Self::SUMI_INK_0,
             hover: Self::SUMI_INK_5,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::SUMI_INK_1,
-            surface: Self::SUMI_INK_2,
+            base: Self::SUMI_INK_2,
             raised: Self::SUMI_INK_3,
             overlay: Self::SUMI_INK_0,
             hover: Self::WAVE_BLUE_1,
@@ -140,20 +140,21 @@ define_palette! {
             normal: Self::FUJI_WHITE,
             muted: Self::OLD_WHITE,
             subtle: Self::FUJI_GRAY,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::ONI_VIOLET),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::SUMI_INK_5,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::FUJI_WHITE, Self::SUMI_INK_5),
+            disabled: crate::theme_variant::ColorPair::new(Self::FUJI_GRAY, Self::SUMI_INK_5),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::ONI_VIOLET,
-            hover: crate::palette::primary_hover(Self::ONI_VIOLET),
-            pressed: crate::palette::action_pressed(Self::ONI_VIOLET),
-            muted: Self::SUMI_INK_4,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ONI_VIOLET), Self::ONI_VIOLET),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ONI_VIOLET), crate::palette::primary_hover(Self::ONI_VIOLET)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ONI_VIOLET), crate::palette::action_pressed(Self::ONI_VIOLET)),
+            muted: crate::theme_variant::ColorPair::new(Self::FUJI_WHITE, Self::SUMI_INK_4),
+            disabled: crate::theme_variant::ColorPair::new(Self::FUJI_GRAY, Self::SUMI_INK_4),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::SPRING_GREEN,
@@ -161,6 +162,7 @@ define_palette! {
             error: Self::SAMURAI_RED,
             critical: Self::SAMURAI_RED,
             info: Self::DRAGON_BLUE,
+            debug: Self::OLD_WHITE,
             trace: Self::OLD_WHITE,
         },
         border: Self::SUMI_INK_6,
@@ -196,6 +198,7 @@ define_palette! {
             invalid: Self::SAMURAI_RED,
             keyword: Self::ONI_VIOLET,
             link: Self::CRYSTAL_BLUE,
+            macro_name: Self::CRYSTAL_BLUE,
             markup_bold: Self::FUJI_WHITE,
             markup_italic: Self::FUJI_WHITE,
             modifier: Self::ONI_VIOLET,

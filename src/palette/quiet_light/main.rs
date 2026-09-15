@@ -144,16 +144,16 @@ define_palette! {
     }
     default TOKEN_TYPES => "purple";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_BACKGROUND,
-            surface: Self::SIDE_BAR_BACKGROUND,
+            base: Self::SIDE_BAR_BACKGROUND,
             raised: Self::SIDE_BAR_SECTION_HEADER_BACKGROUND,
             overlay: Self::DROPDOWN_BACKGROUND,
             hover: Self::LIST_HOVER_BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::ACTIVITY_BAR_BACKGROUND,
-            surface: Self::EDITOR_BACKGROUND,
+            base: Self::EDITOR_BACKGROUND,
             raised: Self::SIDE_BAR_BACKGROUND,
             overlay: Self::DROPDOWN_BACKGROUND,
             hover: Self::LIST_HOVER_BACKGROUND,
@@ -162,20 +162,21 @@ define_palette! {
             normal: Self::TOKEN_0,
             muted: Self::TOKEN_OPERATORS,
             subtle: Self::TOKEN_COMMENTS,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::BUTTON_BACKGROUND),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::SIDE_BAR_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::TOKEN_0, Self::SIDE_BAR_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::TOKEN_COMMENTS, Self::SIDE_BAR_BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::BUTTON_BACKGROUND,
-            hover: crate::palette::primary_hover(Self::BUTTON_BACKGROUND),
-            pressed: crate::palette::action_pressed(Self::BUTTON_BACKGROUND),
-            muted: Self::SIDE_BAR_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), Self::BUTTON_BACKGROUND),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), crate::palette::primary_hover(Self::BUTTON_BACKGROUND)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), crate::palette::action_pressed(Self::BUTTON_BACKGROUND)),
+            muted: crate::theme_variant::ColorPair::new(Self::TOKEN_0, Self::SIDE_BAR_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::TOKEN_COMMENTS, Self::SIDE_BAR_BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TOKEN_STRINGS,
@@ -183,6 +184,7 @@ define_palette! {
             error: Self::TOKEN_INVALID,
             critical: Self::TOKEN_INVALID_ILLEGAL,
             info: Self::TOKEN_KEYWORDS,
+            debug: Self::TOKEN_OPERATORS,
             trace: Self::TOKEN_OPERATORS,
         },
         border: Self::PANEL_SECTION_BORDER,
@@ -218,6 +220,7 @@ define_palette! {
             invalid: Self::TOKEN_INVALID,
             keyword: Self::TOKEN_KEYWORDS,
             link: Self::BUTTON_BACKGROUND,
+            macro_name: Self::TOKEN_FUNCTIONS,
             markup_bold: Self::TOKEN_MARKUP_STYLING,
             markup_italic: Self::TOKEN_MARKUP_STYLING,
             modifier: Self::TOKEN_KEYWORDS,

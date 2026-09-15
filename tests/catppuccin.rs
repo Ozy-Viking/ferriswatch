@@ -1,12 +1,18 @@
 use ferriswatch::color::Color;
 use ferriswatch::palette::NoAccent;
+use ferriswatch::palette::ParseAccentError;
 use ferriswatch::palette::catppuccin::{frappe, latte, macchiato, mocha};
 use ferriswatch::theme_variant::ThemePalette;
+use rstest::rstest;
+use std::str::FromStr;
 
 // Expected values from Catppuccin palette 1.8.0, independent of the semantic mapping.
 #[test]
+
 fn latte_matches_official_colours() {
+
     use latte::Latte as P;
+
     let colours = [
         (P::ROSEWATER, 0xdc8a78),
         (P::FLAMINGO, 0xdd7878),
@@ -35,14 +41,19 @@ fn latte_matches_official_colours() {
         (P::MANTLE, 0xe6e9ef),
         (P::CRUST, 0xdce0e8),
     ];
+
     for (actual, expected) in colours {
+
         assert_eq!(actual, Color::hex(expected));
     }
 }
 
 #[test]
+
 fn frappe_matches_official_colours() {
+
     use frappe::Frappe as P;
+
     let colours = [
         (P::ROSEWATER, 0xf2d5cf),
         (P::FLAMINGO, 0xeebebe),
@@ -71,14 +82,19 @@ fn frappe_matches_official_colours() {
         (P::MANTLE, 0x292c3c),
         (P::CRUST, 0x232634),
     ];
+
     for (actual, expected) in colours {
+
         assert_eq!(actual, Color::hex(expected));
     }
 }
 
 #[test]
+
 fn macchiato_matches_official_colours() {
+
     use macchiato::Macchiato as P;
+
     let colours = [
         (P::ROSEWATER, 0xf4dbd6),
         (P::FLAMINGO, 0xf0c6c6),
@@ -107,14 +123,19 @@ fn macchiato_matches_official_colours() {
         (P::MANTLE, 0x1e2030),
         (P::CRUST, 0x181926),
     ];
+
     for (actual, expected) in colours {
+
         assert_eq!(actual, Color::hex(expected));
     }
 }
 
 #[test]
+
 fn mocha_matches_official_colours() {
+
     use mocha::Mocha as P;
+
     let colours = [
         (P::ROSEWATER, 0xf5e0dc),
         (P::FLAMINGO, 0xf2cdcd),
@@ -143,84 +164,192 @@ fn mocha_matches_official_colours() {
         (P::MANTLE, 0x181825),
         (P::CRUST, 0x11111b),
     ];
+
     for (actual, expected) in colours {
+
         assert_eq!(actual, Color::hex(expected));
     }
+}
+
+fn check_accented_flavour(
+    theme: ferriswatch::theme_variant::ThemeVariant,
+    flavour: &str,
+    colour: Color,
+    name: &str,
+    palette_base: Color,
+    palette_text: Color,
+    palette_surface_0: Color,
+    palette_surface_1: Color,
+    palette_green: Color,
+    palette_yellow: Color,
+    palette_red: Color,
+) {
+
+    assert_eq!(theme.name(), flavour);
+
+    assert_eq!(theme.accent_name(), Some(name));
+
+    assert_eq!(theme.accent(), Some(colour));
+
+    assert_eq!(theme.primary().normal.background, colour);
+
+    assert_eq!(theme.focus(), colour);
+
+    assert_ne!(theme.primary().hover.background, colour);
+
+    assert_eq!(theme.primary().hover.background.a(), colour.a());
+
+    assert_eq!(theme.surfaces().background, palette_base);
+
+    assert_eq!(theme.text().normal, palette_text);
+
+    assert_eq!(theme.surfaces().base, palette_surface_0);
+
+    assert_eq!(theme.surfaces().hover, palette_surface_1);
+
+    assert_eq!(theme.status().success, palette_green);
+
+    assert_eq!(theme.status().warning, palette_yellow);
+
+    assert_eq!(theme.status().error, palette_red);
 }
 
 macro_rules! check_flavour {
     ($test:ident, $module:ident, $palette:ident, $name:literal) => {
         #[test]
+
         fn $test() {
+
             use $module::*;
-            let variants = [
-                (
-                    $palette::variant::<Rosewater>(),
-                    $palette::ROSEWATER,
-                    "Rosewater",
-                ),
-                (
-                    $palette::variant::<Flamingo>(),
-                    $palette::FLAMINGO,
-                    "Flamingo",
-                ),
-                ($palette::variant::<Pink>(), $palette::PINK, "Pink"),
-                ($palette::variant::<Mauve>(), $palette::MAUVE, "Mauve"),
-                ($palette::variant::<Red>(), $palette::RED, "Red"),
-                ($palette::variant::<Maroon>(), $palette::MAROON, "Maroon"),
-                ($palette::variant::<Peach>(), $palette::PEACH, "Peach"),
-                ($palette::variant::<Yellow>(), $palette::YELLOW, "Yellow"),
-                ($palette::variant::<Green>(), $palette::GREEN, "Green"),
-                ($palette::variant::<Teal>(), $palette::TEAL, "Teal"),
-                ($palette::variant::<Sky>(), $palette::SKY, "Sky"),
-                (
-                    $palette::variant::<Sapphire>(),
-                    $palette::SAPPHIRE,
-                    "Sapphire",
-                ),
-                ($palette::variant::<Blue>(), $palette::BLUE, "Blue"),
-                (
-                    $palette::variant::<Lavender>(),
-                    $palette::LAVENDER,
-                    "Lavender",
-                ),
-            ];
-            for (theme, colour, name) in variants {
-                assert_eq!(theme.name(), $name);
-                assert_eq!(theme.accent_name(), Some(name));
-                assert_eq!(theme.accent(), Some(colour));
-                assert_eq!(theme.primary(), colour);
-                assert_eq!(theme.focus(), colour);
-                assert_ne!(theme.primary_hover(), colour);
-                assert_eq!(theme.primary_hover().a(), colour.a());
-                assert_eq!(theme.background(), $palette::BASE);
-                assert_eq!(theme.text(), $palette::TEXT);
-                assert_eq!(theme.surface(), $palette::SURFACE_0);
-                assert_eq!(theme.surface_hover(), $palette::SURFACE_1);
-                assert_eq!(theme.success(), $palette::GREEN);
-                assert_eq!(theme.warning(), $palette::YELLOW);
-                assert_eq!(theme.error(), $palette::RED);
-            }
+
+            let check = |theme, colour, accent_name| {
+
+                check_accented_flavour(
+                    theme,
+                    $name,
+                    colour,
+                    accent_name,
+                    $palette::BASE,
+                    $palette::TEXT,
+                    $palette::SURFACE_0,
+                    $palette::SURFACE_1,
+                    $palette::GREEN,
+                    $palette::YELLOW,
+                    $palette::RED,
+                );
+            };
+
+            check(
+                $palette::variant::<Rosewater>(),
+                $palette::ROSEWATER,
+                "Rosewater",
+            );
+
+            check(
+                $palette::variant::<Flamingo>(),
+                $palette::FLAMINGO,
+                "Flamingo",
+            );
+
+            check($palette::variant::<Pink>(), $palette::PINK, "Pink");
+
+            check($palette::variant::<Mauve>(), $palette::MAUVE, "Mauve");
+
+            check($palette::variant::<Red>(), $palette::RED, "Red");
+
+            check($palette::variant::<Maroon>(), $palette::MAROON, "Maroon");
+
+            check($palette::variant::<Peach>(), $palette::PEACH, "Peach");
+
+            check($palette::variant::<Yellow>(), $palette::YELLOW, "Yellow");
+
+            check($palette::variant::<Green>(), $palette::GREEN, "Green");
+
+            check($palette::variant::<Teal>(), $palette::TEAL, "Teal");
+
+            check($palette::variant::<Sky>(), $palette::SKY, "Sky");
+
+            check(
+                $palette::variant::<Sapphire>(),
+                $palette::SAPPHIRE,
+                "Sapphire",
+            );
+
+            check($palette::variant::<Blue>(), $palette::BLUE, "Blue");
+
+            check(
+                $palette::variant::<Lavender>(),
+                $palette::LAVENDER,
+                "Lavender",
+            );
+
             let default = $palette::variant::<NoAccent>();
+
             assert_eq!(default.name(), $name);
+
             assert_eq!(default.accent(), None);
+
             assert_eq!(default.accent_name(), None);
-            assert_eq!(default.primary(), $palette::MAUVE);
+
+            assert_eq!(default.primary().normal.background, $palette::MAUVE);
+
             assert_eq!(default.focus(), $palette::MAUVE);
+
             assert_eq!(
-                default.primary_hover(),
-                $palette::variant::<Mauve>().primary_hover()
+                default.primary().hover.background,
+                $palette::variant::<Mauve>().primary().hover.background
             );
         }
     };
 }
 
 check_flavour!(latte_variants, latte, Latte, "Catppuccin Latte");
+
 check_flavour!(frappe_variants, frappe, Frappe, "Catppuccin Frappé");
+
 check_flavour!(
     macchiato_variants,
     macchiato,
     Macchiato,
     "Catppuccin Macchiato"
 );
+
 check_flavour!(mocha_variants, mocha, Mocha, "Catppuccin Mocha");
+
+#[rstest]
+#[case::id("blue", Ok(mocha::Blue))]
+#[case::wrong_accent("mauve", Err(ParseAccentError { expected: "blue", found: "mauve".into() }))]
+#[case::display_name("Blue", Err(ParseAccentError { expected: "blue", found: "Blue".into() }))]
+#[case::empty("", Err(ParseAccentError { expected: "blue", found: String::new() }))]
+
+fn mocha_blue_parses_persisted_id(
+    #[case] input: &str,
+    #[case] expected: Result<mocha::Blue, ParseAccentError>,
+) {
+
+    assert_eq!(input.parse(), expected);
+
+    if expected.is_ok() {
+
+        assert_eq!(mocha::Blue.to_string(), "blue");
+
+        assert_eq!(mocha::Blue::from_str("blue").unwrap(), mocha::Blue);
+    }
+}
+
+#[rstest]
+#[case::id("none", Ok(NoAccent))]
+#[case::empty("", Err(ParseAccentError { expected: "none", found: String::new() }))]
+#[case::other("blue", Err(ParseAccentError { expected: "none", found: "blue".into() }))]
+
+fn no_accent_parses_persisted_id(
+    #[case] input: &str,
+    #[case] expected: Result<NoAccent, ParseAccentError>,
+) {
+
+    assert_eq!(input.parse(), expected);
+
+    assert_eq!(NoAccent.to_string(), "none");
+
+    assert_eq!(NoAccent::NAME, "None");
+}

@@ -28,6 +28,7 @@
   .fs-error { color: var(--fs-error); }
   .fs-critical { color: var(--fs-critical); }
   .fs-info { color: var(--fs-info); }
+  .fs-debug { color: var(--fs-debug); }
   .fs-trace { color: var(--fs-trace); }
   .fs-focus:focus-visible { outline: 2px solid var(--fs-focus); }
   .fs-focus:focus-visible { outline-offset: 2px; }

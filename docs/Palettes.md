@@ -26,7 +26,15 @@ assert!(default.selected_accent().is_none());
 ```
 
 Palette types are re-exported from their family modules. Single-variant families
-use `main::Main`. Typed accents remain local to each concrete palette module.
+use `main::Main`. Typed accents remain local to each concrete palette module and implement
+`FromStr` / `Display` for their persisted snake_case ID:
+
+```rust
+use ferriswatch::palette::catppuccin::mocha::Blue;
+let accent: Blue = "blue".parse()?;
+assert_eq!(accent.to_string(), "blue");
+# Ok::<(), ferriswatch::palette::ParseAccentError>(())
+```
 Raw constants preserve source vocabulary, such as `SUMI_INK_3`, `NORD_0`,
 `BASE_0A`, and editor keys normalized to uppercase snake_case.
 
@@ -47,28 +55,35 @@ provides family, variant, appearance and contrast separately.
 
 `selected_accent()` returns one optional `ResolvedAccent`, keeping its stable ID,
 display label and colour together. `accent()`, `accent_name()` and `accent_id()`
-remain convenience accessors. Explicit transparent accents retain all metadata;
-`NoAccent` has none, while using the documented palette-default semantic colours.
-Custom `Accent<P>` implementations must provide `ACCENT`, `ID` and `NAME` together,
-or make all three absent. Factories reject inconsistent implementations by panicking.
+remain convenience accessors. Explicit transparent accents retain all metadata.
+`NoAccent` uses the palette-default colours and does not record a
+`ResolvedAccent`; its typed id is `none` and display name is `None`.
+Custom `Accent<P>` implementations always supply `ID` and `NAME`. `ACCENT` is
+`None` only for `NoAccent`. Factories panic if the id or name is invalid.
 
 ## Resolved colour groups
 
-`ThemeVariantColors` stores concrete values throughout:
+`ThemeVariantColors` groups the palette mappings:
 
 | Group | Fields |
 | --- | --- |
-| `surface`, `surface_alt` | `background`, `surface`, `raised`, `overlay`, `hover` |
-| `text` | `normal`, `muted`, `subtle`, `on_primary`, `on_secondary` |
-| `primary`, `secondary` | `normal`, `hover`, `pressed`, `muted` |
-| `status` | `success`, `warning`, `error`, `critical`, `info`, `trace` |
+| `surfaces`, `surfaces_alt` | `background`, `base`, `raised`, `overlay`, `hover` |
+| `text`, optional `text_alt` | `normal`, `muted`, `subtle` |
+| `primary`, `secondary` | `normal`, `hover`, `pressed`, `muted`, `disabled`, each a `ColorPair` with `foreground` and `background` |
+| `status` | `success`, `warning`, `error`, `critical`, `info`, `debug`, `trace` |
+| `syntax` | highlighting roles including `macro_name` |
+| `chromatic` | `red`, `orange`, `yellow`, `green`, `cyan`, `blue`, `purple`, `pink` |
 | Ungrouped | `border`, `border_muted`, `focus` |
 
 The two surface groups are independent. Placement does not imply brightness order.
 Factories supply every colour; simple palettes deliberately repeat source colours.
-There is no optional-colour fallback during rendering, and transparency is never
-replaced with a default. Existing convenience getters expose the normal groups;
-`colors()` exposes every field.
+Built-in palettes set `text_alt` to `None`, so `text_alt()` resolves to the normal
+text group. Transparency is never replaced with a default. Group getters return
+their full structures; `colors()` exposes every field.
+
+Muted actions pair normal text with the existing muted fill. Disabled actions pair
+subtle text with that fill. Debug uses muted text, and syntax `macro_name` uses the
+function colour. These mappings reuse existing palette colours.
 
 Primary and focus use the selected accent. Derived hover scales linear RGB by
 0.85, and pressed scales it by 0.70, preserving alpha. Secondary states use explicit
@@ -93,14 +108,14 @@ use ferriswatch::theme_variant::{ThemeVariant, ResolvedAccent};
 
 let original = catalogue::resolve("catppuccin/mocha", None)?;
 let mut colors = *original.colors();
-colors.surface_alt.background = Color::TRANSPARENT;
+colors.surfaces_alt.background = Color::TRANSPARENT;
 let accent = ResolvedAccent::new("clear", "Clear", Color::TRANSPARENT)?;
 let custom = ThemeVariant::new(
     "custom/my_workspace", "My workspace", original.metadata().appearance,
     colors, Some(accent),
 )?;
-assert_eq!(custom.colors().surface, original.colors().surface);
-assert_eq!(custom.colors().surface_alt.background, Color::TRANSPARENT);
+assert_eq!(custom.colors().surfaces, original.colors().surfaces);
+assert_eq!(custom.colors().surfaces_alt.background, Color::TRANSPARENT);
 assert_eq!(custom.accent_id(), Some("clear"));
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```

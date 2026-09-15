@@ -35,16 +35,16 @@ define_palette! {
     }
     default IRIS => "iris";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::BASE,
-            surface: Self::SURFACE,
+            base: Self::SURFACE,
             raised: Self::OVERLAY,
             overlay: Self::OVERLAY,
             hover: Self::HIGHLIGHT_MED,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::NC,
-            surface: Self::BASE,
+            base: Self::BASE,
             raised: Self::SURFACE,
             overlay: Self::OVERLAY,
             hover: Self::HIGHLIGHT_LOW,
@@ -53,20 +53,21 @@ define_palette! {
             normal: Self::TEXT,
             muted: Self::SUBTLE,
             subtle: Self::MUTED,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::ROSE),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::HIGHLIGHT_MED,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::TEXT, Self::HIGHLIGHT_MED),
+            disabled: crate::theme_variant::ColorPair::new(Self::MUTED, Self::HIGHLIGHT_MED),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::ROSE,
-            hover: crate::palette::primary_hover(Self::ROSE),
-            pressed: crate::palette::action_pressed(Self::ROSE),
-            muted: Self::SURFACE,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ROSE), Self::ROSE),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ROSE), crate::palette::primary_hover(Self::ROSE)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::ROSE), crate::palette::action_pressed(Self::ROSE)),
+            muted: crate::theme_variant::ColorPair::new(Self::TEXT, Self::SURFACE),
+            disabled: crate::theme_variant::ColorPair::new(Self::MUTED, Self::SURFACE),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::LEAF,
@@ -74,6 +75,7 @@ define_palette! {
             error: Self::LOVE,
             critical: Self::LOVE,
             info: Self::FOAM,
+            debug: Self::SUBTLE,
             trace: Self::SUBTLE,
         },
         border: Self::HIGHLIGHT_HIGH,
@@ -109,6 +111,7 @@ define_palette! {
             invalid: Self::LOVE,
             keyword: Self::PINE,
             link: Self::FOAM,
+            macro_name: Self::FOAM,
             markup_bold: Self::TEXT,
             markup_italic: Self::TEXT,
             modifier: Self::PINE,

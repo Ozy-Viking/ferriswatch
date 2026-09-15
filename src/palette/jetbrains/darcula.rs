@@ -921,16 +921,16 @@ define_palette! {
     }
     default EDITOR_CONSOLE_BLUE_OUTPUT_FOREGROUND => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_TEXT_BACKGROUND,
-            surface: Self::UI_BACKGROUND,
+            base: Self::UI_BACKGROUND,
             raised: Self::UI_TEXT_FIELD_BACKGROUND,
             overlay: Self::UI_POPUP_BACKGROUND,
             hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::UI_BACKGROUND,
-            surface: Self::EDITOR_TEXT_BACKGROUND,
+            base: Self::EDITOR_TEXT_BACKGROUND,
             raised: Self::UI_BACKGROUND,
             overlay: Self::UI_POPUP_BACKGROUND,
             hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
@@ -939,20 +939,21 @@ define_palette! {
             normal: Self::EDITOR_TEXT_FOREGROUND,
             muted: Self::UI_LABEL_FOREGROUND,
             subtle: Self::UI_COMPONENT_INFO_FOREGROUND,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::UI_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::UI_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::UI_COMPONENT_INFO_FOREGROUND, Self::UI_BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::UI_BUTTON_START_BACKGROUND,
-            hover: Self::UI_ACTION_BUTTON_HOVER_BACKGROUND,
-            pressed: Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND,
-            muted: Self::UI_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_BUTTON_START_BACKGROUND),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_ACTION_BUTTON_HOVER_BACKGROUND),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::UI_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::UI_COMPONENT_INFO_FOREGROUND, Self::UI_BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::EDITOR_CONSOLE_GREEN_OUTPUT_FOREGROUND,
@@ -960,6 +961,7 @@ define_palette! {
             error: Self::EDITOR_CONSOLE_RED_OUTPUT_FOREGROUND,
             critical: Self::EDITOR_ERRORS_ATTRIBUTES_EFFECT_COLOR,
             info: Self::EDITOR_CONSOLE_BLUE_OUTPUT_FOREGROUND,
+            debug: Self::UI_LABEL_FOREGROUND,
             trace: Self::UI_COMPONENT_INFO_FOREGROUND,
         },
         border: Self::UI_COMPONENT_BORDER_COLOR,
@@ -995,6 +997,7 @@ define_palette! {
             invalid: Self::EDITOR_CONSOLE_RED_OUTPUT_FOREGROUND,
             keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
             link: Self::UI_BUTTON_START_BACKGROUND,
+            macro_name: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
             markup_bold: Self::EDITOR_TEXT_FOREGROUND,
             markup_italic: Self::EDITOR_TEXT_FOREGROUND,
             modifier: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,

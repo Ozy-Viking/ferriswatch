@@ -122,16 +122,16 @@ define_palette! {
     }
     default DRAGON_BLUE_2 => "dragon_blue_2";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::DRAGON_BLACK_3,
-            surface: Self::DRAGON_BLACK_4,
+            base: Self::DRAGON_BLACK_4,
             raised: Self::DRAGON_BLACK_5,
             overlay: Self::DRAGON_BLACK_0,
             hover: Self::DRAGON_BLACK_5,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::DRAGON_BLACK_0,
-            surface: Self::DRAGON_BLACK_1,
+            base: Self::DRAGON_BLACK_1,
             raised: Self::DRAGON_BLACK_2,
             overlay: Self::DRAGON_BLACK_0,
             hover: Self::DRAGON_BLACK_4,
@@ -140,20 +140,21 @@ define_palette! {
             normal: Self::DRAGON_WHITE,
             muted: Self::OLD_WHITE,
             subtle: Self::DRAGON_ASH,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::DRAGON_VIOLET),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::DRAGON_BLACK_5,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::DRAGON_WHITE, Self::DRAGON_BLACK_5),
+            disabled: crate::theme_variant::ColorPair::new(Self::DRAGON_ASH, Self::DRAGON_BLACK_5),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::DRAGON_VIOLET,
-            hover: crate::palette::primary_hover(Self::DRAGON_VIOLET),
-            pressed: crate::palette::action_pressed(Self::DRAGON_VIOLET),
-            muted: Self::DRAGON_BLACK_4,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::DRAGON_VIOLET), Self::DRAGON_VIOLET),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::DRAGON_VIOLET), crate::palette::primary_hover(Self::DRAGON_VIOLET)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::DRAGON_VIOLET), crate::palette::action_pressed(Self::DRAGON_VIOLET)),
+            muted: crate::theme_variant::ColorPair::new(Self::DRAGON_WHITE, Self::DRAGON_BLACK_4),
+            disabled: crate::theme_variant::ColorPair::new(Self::DRAGON_ASH, Self::DRAGON_BLACK_4),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::SPRING_GREEN,
@@ -161,6 +162,7 @@ define_palette! {
             error: Self::SAMURAI_RED,
             critical: Self::SAMURAI_RED,
             info: Self::DRAGON_BLUE,
+            debug: Self::OLD_WHITE,
             trace: Self::DRAGON_GRAY_3,
         },
         border: Self::DRAGON_BLACK_6,
@@ -196,6 +198,7 @@ define_palette! {
             invalid: Self::SAMURAI_RED,
             keyword: Self::DRAGON_VIOLET,
             link: Self::DRAGON_BLUE_2,
+            macro_name: Self::DRAGON_BLUE_2,
             markup_bold: Self::DRAGON_WHITE,
             markup_italic: Self::DRAGON_WHITE,
             modifier: Self::DRAGON_VIOLET,

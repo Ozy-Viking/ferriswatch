@@ -43,16 +43,16 @@ define_palette! {
     }
     default BLUE => "blue";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::BG_1,
-            surface: Self::BG_2,
+            base: Self::BG_2,
             raised: Self::BG_3,
             overlay: Self::BG_0,
             hover: Self::SEL_0,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::BG_0,
-            surface: Self::BG_1,
+            base: Self::BG_1,
             raised: Self::BG_2,
             overlay: Self::BG_0,
             hover: Self::SEL_0,
@@ -61,20 +61,21 @@ define_palette! {
             normal: Self::FG_1,
             muted: Self::FG_2,
             subtle: Self::COMMENT,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::MAGENTA),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::BG_2,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_2),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BG_2),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::MAGENTA,
-            hover: crate::palette::primary_hover(Self::MAGENTA),
-            pressed: crate::palette::action_pressed(Self::MAGENTA),
-            muted: Self::BG_2,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), Self::MAGENTA),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), crate::palette::primary_hover(Self::MAGENTA)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), crate::palette::action_pressed(Self::MAGENTA)),
+            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_2),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BG_2),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
@@ -82,6 +83,7 @@ define_palette! {
             error: Self::RED,
             critical: Self::RED,
             info: Self::BLUE,
+            debug: Self::FG_2,
             trace: Self::FG_3,
         },
         border: Self::BG_4,
@@ -117,6 +119,7 @@ define_palette! {
             invalid: Self::RED,
             keyword: Self::MAGENTA,
             link: Self::BLUE,
+            macro_name: Self::BLUE,
             markup_bold: Self::FG_1,
             markup_italic: Self::FG_1,
             modifier: Self::MAGENTA,

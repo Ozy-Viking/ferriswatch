@@ -43,16 +43,16 @@ define_palette! {
     }
     default COMMON_ACCENT => "accent";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::COMMON_BG,
-            surface: Self::COMMON_BG,
+            base: Self::COMMON_BG,
             raised: Self::COMMON_BG,
             overlay: Self::COMMON_BG,
             hover: Self::COMMON_BG,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::COMMON_BG,
-            surface: Self::COMMON_BG,
+            base: Self::COMMON_BG,
             raised: Self::COMMON_BG,
             overlay: Self::COMMON_BG,
             hover: Self::COMMON_BG,
@@ -61,20 +61,21 @@ define_palette! {
             normal: Self::COMMON_FG,
             muted: Self::SYNTAX_COMMENT,
             subtle: Self::COMMON_UI,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::SYNTAX_ENTITY),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::COMMON_BG,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::COMMON_FG, Self::COMMON_BG),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMON_UI, Self::COMMON_BG),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::SYNTAX_ENTITY,
-            hover: crate::palette::primary_hover(Self::SYNTAX_ENTITY),
-            pressed: crate::palette::action_pressed(Self::SYNTAX_ENTITY),
-            muted: Self::COMMON_BG,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), Self::SYNTAX_ENTITY),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), crate::palette::primary_hover(Self::SYNTAX_ENTITY)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), crate::palette::action_pressed(Self::SYNTAX_ENTITY)),
+            muted: crate::theme_variant::ColorPair::new(Self::COMMON_FG, Self::COMMON_BG),
+            disabled: crate::theme_variant::ColorPair::new(Self::COMMON_UI, Self::COMMON_BG),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::VCS_ADDED,
@@ -82,6 +83,7 @@ define_palette! {
             error: Self::SYNTAX_ERROR,
             critical: Self::VCS_REMOVED,
             info: Self::SYNTAX_TAG,
+            debug: Self::SYNTAX_COMMENT,
             trace: Self::COMMON_UI,
         },
         border: Self::COMMON_UI,
@@ -117,6 +119,7 @@ define_palette! {
             invalid: Self::SYNTAX_ERROR,
             keyword: Self::SYNTAX_KEYWORD,
             link: Self::SYNTAX_FUNC,
+            macro_name: Self::SYNTAX_FUNC,
             markup_bold: Self::COMMON_FG,
             markup_italic: Self::COMMON_FG,
             modifier: Self::SYNTAX_KEYWORD,

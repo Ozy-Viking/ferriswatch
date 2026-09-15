@@ -57,16 +57,16 @@ define_palette! {
     }
     default EDITOR_ACCENT => "accent";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_BG,
-            surface: Self::EDITOR_ACTIVE,
+            base: Self::EDITOR_ACTIVE,
             raised: Self::EDITOR_HIGHLIGHT,
             overlay: Self::EDITOR_BG,
             hover: Self::EDITOR_ACTIVE,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_BG_ALT,
-            surface: Self::EDITOR_BG,
+            base: Self::EDITOR_BG,
             raised: Self::EDITOR_ACTIVE,
             overlay: Self::EDITOR_BG,
             hover: Self::EDITOR_ACTIVE,
@@ -75,20 +75,21 @@ define_palette! {
             normal: Self::EDITOR_FG,
             muted: Self::EDITOR_FG_DARK,
             subtle: Self::SYNTAX_COMMENTS,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::MAIN_PURPLE),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::EDITOR_ACTIVE,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FG, Self::EDITOR_ACTIVE),
+            disabled: crate::theme_variant::ColorPair::new(Self::SYNTAX_COMMENTS, Self::EDITOR_ACTIVE),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::MAIN_PURPLE,
-            hover: crate::palette::primary_hover(Self::MAIN_PURPLE),
-            pressed: crate::palette::action_pressed(Self::MAIN_PURPLE),
-            muted: Self::EDITOR_ACTIVE,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAIN_PURPLE), Self::MAIN_PURPLE),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAIN_PURPLE), crate::palette::primary_hover(Self::MAIN_PURPLE)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAIN_PURPLE), crate::palette::action_pressed(Self::MAIN_PURPLE)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FG, Self::EDITOR_ACTIVE),
+            disabled: crate::theme_variant::ColorPair::new(Self::SYNTAX_COMMENTS, Self::EDITOR_ACTIVE),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::MAIN_GREEN,
@@ -96,6 +97,7 @@ define_palette! {
             error: Self::LSP_ERROR,
             critical: Self::MAIN_RED,
             info: Self::MAIN_PALEBLUE,
+            debug: Self::EDITOR_FG_DARK,
             trace: Self::EDITOR_FG,
         },
         border: Self::EDITOR_BORDER,
@@ -131,6 +133,7 @@ define_palette! {
             invalid: Self::LSP_ERROR,
             keyword: Self::MAIN_PURPLE,
             link: Self::MAIN_BLUE,
+            macro_name: Self::MAIN_BLUE,
             markup_bold: Self::EDITOR_FG,
             markup_italic: Self::EDITOR_FG,
             modifier: Self::MAIN_PURPLE,

@@ -169,16 +169,16 @@ define_palette! {
     }
     default TERMINAL_ANSI_BRIGHT_GREEN => "green";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::EDITOR_BACKGROUND,
-            surface: Self::SIDE_BAR_BACKGROUND,
+            base: Self::SIDE_BAR_BACKGROUND,
             raised: Self::DROPDOWN_BACKGROUND,
             overlay: Self::EDITOR_WIDGET_BACKGROUND,
             hover: Self::LIST_HOVER_BACKGROUND,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::SIDE_BAR_BACKGROUND,
-            surface: Self::EDITOR_BACKGROUND,
+            base: Self::EDITOR_BACKGROUND,
             raised: Self::SIDE_BAR_BACKGROUND,
             overlay: Self::EDITOR_WIDGET_BACKGROUND,
             hover: Self::LIST_HOVER_BACKGROUND,
@@ -187,20 +187,21 @@ define_palette! {
             normal: Self::EDITOR_FOREGROUND,
             muted: Self::EDITOR_FOREGROUND,
             subtle: Self::EDITOR_LINE_NUMBER_FOREGROUND,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::TERMINAL_ANSI_BRIGHT_MAGENTA),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::SIDE_BAR_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::TERMINAL_ANSI_BRIGHT_MAGENTA,
-            hover: crate::palette::primary_hover(Self::TERMINAL_ANSI_BRIGHT_MAGENTA),
-            pressed: crate::palette::action_pressed(Self::TERMINAL_ANSI_BRIGHT_MAGENTA),
-            muted: Self::SIDE_BAR_BACKGROUND,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_BRIGHT_MAGENTA), Self::TERMINAL_ANSI_BRIGHT_MAGENTA),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_BRIGHT_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_BRIGHT_MAGENTA)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_BRIGHT_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_BRIGHT_MAGENTA)),
+            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_BRIGHT_GREEN,
@@ -208,6 +209,7 @@ define_palette! {
             error: Self::TERMINAL_ANSI_RED,
             critical: Self::TERMINAL_ANSI_BRIGHT_RED,
             info: Self::TERMINAL_ANSI_BLUE,
+            debug: Self::EDITOR_FOREGROUND,
             trace: Self::EDITOR_LINE_NUMBER_FOREGROUND,
         },
         border: Self::PANEL_BORDER,
@@ -243,6 +245,7 @@ define_palette! {
             invalid: Self::TOKEN_INVALID,
             keyword: Self::TOKEN_KEYWORD,
             link: Self::TERMINAL_ANSI_BRIGHT_MAGENTA,
+            macro_name: Self::TOKEN_FUNCTION_NAME,
             markup_bold: Self::TOKEN_MARKUP_STYLING,
             markup_italic: Self::TOKEN_MARKUP_STYLING,
             modifier: Self::TOKEN_STORAGE,

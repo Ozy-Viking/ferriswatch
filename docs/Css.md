@@ -1,6 +1,6 @@
 ## Loading color classes
 
-`theme_css(&ThemeVariant)` exports 32 semantic `--fs-*` variable declarations.
+`theme_css(&ThemeVariant)` exports 33 semantic `--fs-*` variable declarations.
 `DEFAULT_CSS` contains optional classes that consume them. Both are available
 without the `dioxus` feature. No stylesheet is injected by importing the crate.
 
@@ -36,7 +36,7 @@ Choose scheme from the variant's actual `Appearance`.
 | `fs-primary`, `fs-secondary` | action background and on-action foreground; hover and pressed backgrounds |
 | `fs-border`, `fs-border-muted` | border color only |
 | `fs-focus` | focus-visible outline: 2px solid focus color, offset 2px |
-| `fs-success`, `fs-warning`, `fs-error`, `fs-critical`, `fs-info`, `fs-trace` | status foreground only |
+| `fs-success`, `fs-warning`, `fs-error`, `fs-critical`, `fs-info`, `fs-debug`, `fs-trace` | status foreground only |
 
 Classes do not set spacing, layout, dimensions, radius, type scale, shadows, or
 animation. Border classes do not create a border. The focus helper is the sole

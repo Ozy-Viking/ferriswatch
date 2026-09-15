@@ -44,8 +44,20 @@ macro_rules! define_palette {
             pub struct $accent;
             impl $crate::palette::Accent<$palette> for $accent {
                 const ACCENT: Option<$crate::color::Color> = Some($palette::$accent_color);
-                const ID: Option<&'static str> = Some($accent_id);
-                const NAME: Option<&'static str> = Some($accent_name);
+                const ID: &'static str = $accent_id;
+                const NAME: &'static str = $accent_name;
+            }
+            impl std::fmt::Display for $accent {
+                fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                    f.write_str($accent_id)
+                }
+            }
+            impl std::str::FromStr for $accent {
+                type Err = $crate::palette::ParseAccentError;
+
+                fn from_str(value: &str) -> Result<Self, Self::Err> {
+                    $crate::palette::parse_accent_id(value, $accent_id)
+                }
             }
         )+
         impl $crate::theme_variant::ThemePalette for $palette {

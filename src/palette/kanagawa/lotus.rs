@@ -122,16 +122,16 @@ define_palette! {
     }
     default LOTUS_BLUE_4 => "lotus_blue_4";
     roles(primary) {
-        surface: crate::theme_variant::SurfaceColors {
+        surfaces: crate::theme_variant::SurfaceColors {
             background: Self::LOTUS_WHITE_3,
-            surface: Self::LOTUS_WHITE_4,
+            base: Self::LOTUS_WHITE_4,
             raised: Self::LOTUS_WHITE_5,
             overlay: Self::LOTUS_WHITE_0,
             hover: Self::LOTUS_WHITE_5,
         },
-        surface_alt: crate::theme_variant::SurfaceColors {
+        surfaces_alt: crate::theme_variant::SurfaceColors {
             background: Self::LOTUS_WHITE_0,
-            surface: Self::LOTUS_WHITE_1,
+            base: Self::LOTUS_WHITE_1,
             raised: Self::LOTUS_WHITE_2,
             overlay: Self::LOTUS_WHITE_0,
             hover: Self::LOTUS_WHITE_4,
@@ -140,20 +140,21 @@ define_palette! {
             normal: Self::LOTUS_INK_1,
             muted: Self::LOTUS_INK_2,
             subtle: Self::LOTUS_GRAY_3,
-            on_primary: crate::palette::action_text(primary),
-            on_secondary: crate::palette::action_text(Self::LOTUS_VIOLET_4),
         },
+        text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: primary,
-            hover: crate::palette::primary_hover(primary),
-            pressed: crate::palette::action_pressed(primary),
-            muted: Self::LOTUS_WHITE_5,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            muted: crate::theme_variant::ColorPair::new(Self::LOTUS_INK_1, Self::LOTUS_WHITE_5),
+            disabled: crate::theme_variant::ColorPair::new(Self::LOTUS_GRAY_3, Self::LOTUS_WHITE_5),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: Self::LOTUS_VIOLET_4,
-            hover: crate::palette::primary_hover(Self::LOTUS_VIOLET_4),
-            pressed: crate::palette::action_pressed(Self::LOTUS_VIOLET_4),
-            muted: Self::LOTUS_WHITE_4,
+            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::LOTUS_VIOLET_4), Self::LOTUS_VIOLET_4),
+            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::LOTUS_VIOLET_4), crate::palette::primary_hover(Self::LOTUS_VIOLET_4)),
+            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::LOTUS_VIOLET_4), crate::palette::action_pressed(Self::LOTUS_VIOLET_4)),
+            muted: crate::theme_variant::ColorPair::new(Self::LOTUS_INK_1, Self::LOTUS_WHITE_4),
+            disabled: crate::theme_variant::ColorPair::new(Self::LOTUS_GRAY_3, Self::LOTUS_WHITE_4),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::LOTUS_GREEN,
@@ -161,6 +162,7 @@ define_palette! {
             error: Self::LOTUS_RED_3,
             critical: Self::LOTUS_RED_3,
             info: Self::LOTUS_TEAL_3,
+            debug: Self::LOTUS_INK_2,
             trace: Self::LOTUS_GRAY_2,
         },
         border: Self::LOTUS_GRAY_2,
@@ -196,6 +198,7 @@ define_palette! {
             invalid: Self::LOTUS_RED_3,
             keyword: Self::LOTUS_VIOLET_4,
             link: Self::LOTUS_BLUE_4,
+            macro_name: Self::LOTUS_BLUE_4,
             markup_bold: Self::LOTUS_INK_1,
             markup_italic: Self::LOTUS_INK_1,
             modifier: Self::LOTUS_VIOLET_4,
