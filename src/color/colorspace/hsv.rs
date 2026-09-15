@@ -9,6 +9,7 @@ use crate::color::Channel;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 /// HSV is expressed as equivalent HWB because CSS has no HSV function.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct Hsv {
     /// Hue in degrees, normally `0.0..360.0`; 360 degrees is equivalent to zero.
     pub h: Channel<f32>,
@@ -20,7 +21,9 @@ pub struct Hsv {
 
 impl Hsv {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(h: f32, s: f32, v: f32) -> Self {
+
         Self {
             h: Channel::color_channel("h", h, 0.0..360.0)
                 .with_wrapping()

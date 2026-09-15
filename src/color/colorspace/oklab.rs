@@ -10,6 +10,7 @@ use crate::color::Channel;
 /// `Display` writes CSS `oklab(...)` with three decimal places by default;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct Oklab {
     /// Lightness, nominally `0.0..=1.0`, from black to reference white.
     pub l: Channel<f32>,
@@ -21,7 +22,9 @@ pub struct Oklab {
 
 impl Oklab {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(l: f32, a: f32, b: f32) -> Self {
+
         Self {
             l: Channel::color_channel("l", l, 0.0..=1.0),
             a: Channel::color_channel("a", a, ..),

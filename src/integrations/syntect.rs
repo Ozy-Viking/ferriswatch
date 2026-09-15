@@ -10,22 +10,29 @@ use crate::{
 /// Conversion into a Syntect highlighting [`Theme`](syntect::highlighting::Theme).
 ///
 /// Implemented for [`ThemeVariant`].
+
 pub trait SyntectTheme {
     /// Returns this theme as a Syntect highlighting theme.
     #[must_use]
+
     fn syntect(&self) -> syntect::highlighting::Theme;
 }
 
 #[cfg(feature = "syntect")]
+
 impl SyntectTheme for ThemeVariant {
     /// Returns this theme variant as a Syntect highlighting theme.
+
     fn syntect(&self) -> syntect::highlighting::Theme {
+
         use syntect::highlighting::{FontStyle, StyleModifier, Theme, ThemeItem, ThemeSettings};
 
         let colors = self.colors();
+
         let syntax = &colors.syntax;
 
         fn item(scope: &str, color: syntect::highlighting::Color) -> ThemeItem {
+
             ThemeItem {
                 scope: scope
                     .parse()
@@ -42,6 +49,7 @@ impl SyntectTheme for ThemeVariant {
             color: syntect::highlighting::Color,
             font_style: FontStyle,
         ) -> ThemeItem {
+
             ThemeItem {
                 scope: scope
                     .parse()
@@ -127,8 +135,10 @@ impl SyntectTheme for ThemeVariant {
         }
     }
 }
+
 impl From<Rgb> for syntect::highlighting::Color {
     fn from(color: Rgb) -> Self {
+
         Self {
             r: color.r(),
             g: color.g(),
@@ -137,16 +147,20 @@ impl From<Rgb> for syntect::highlighting::Color {
         }
     }
 }
+
 impl From<Rgba> for syntect::highlighting::Color {
     fn from(color: Rgba) -> Self {
+
         Self {
             a: color.alpha_u8(),
             ..(*color.color()).into()
         }
     }
 }
+
 impl From<Color> for syntect::highlighting::Color {
     fn from(color: Color) -> Self {
+
         Rgba::from(color).into()
     }
 }

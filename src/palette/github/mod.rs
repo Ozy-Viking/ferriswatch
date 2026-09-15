@@ -9,6 +9,7 @@ pub use dark::Dark;
 pub use light::Light;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DARK: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/primer/github-vscode-theme",
@@ -49,6 +50,7 @@ pub(super) const SOURCE_DARK: &[PaletteSource] = &[
 ];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_LIGHT: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/primer/github-vscode-theme",

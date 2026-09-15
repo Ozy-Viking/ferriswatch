@@ -12,6 +12,7 @@ use crate::color::Channel;
 /// `Display` writes CSS `color(xyz-d50...)` with three decimal places by default;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct XyzD50 {
     /// X tristimulus value, normally nonnegative, with no fixed upper bound.
     pub x: Channel<f32>,
@@ -23,7 +24,9 @@ pub struct XyzD50 {
 
 impl XyzD50 {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(x: f32, y: f32, z: f32) -> Self {
+
         Self {
             x: Channel::color_channel("x", x, 0.0..),
             y: Channel::color_channel("y", y, 0.0..),

@@ -14,6 +14,7 @@ use crate::color::Channel;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 /// CSS `xyz` means D65; callers must supply D65 coordinates for CSS output.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct Xyz {
     /// X tristimulus value, normally nonnegative, with no fixed upper bound.
     pub x: Channel<f32>,
@@ -25,7 +26,9 @@ pub struct Xyz {
 
 impl Xyz {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(x: f32, y: f32, z: f32) -> Self {
+
         Self {
             x: Channel::color_channel("x", x, 0.0..),
             y: Channel::color_channel("y", y, 0.0..),

@@ -11,6 +11,7 @@ use crate::color::Channel;
 /// `Display` writes CSS `color(rec2020...)` with three decimal places by default;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct Rec2020 {
     /// Red channel, nominally `0.0..=1.0`.
     pub r: Channel<f32>,
@@ -22,7 +23,9 @@ pub struct Rec2020 {
 
 impl Rec2020 {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(r: f32, g: f32, b: f32) -> Self {
+
         Self {
             r: Channel::color_channel("r", r, 0.0..=1.0),
             g: Channel::color_channel("g", g, 0.0..=1.0),

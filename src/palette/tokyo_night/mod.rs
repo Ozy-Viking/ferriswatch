@@ -4,15 +4,23 @@
 use crate::catalogue::PaletteSource;
 
 pub mod night;
+
 pub use night::Night;
+
 pub mod storm;
+
 pub use storm::Storm;
+
 pub mod moon;
+
 pub use moon::Moon;
+
 pub mod day;
+
 pub use day::Day;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/folke/tokyonight.nvim",

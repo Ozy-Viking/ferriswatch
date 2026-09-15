@@ -9,6 +9,7 @@ pub use dark_plus::DarkPlus;
 pub use light_plus::LightPlus;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DARK_PLUS: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/microsoft/vscode",
@@ -25,6 +26,7 @@ pub(super) const SOURCE_DARK_PLUS: &[PaletteSource] = &[
 ];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_LIGHT_PLUS: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/microsoft/vscode",

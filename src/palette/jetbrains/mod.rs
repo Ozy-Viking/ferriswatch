@@ -9,6 +9,7 @@ pub use darcula::Darcula;
 pub use dark::Dark;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DARCULA: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/JetBrains/intellij-community",
@@ -25,6 +26,7 @@ pub(super) const SOURCE_DARCULA: &[PaletteSource] = &[
 ];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DARK: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/JetBrains/intellij-community",

@@ -4,19 +4,31 @@
 use crate::catalogue::PaletteSource;
 
 pub mod dark_hard;
+
 pub use dark_hard::DarkHard;
+
 pub mod dark_medium;
+
 pub use dark_medium::DarkMedium;
+
 pub mod dark_soft;
+
 pub use dark_soft::DarkSoft;
+
 pub mod light_hard;
+
 pub use light_hard::LightHard;
+
 pub mod light_medium;
+
 pub use light_medium::LightMedium;
+
 pub mod light_soft;
+
 pub use light_soft::LightSoft;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/morhetz/gruvbox",
     revision: "5d15b2765f59754d7ac263c88a0f6e3e58124951",

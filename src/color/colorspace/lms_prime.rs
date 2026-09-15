@@ -14,6 +14,7 @@ use crate::color::Channel;
 /// Precision defaults to three decimal places and can be set with `{:.N}`.
 /// Non-finite channels are written as `none`.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct LmsPrime {
     /// Long-wavelength component; finite, with no fixed bounds.
     pub l: Channel<f32>,
@@ -25,7 +26,9 @@ pub struct LmsPrime {
 
 impl LmsPrime {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(l: f32, m: f32, s: f32) -> Self {
+
         Self {
             l: Channel::color_channel("l", l, ..),
             m: Channel::color_channel("m", m, ..),

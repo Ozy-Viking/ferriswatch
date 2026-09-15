@@ -19,6 +19,7 @@ use crate::color::{Alpha, Clamp, ColorError, ColorResult, ColorSpace, LinearSrgb
 /// Use the explicit raw conversion methods to preserve extended channel values.
 /// Directions that can reject non-finite or overflowing values retain `TryFrom`.
 #[derive(Debug, Clone, Copy)]
+
 pub struct Color {
     /// Red channel, finite and nominally `0.0..=1.0`.
     r: Channel<f32>,
@@ -32,6 +33,7 @@ pub struct Color {
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
+
         floats_eq(&self.r, &other.r)
             && floats_eq(&self.g, &other.g)
             && floats_eq(&self.b, &other.b)
@@ -51,6 +53,7 @@ impl Color {
     /// const BACKGROUND: Color = Color::TRANSPARENT;
     /// assert_eq!(BACKGROUND.a(), 0.0);
     /// ```
+
     pub const TRANSPARENT: Self = Self {
         r: Channel::unit_color_channel("r", 0.0),
         g: Channel::unit_color_channel("g", 0.0),
@@ -67,10 +70,14 @@ impl Color {
     ///
     /// This conversion cannot fail. The result wrapper is retained for compatibility;
     /// use [`Self::hex`] for a direct opaque RGB value in constant definitions.
+
     pub const fn from_hex(value: u32) -> ColorResult<Self> {
+
         if value <= 0xFFFFFF {
+
             Ok(Self::hex(value))
         } else {
+
             Ok(Self::hex_alpha(value))
         }
     }
@@ -89,8 +96,11 @@ impl Color {
     /// const ROSEWATER: Color = Color::hex(0xf5e0dc);
     /// assert_eq!(ROSEWATER.a(), 1.0);
     /// ```
+
     pub const fn hex(value: u32) -> Self {
+
         assert!(value <= 0xFFFFFF, "RGB hex value must fit in 24 bits");
+
         Self::from_rgba8((value >> 16) as u8, (value >> 8) as u8, value as u8, 255)
     }
 
@@ -107,7 +117,9 @@ impl Color {
     /// assert_eq!(FADED.a(), 128.0 / 255.0);
     /// assert_eq!(CLEAR, Color::TRANSPARENT);
     /// ```
+
     pub const fn hex_alpha(value: u32) -> Self {
+
         Self::from_rgba8(
             (value >> 24) as u8,
             (value >> 16) as u8,
@@ -119,8 +131,11 @@ impl Color {
     /// Decodes encoded sRGB bytes and a linear alpha byte, including in constants.
     ///
     /// Each input is in `0..=255`. Alpha zero is transparent and 255 is opaque.
+
     pub const fn from_rgba8(r: u8, g: u8, b: u8, a: u8) -> Self {
+
         use crate::color::srgb_byte_table::SRGB_BYTE_TO_LINEAR;
+
         Self {
             r: Channel::unit_color_channel("r", SRGB_BYTE_TO_LINEAR[r as usize]),
             g: Channel::unit_color_channel("g", SRGB_BYTE_TO_LINEAR[g as usize]),
@@ -145,7 +160,9 @@ impl Color {
     /// assert_eq!(color.a(), 128.0 / 255.0);
     /// # Ok::<(), ferriswatch::color::ColorError>(())
     /// ```
+
     pub fn from_hex_str(value: &str) -> ColorResult<Self> {
+
         match value.strip_prefix('#').unwrap_or(value).len() {
             3 | 6 => Ok(Self::from(Rgb::from_hex_str(value)?)),
             4 | 8 => Ok(Self::from(Rgba::from_hex_str(value)?)),
@@ -154,22 +171,31 @@ impl Color {
     }
 
     /// Shorthand for [`Self::from_hex_str`], with the same parsing errors.
+
     pub fn hex_str(value: &str) -> ColorResult<Self> {
+
         Self::from_hex_str(value)
     }
 
     pub fn new(r: f32, g: f32, b: f32, a: f32) -> ColorResult<Self> {
+
         if !r.is_finite() {
+
             return Err(ColorError::InvalidColorChannel("r", r));
         }
+
         if !g.is_finite() {
+
             return Err(ColorError::InvalidColorChannel("g", g));
         }
+
         if !b.is_finite() {
+
             return Err(ColorError::InvalidColorChannel("b", b));
         }
 
         if !a.is_finite() || !(0.0..=1.0).contains(&a) {
+
             return Err(ColorError::InvalidAlpha(a));
         }
 
@@ -180,65 +206,91 @@ impl Color {
             a: Channel::color_channel("alpha", a, 0.0..=1.0),
         })
     }
+
     /// Borrows the r channel and its bounds.
+
     pub fn r_channel(&self) -> &Channel<f32> {
+
         &self.r
     }
 
     pub fn r(&self) -> f32 {
+
         *self.r
     }
 
     /// Borrows the g channel and its bounds.
+
     pub fn g_channel(&self) -> &Channel<f32> {
+
         &self.g
     }
 
     pub fn g(&self) -> f32 {
+
         *self.g
     }
 
     /// Borrows the b channel and its bounds.
+
     pub fn b_channel(&self) -> &Channel<f32> {
+
         &self.b
     }
 
     pub fn b(&self) -> f32 {
+
         *self.b
     }
 
     /// Borrows the a channel and its bounds.
+
     pub fn a_channel(&self) -> &Channel<f32> {
+
         &self.a
     }
 
     pub fn a(&self) -> f32 {
+
         *self.a
     }
+
     pub fn is_in_srgb_gamut(&self) -> bool {
+
         self.r.in_bounds() && self.g.in_bounds() && self.b.in_bounds()
     }
+
     pub fn clamp_to_srgb_gamut(mut self) -> Self {
+
         self.r = self.r.clamp();
+
         self.g = self.g.clamp();
+
         self.b = self.b.clamp();
+
         self
     }
+
     pub fn linear_srgb(&self) -> LinearSrgb {
+
         LinearSrgb::new(self.r(), self.g(), self.b()).expect("Color stores finite RGB values")
     }
+
     pub fn linear_srgba(&self) -> Alpha<LinearSrgb> {
+
         Alpha {
             color: self.linear_srgb(),
             alpha: self.a,
         }
     }
+
     pub fn to<T>(&self) -> ColorResult<T>
     where
         T: ColorSpace,
         <T as TryFrom<LinearSrgb>>::Error: Into<ColorError>,
         LinearSrgb: TryFrom<T>,
     {
+
         self.to_colorspace::<T>()
     }
 
@@ -254,11 +306,13 @@ impl Color {
     /// assert_eq!((*hsl.h, *hsl.s, *hsl.l), (0.0, 1.0, 0.5));
     /// # Ok::<(), ferriswatch::color::ColorError>(())
     /// ```
+
     pub fn to_colorspace<T>(&self) -> ColorResult<T>
     where
         T: ColorSpace,
         LinearSrgb: TryFrom<T>,
     {
+
         T::try_from_color(*self)
     }
 
@@ -274,11 +328,13 @@ impl Color {
     /// assert_eq!(extended.to_clamped::<Rgb>()?, Rgb::new(255, 0, 0));
     /// # Ok::<(), ferriswatch::color::ColorError>(())
     /// ```
+
     pub fn to_clamped<T>(&self) -> ColorResult<T>
     where
         T: ColorSpace,
         LinearSrgb: TryFrom<T>,
     {
+
         T::try_from_linear_srgb_clamped(self.linear_srgb())
     }
 
@@ -287,12 +343,15 @@ impl Color {
     ///
     /// # Errors
     /// Returns the source conversion error for non-finite or overflowing coordinates.
+
     pub fn clamped_from<T>(color: T) -> ColorResult<Self>
     where
         T: ColorSpace,
         LinearSrgb: TryFrom<T>,
     {
+
         let linear = color.try_into_linear_srgb_raw()?;
+
         Ok(Self::from(linear.clamp()))
     }
 
@@ -300,37 +359,49 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the color is outside the sRGB gamut or conversion overflows.
+
     pub fn rgb(&self) -> ColorResult<Rgb> {
+
         self.to::<Rgb>()
     }
 
     /// Converts to [`Srgb`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn srgb(&self) -> Srgb {
+
         Srgb::from(self.linear_srgb())
     }
 
     /// Converts to [`A98Rgb`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn a98_rgb(&self) -> A98Rgb {
+
         A98Rgb::from(self.linear_srgb())
     }
 
     /// Converts to [`DisplayP3`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn display_p3(&self) -> DisplayP3 {
+
         DisplayP3::from(self.linear_srgb())
     }
 
     /// Converts to [`ProPhotoRgb`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn prophoto_rgb(&self) -> ProPhotoRgb {
+
         ProPhotoRgb::from(self.linear_srgb())
     }
 
     /// Converts to [`Rec2020`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn rec2020(&self) -> Rec2020 {
+
         Rec2020::from(self.linear_srgb())
     }
 
@@ -346,7 +417,9 @@ impl Color {
     /// assert_eq!((*hsl.h, *hsl.s, *hsl.l), (0.0, 1.0, 0.5));
     /// # Ok::<(), ferriswatch::color::ColorError>(())
     /// ```
+
     pub fn hsl(&self) -> ColorResult<Hsl> {
+
         self.to::<Hsl>()
     }
 
@@ -354,13 +427,17 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the converted coordinates are non-finite or overflow.
+
     pub fn hsv(&self) -> ColorResult<Hsv> {
+
         self.to::<Hsv>()
     }
 
     /// Converts to [`Hwb`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn hwb(&self) -> Hwb {
+
         Hwb::from(self.linear_srgb())
     }
 
@@ -368,7 +445,9 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the converted coordinates are non-finite or overflow.
+
     pub fn lab(&self) -> ColorResult<Lab> {
+
         self.to::<Lab>()
     }
 
@@ -376,31 +455,41 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the converted coordinates are non-finite or overflow.
+
     pub fn lch(&self) -> ColorResult<Lch> {
+
         self.to::<Lch>()
     }
 
     /// Converts to [`Oklab`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn oklab(&self) -> Oklab {
+
         Oklab::from(self.linear_srgb())
     }
 
     /// Converts to [`Oklch`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn oklch(&self) -> Oklch {
+
         Oklch::from(self.linear_srgb())
     }
 
     /// Converts to [`Lms`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn lms(&self) -> Lms {
+
         Lms::from(self.linear_srgb())
     }
 
     /// Converts to [`LmsPrime`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn lms_prime(&self) -> LmsPrime {
+
         LmsPrime::from(self.linear_srgb())
     }
 
@@ -408,13 +497,17 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the converted coordinates are non-finite or overflow.
+
     pub fn xyz(&self) -> ColorResult<Xyz> {
+
         self.to::<Xyz>()
     }
 
     /// Converts to [`XyzD50`] without clamping, ignoring alpha.
     /// All finite linear-sRGB inputs are representable in this space.
+
     pub fn xyz_d50(&self) -> XyzD50 {
+
         XyzD50::from(self.linear_srgb())
     }
 
@@ -422,29 +515,39 @@ impl Color {
     ///
     /// # Errors
     /// Returns an error if the converted coordinates are non-finite or overflow.
+
     pub fn xyz_d65(&self) -> ColorResult<XyzD65> {
+
         self.to::<XyzD65>()
     }
 
     pub fn set_a(&mut self, alpha: f32) -> ColorResult<&mut Self> {
+
         if !alpha.is_finite() || !(0.0..=1.0).contains(&alpha) {
+
             return Err(ColorError::InvalidAlpha(alpha));
         }
+
         *self.a = alpha;
+
         Ok(self)
     }
 }
 
 impl std::fmt::Display for Color {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+
         std::fmt::Display::fmt(&self.linear_srgba(), f)
     }
 }
 
 impl From<LinearSrgb> for Color {
     /// Clamps linear-sRGB channels to `0..=1` and sets alpha to one.
+
     fn from(color: LinearSrgb) -> Self {
+
         let color = color.clamp();
+
         Self {
             r: *color.r_channel(),
             g: *color.g_channel(),
@@ -502,17 +605,22 @@ where
     LinearSrgb: TryFrom<T>,
 {
     fn clamped_from(color: T) -> ColorResult<Self> {
+
         Self::clamped_from(color)
     }
 }
 
 impl From<Srgb> for Color {
     /// Decodes to linear light, clamps RGB to `0..=1`, and supplies opaque alpha.
+
     fn from(value: Srgb) -> Self {
+
         // Decode in f64 so every finite encoded f32 remains representable until clamping.
         let [r, g, b] = [value.r(), value.g(), value.b()].map(|v| {
+
             crate::color::rgb_conversion::decode_srgb(f64::from(v)).clamp(0.0, 1.0) as f32
         });
+
         Self {
             r: Channel::color_channel("r", r, 0.0..=1.0),
             g: Channel::color_channel("g", g, 0.0..=1.0),
@@ -539,7 +647,9 @@ impl_from_alpha!(LinearSrgb, Srgb, Rgb);
 
 impl From<Rgb> for Color {
     /// Decodes encoded byte channels to linear light and sets alpha to one.
+
     fn from(value: Rgb) -> Self {
+
         Self::from(LinearSrgb::from(value))
     }
 }
@@ -574,7 +684,9 @@ impl_from_color!(
 
 impl<C: From<Color>> From<Color> for Alpha<C> {
     /// Converts and clamps destination channels, quantizing byte RGB, and preserves alpha.
+
     fn from(value: Color) -> Self {
+
         Self {
             color: C::from(value),
             alpha: value.a,
@@ -602,8 +714,11 @@ impl From<Color> for Rgb {
     ///
     /// `Into<Rgb>` has the same behavior. Alpha is discarded. Use [`Color::rgb`]
     /// to reject out-of-gamut colors instead of clamping them.
+
     fn from(value: Color) -> Self {
+
         let encoded = value.srgb();
+
         Self::new(
             encoded.r_u8_clamped(),
             encoded.g_u8_clamped(),

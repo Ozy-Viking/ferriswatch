@@ -11,6 +11,7 @@ pub use oceanic::Oceanic;
 pub use palenight::Palenight;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_OCEANIC: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/marko-cerovac/material.nvim",
     revision: "92f7366a9315cd386bc4fa4d716fde375dda210f",
@@ -19,6 +20,7 @@ pub(super) const SOURCE_OCEANIC: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_PALENIGHT: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/marko-cerovac/material.nvim",
     revision: "92f7366a9315cd386bc4fa4d716fde375dda210f",
@@ -27,6 +29,7 @@ pub(super) const SOURCE_PALENIGHT: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_LIGHTER: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/marko-cerovac/material.nvim",
     revision: "92f7366a9315cd386bc4fa4d716fde375dda210f",

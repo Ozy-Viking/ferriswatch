@@ -1,7 +1,9 @@
 //! The built-in catalogue. Each entry owns its metadata, accents and factories.
+
 use super::PaletteRegistration;
 
 /// All supported concrete built-in palettes.
+
 pub const PALETTES: &[&PaletteRegistration] = &[
     &crate::palette::ayu::dark::Dark::REGISTRATION,
     &crate::palette::ayu::light::Light::REGISTRATION,

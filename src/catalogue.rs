@@ -7,6 +7,7 @@
 //! assert_eq!(theme.accent_id(), Some("green"));
 //! # Ok::<(), catalogue::ResolveError>(())
 //! ```
+
 use crate::{
     color::Color,
     theme_variant::{Appearance, ThemeMetadata, ThemeVariant},
@@ -14,6 +15,7 @@ use crate::{
 
 /// A pinned upstream resource used to import a palette or its UI mappings.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+
 pub struct PaletteSource {
     /// Upstream repository URL.
     pub repository: &'static str,
@@ -26,24 +28,34 @@ pub struct PaletteSource {
     /// This records the upstream notice, not a legal compatibility assessment.
     pub licence: Option<&'static str>,
 }
+
 impl PaletteSource {
     /// Permanent source link for inspecting the imported revision.
+
     pub fn permalink(&self) -> String {
+
         use std::fmt::Write;
+
         let mut path = String::new();
+
         for byte in self.path.bytes() {
+
             if byte.is_ascii_alphanumeric() || b"-._~/".contains(&byte) {
+
                 path.push(char::from(byte));
             } else {
+
                 write!(path, "%{byte:02X}").expect("writing to a String cannot fail");
             }
         }
+
         format!("{}/blob/{}/{}", self.repository, self.revision, path)
     }
 }
 
 /// A curated named accent and its typed factory erased for runtime selection.
 #[derive(Clone, Copy, Debug)]
+
 pub struct AccentRegistration {
     /// Persisted ID.
     pub id: &'static str,
@@ -57,6 +69,7 @@ pub struct AccentRegistration {
 
 /// One valid variant/contrast combination. This drives menus and resolution.
 #[derive(Debug)]
+
 pub struct PaletteRegistration {
     /// Stable identity, appearance and labels.
     pub metadata: ThemeMetadata,
@@ -71,12 +84,15 @@ pub struct PaletteRegistration {
     /// Factory producing the registered theme selection.
     pub factory: fn() -> ThemeVariant,
 }
+
 impl PaletteRegistration {
     /// Resolves a supported accent, or the palette default without accent metadata.
     ///
     /// # Errors
     /// Returns `UnknownAccent` for unsupported IDs, including an empty string.
+
     pub fn resolve(&self, accent_id: Option<&str>) -> Result<ThemeVariant, ResolveError> {
+
         match accent_id {
             None => Ok((self.factory)()),
             Some(id) => self
@@ -94,6 +110,7 @@ impl PaletteRegistration {
 
 /// A selection absent from the built-in catalogue.
 #[derive(Clone, Debug, PartialEq, Eq, thiserror::Error)]
+
 pub enum ResolveError {
     /// Unknown family/variant or malformed theme ID.
     #[error("unknown theme ID: {0}")]
@@ -107,11 +124,14 @@ pub enum ResolveError {
 }
 
 mod registrations;
+
 pub use registrations::PALETTES;
 
 /// Built-in registrations eligible for a mode, including palettes supporting both.
 /// Resolution remains unrestricted by mode.
+
 pub fn palettes_for(mode: Appearance) -> impl Iterator<Item = &'static PaletteRegistration> {
+
     PALETTES
         .iter()
         .copied()
@@ -119,7 +139,9 @@ pub fn palettes_for(mode: Appearance) -> impl Iterator<Item = &'static PaletteRe
 }
 
 /// Resolves the default variant of each palette eligible for a mode.
+
 pub fn variants_for(mode: Appearance) -> impl Iterator<Item = ThemeVariant> {
+
     palettes_for(mode).map(|entry| (entry.factory)())
 }
 
@@ -127,18 +149,25 @@ pub fn variants_for(mode: Appearance) -> impl Iterator<Item = ThemeVariant> {
 ///
 /// # Errors
 /// Returns `UnknownTheme` or `UnsupportedContrast` for unregistered combinations.
+
 pub fn get(id: &str) -> Result<&'static PaletteRegistration, ResolveError> {
+
     if let Some(entry) = PALETTES.iter().find(|p| p.metadata.id == id) {
+
         return Ok(entry);
     }
+
     let parts: Vec<_> = id.split('/').collect();
+
     if (parts.len() == 2 || parts.len() == 3)
         && PALETTES
             .iter()
             .any(|p| p.metadata.family_id == parts[0] && p.metadata.variant_id == parts[1])
     {
+
         return Err(ResolveError::UnsupportedContrast(id.into()));
     }
+
     Err(ResolveError::UnknownTheme(id.into()))
 }
 
@@ -146,6 +175,8 @@ pub fn get(id: &str) -> Result<&'static PaletteRegistration, ResolveError> {
 ///
 /// # Errors
 /// Rejects unknown themes, unsupported contrast combinations and unknown accents.
+
 pub fn resolve(id: &str, accent_id: Option<&str>) -> Result<ThemeVariant, ResolveError> {
+
     get(id)?.resolve(accent_id)
 }

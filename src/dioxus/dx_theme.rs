@@ -1,5 +1,6 @@
 //! Adapter for DioxusLabs/components 9a758255 preview/assets/dx-components-theme.css.
 //! These are upstream neutral scales, not Ferriswatch primary/secondary actions.
+
 use crate::theme_variant::Appearance;
 
 const COLORS: &str = "\
@@ -30,50 +31,68 @@ const COLORS: &str = "\
 --secondary-info-color:var(--fs-info);";
 
 pub(super) fn declarations(appearance: Appearance) -> String {
+
     let mode = match appearance {
         Appearance::Dark => "--dark:initial;--light: ;--dxc-dark-on:initial;--dxc-light-on: ;",
         Appearance::Light => "--dark: ;--light:initial;--dxc-dark-on: ;--dxc-light-on:initial;",
     };
+
     format!("{COLORS}{mode}")
 }
 
 #[cfg(test)]
+
 mod tests {
+
     use super::*;
 
     #[test]
+
     fn maps_upstream_colors_and_switches_only() {
+
         let upstream = include_str!("../../examples/dioxus_theme/fixtures/dx-components-theme.css");
+
         let names: std::collections::BTreeSet<_> = upstream
             .lines()
             .map(str::trim)
             .filter(|line| line.starts_with("--"))
             .map(|line| line.split_once(':').unwrap().0)
             .collect();
+
         for appearance in [Appearance::Light, Appearance::Dark] {
+
             let css = declarations(appearance);
+
             let actual: std::collections::BTreeSet<_> = css
                 .split(';')
                 .filter(|d| !d.is_empty())
                 .map(|d| d.split_once(':').unwrap().0)
                 .collect();
+
             assert_eq!(
                 actual, names,
                 "every upstream color and mode switch is covered"
             );
+
             assert_eq!(css.split(';').filter(|d| !d.is_empty()).count(), 29);
+
             assert!(
                 css.split(';')
                     .filter(|d| !d.is_empty())
                     .all(|d| d.starts_with("--"))
             );
+
             assert!(css.contains("--primary-color:var(--fs-background);"));
+
             assert!(css.contains("--secondary-color:var(--fs-text);"));
+
             assert!(css.contains("--focused-border-color:var(--fs-focus);"));
+
             assert_eq!(
                 css.contains("--dark:initial;"),
                 appearance == Appearance::Dark
             );
+
             assert_eq!(
                 css.contains("--light:initial;"),
                 appearance == Appearance::Light

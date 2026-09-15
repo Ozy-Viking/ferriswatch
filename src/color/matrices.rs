@@ -4,9 +4,11 @@
 #![allow(clippy::excessive_precision)]
 
 pub(super) type Channels = [f64; 3];
+
 pub(super) type Matrix = [[f64; 3]; 3];
 
 pub(super) fn multiply(matrix: Matrix, values: Channels) -> Channels {
+
     matrix.map(|row| row[0] * values[0] + row[1] * values[1] + row[2] * values[2])
 }
 

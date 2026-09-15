@@ -12,6 +12,7 @@ use crate::color::Channel;
 /// use `{:.N}` to choose precision. Non-finite channels are written as `none`.
 /// CSS output interprets these coordinates relative to D50.
 #[derive(Debug, Clone, Copy, PartialEq)]
+
 pub struct Lch {
     /// Lightness, nominally `0.0..=100.0`, from black to reference white.
     pub l: Channel<f32>,
@@ -23,7 +24,9 @@ pub struct Lch {
 
 impl Lch {
     /// Creates channels with this color space's bounds, without validating or clamping values.
+
     pub fn new(l: f32, c: f32, h: f32) -> Self {
+
         Self {
             l: Channel::color_channel("l", l, 0.0..=100.0),
             c: Channel::color_channel("c", c, 0.0..),

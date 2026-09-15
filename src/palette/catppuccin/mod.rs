@@ -30,6 +30,7 @@ pub use macchiato::Macchiato;
 pub use mocha::Mocha;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/catppuccin/palette",
     revision: "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd",

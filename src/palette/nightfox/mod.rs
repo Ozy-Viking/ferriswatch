@@ -6,6 +6,7 @@ pub mod carbonfox;
 pub mod dawnfox;
 pub mod dayfox;
 pub mod duskfox;
+
 // Upstream names both the family and its original variant Nightfox.
 #[allow(clippy::module_inception)]
 pub mod nightfox;
@@ -21,6 +22,7 @@ pub use nordfox::Nordfox;
 pub use terafox::Terafox;
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_NIGHTFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -29,6 +31,7 @@ pub(super) const SOURCE_NIGHTFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DAYFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -37,6 +40,7 @@ pub(super) const SOURCE_DAYFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DAWNFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -45,6 +49,7 @@ pub(super) const SOURCE_DAWNFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_DUSKFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -53,6 +58,7 @@ pub(super) const SOURCE_DUSKFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_NORDFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -61,6 +67,7 @@ pub(super) const SOURCE_NORDFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_TERAFOX: &[PaletteSource] = &[PaletteSource {
     repository: "https://github.com/EdenEast/nightfox.nvim",
     revision: "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
@@ -69,6 +76,7 @@ pub(super) const SOURCE_TERAFOX: &[PaletteSource] = &[PaletteSource {
 }];
 
 /// Pinned upstream palette resources.
+
 pub(super) const SOURCE_CARBONFOX: &[PaletteSource] = &[
     PaletteSource {
         repository: "https://github.com/EdenEast/nightfox.nvim",

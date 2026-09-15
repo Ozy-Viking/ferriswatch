@@ -1,10 +1,12 @@
 #![doc = include_str!("../../docs/Color.md")]
 
 mod channel;
+
 pub use channel::{
     AdjacentValue, Channel, ChannelBuilder, ChannelError, RangeErrorReason,
     WrappingRangeErrorReason, WrappingValue,
 };
+
 mod conversions;
 mod cylindrical_conversion;
 mod formatting;
@@ -14,14 +16,20 @@ mod rgb_conversion;
 mod srgb_byte_table;
 
 pub mod colorspace;
+
 pub use colorspace::*;
+
 mod alpha;
+
 pub use alpha::Alpha;
+
 #[allow(clippy::module_inception)]
 mod color;
+
 pub use color::Color;
 
 pub mod prelude {
+
     pub use super::{
         A98Rgb, A98Rgba, Alpha, Color, ColorError, ColorResult, ColorSpace, DisplayP3, DisplayP3a,
         Hsl, Hsla, Hsv, Hsva, Hwb, Hwba, Lab, Laba, Lch, Lcha, LinearSrgb, LinearSrgba, Lms,
@@ -35,6 +43,7 @@ use std::convert::Infallible;
 pub type ColorResult<T> = Result<T, ColorError>;
 
 #[derive(Debug, Clone, miette::Diagnostic, thiserror::Error)]
+
 pub enum ColorError {
     #[error("invalid length of {0}")]
     InvalidLength(usize),
@@ -65,6 +74,7 @@ pub enum ColorError {
 
 impl PartialEq for ColorError {
     fn eq(&self, other: &Self) -> bool {
+
         match (self, other) {
             (Self::InvalidLength(l0), Self::InvalidLength(r0)) => l0 == r0,
             (
@@ -90,14 +100,18 @@ impl Eq for ColorError {}
 
 impl From<Infallible> for ColorError {
     fn from(value: Infallible) -> Self {
+
         match value {}
     }
 }
 
 fn floats_eq(a: &f32, b: &f32) -> bool {
+
     if a.is_nan() && b.is_nan() {
+
         true
     } else {
+
         a == b
     }
 }
@@ -106,11 +120,13 @@ fn floats_eq(a: &f32, b: &f32) -> bool {
 ///
 /// Hue wraps into `0.0..360.0`; unbounded channels are left unchanged.
 /// This operation does not validate values or perform perceptual gamut mapping.
+
 pub trait Clamp {
     fn clamp(self) -> Self;
 }
 
 /// Converts without clamping the source or intermediates, then clamps the target.
+
 pub trait ClampedInto<T>: Sized {
     fn clamped_into(self) -> ColorResult<T>;
 }
@@ -120,12 +136,14 @@ where
     U: ClampedFrom<T>,
 {
     fn clamped_into(self) -> ColorResult<U> {
+
         U::clamped_from(self)
     }
 }
 
 /// Converts without clamping the source or intermediates, then clamps the target.
 /// Byte targets apply their bounds immediately before quantization.
+
 pub trait ClampedFrom<T>: Sized {
     fn clamped_from(value: T) -> ColorResult<Self>;
 }
@@ -137,7 +155,9 @@ where
     U: ColorSpace,
 {
     fn clamped_from(value: T) -> ColorResult<Self> {
+
         let linear = value.try_into_linear_srgb_raw()?;
+
         U::try_from_linear_srgb_clamped(linear)
     }
 }

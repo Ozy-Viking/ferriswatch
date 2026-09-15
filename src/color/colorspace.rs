@@ -33,60 +33,113 @@ use std::fmt::Display;
 use super::{Alpha, Clamp, Color, ColorResult};
 
 mod a98_rgb;
+
 pub use a98_rgb::A98Rgb;
+
 mod display_p3;
+
 pub use display_p3::DisplayP3;
+
 mod hsl;
+
 pub use hsl::Hsl;
+
 mod hsv;
+
 pub use hsv::Hsv;
+
 mod hwb;
+
 pub use hwb::Hwb;
+
 mod lab;
+
 pub use lab::Lab;
+
 mod lch;
+
 pub use lch::Lch;
+
 mod lms;
+
 pub use lms::Lms;
+
 mod lms_prime;
+
 pub use lms_prime::LmsPrime;
+
 mod oklab;
+
 pub use oklab::Oklab;
+
 mod oklch;
+
 pub use oklch::Oklch;
+
 mod prophoto_rgb;
+
 pub use prophoto_rgb::ProPhotoRgb;
+
 mod rec2020;
+
 pub use rec2020::Rec2020;
+
 mod xyz;
+
 pub use xyz::Xyz;
+
 mod xyz_d50;
+
 pub use xyz_d50::XyzD50;
+
 mod xyz_d65;
+
 pub use xyz_d65::XyzD65;
+
 mod linear_srgb;
+
 pub use linear_srgb::LinearSrgb;
+
 mod srgb;
+
 pub use srgb::{Rgb, Srgb};
 
 pub type A98Rgba = Alpha<A98Rgb>;
+
 pub type DisplayP3a = Alpha<DisplayP3>;
+
 pub type Hsla = Alpha<Hsl>;
+
 pub type Hsva = Alpha<Hsv>;
+
 pub type Hwba = Alpha<Hwb>;
+
 pub type Laba = Alpha<Lab>;
+
 pub type Lcha = Alpha<Lch>;
+
 pub type LinearSrgba = Alpha<LinearSrgb>;
+
 pub type Lmsa = Alpha<Lms>;
+
 pub type LmsPrimea = Alpha<LmsPrime>;
+
 pub type Oklaba = Alpha<Oklab>;
+
 pub type Oklcha = Alpha<Oklch>;
+
 pub type ProPhotoRgba = Alpha<ProPhotoRgb>;
+
 pub type Rec2020a = Alpha<Rec2020>;
+
 pub type Rgba = Alpha<Rgb>;
+
 pub type SRgba = Alpha<Srgb>;
+
 pub type Xyza = Alpha<Xyz>;
+
 pub type XyzD50a = Alpha<XyzD50>;
+
 pub type XyzD65a = Alpha<XyzD65>;
 
 /// A color representation convertible to and from linear sRGB.
@@ -116,31 +169,41 @@ pub type XyzD65a = Alpha<XyzD65>;
 /// assert!((restored.r() - source.r()).abs() < 0.00001);
 /// # Ok::<(), ferriswatch::color::ColorError>(())
 /// ```
+
 pub trait ColorSpace: Sized + TryFrom<LinearSrgb> + Clamp + Display
 where
     LinearSrgb: TryFrom<Self>,
 {
     /// Converts to an opaque linear-sRGB color without clamping.
+
     fn try_into_color(self) -> ColorResult<Color> {
+
         let color = self.try_into_linear_srgb_raw()?;
 
         Color::new(color.r(), color.g(), color.b(), 1.0)
     }
 
     /// Converts the color channels, ignoring alpha, without clamping.
+
     fn try_from_color(color: Color) -> ColorResult<Self> {
+
         Self::try_from_linear_srgb_raw(color.linear_srgb())
     }
+
     /// Converts to linear sRGB without clamping; rejects non-finite or overflowing results.
+
     fn try_into_linear_srgb_raw(self) -> ColorResult<LinearSrgb>;
 
     /// Converts from linear sRGB without clamping; rejects unrepresentable results.
+
     fn try_from_linear_srgb_raw(color: LinearSrgb) -> ColorResult<Self>;
 
     /// Converts without clamping the input, then clamps the destination channels.
     ///
     /// Byte representations override this to clamp before quantization.
+
     fn try_from_linear_srgb_clamped(color: LinearSrgb) -> ColorResult<Self> {
+
         Ok(Self::try_from_linear_srgb_raw(color)?.clamp())
     }
 }
