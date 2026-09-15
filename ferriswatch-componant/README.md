@@ -25,4 +25,7 @@ ferriswatch-componant = { version = "0.3.0", registry = "onedev" }
 ```
 
 Mount `ThemePicker` or `ThemeCombobox` inside `ThemeProvider`, and build
-component assets with `dx`.
+component assets with `dx`. `ThemeCombobox` is unstyled: pass classes for the
+root and each part, and set `matching_mode_only` to `false` to list every
+configured palette instead of only those that match the active appearance.
+Call `use_theme::<LocalStorage>()` in the host to persist the selection.

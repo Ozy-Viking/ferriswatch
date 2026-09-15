@@ -1,18 +1,20 @@
 //! Stable identity for built-in and application-defined themes.
+
 use crate::color::Color;
 use std::borrow::Cow;
 
 /// Overall appearance, independent of a variant's upstream name.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+
 pub enum Appearance {
-    /// Dark backgrounds.
     Dark,
-    /// Light backgrounds.
     Light,
 }
 
 /// Advisory eligibility for the light and dark selections in a theme.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+
 pub enum ThemeSupport {
     /// Include in light-mode lists.
     Light,
@@ -24,7 +26,9 @@ pub enum ThemeSupport {
 
 impl ThemeSupport {
     /// Filters a choice list; it does not restrict theme construction or selection.
+
     pub const fn supports(self, mode: Appearance) -> bool {
+
         matches!(
             (self, mode),
             (Self::Both, _) | (Self::Light, Appearance::Light) | (Self::Dark, Appearance::Dark)
@@ -34,6 +38,7 @@ impl ThemeSupport {
 
 impl From<Appearance> for ThemeSupport {
     fn from(appearance: Appearance) -> Self {
+
         match appearance {
             Appearance::Light => Self::Light,
             Appearance::Dark => Self::Dark,
@@ -43,6 +48,7 @@ impl From<Appearance> for ThemeSupport {
 
 /// A palette's explicitly supported background contrast.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+
 pub enum Contrast {
     /// Soft background contrast.
     Soft,
@@ -54,7 +60,9 @@ pub enum Contrast {
 
 impl Contrast {
     /// Persisted contrast segment.
+
     pub const fn id(self) -> &'static str {
+
         match self {
             Self::Soft => "soft",
             Self::Medium => "medium",
@@ -65,6 +73,7 @@ impl Contrast {
 
 /// Declared identifiers and labels. Display labels never act as lookup keys.
 #[derive(Clone, Debug, PartialEq, Eq)]
+
 pub struct ThemeMetadata {
     /// Canonical `family/variant[/contrast]` or `custom/identifier`.
     pub id: Cow<'static, str>,
@@ -88,6 +97,7 @@ pub struct ThemeMetadata {
 
 /// An explicit accent selection. Transparency does not mean absence.
 #[derive(Clone, Debug, PartialEq, Eq)]
+
 pub struct ResolvedAccent {
     id: Cow<'static, str>,
     name: Cow<'static, str>,
@@ -99,34 +109,50 @@ impl ResolvedAccent {
     ///
     /// # Errors
     /// Rejects identifiers outside ASCII snake_case or empty display names.
+
     pub fn new(
         id: impl Into<Cow<'static, str>>,
         name: impl Into<Cow<'static, str>>,
         color: Color,
     ) -> Result<Self, IdentityError> {
+
         let id = id.into();
+
         let name = name.into();
+
         if !valid_segment(&id) || name.trim().is_empty() {
+
             return Err(IdentityError::InvalidAccent);
         }
+
         Ok(Self { id, name, color })
     }
+
     /// Stable accent identifier.
+
     pub fn id(&self) -> &str {
+
         &self.id
     }
+
     /// Display label.
+
     pub fn name(&self) -> &str {
+
         &self.name
     }
+
     /// Explicit colour, including its alpha channel.
+
     pub const fn color(&self) -> Color {
+
         self.color
     }
 }
 
 /// Invalid custom identity or accent metadata.
 #[derive(Clone, Debug, PartialEq, Eq, thiserror::Error)]
+
 pub enum IdentityError {
     /// Custom themes require a caller-supplied identifier.
     #[error("custom theme ID must be custom/<snake_case_identifier>")]
@@ -140,6 +166,7 @@ pub enum IdentityError {
 }
 
 pub(crate) fn valid_segment(value: &str) -> bool {
+
     !value.is_empty()
         && value.as_bytes()[0].is_ascii_lowercase()
         && value

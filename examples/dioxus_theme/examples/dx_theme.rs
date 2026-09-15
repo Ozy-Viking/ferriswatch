@@ -56,7 +56,7 @@ fn App() -> Element {
 
 #[component]
 fn Controls() -> Element {
-    let mut theme = ferriswatch::dioxus::use_theme();
+    let mut theme = ferriswatch::dioxus::use_theme::<ferriswatch::dioxus::Memory>();
     rsx! { button { id: "mode", onclick: move |_| theme.set_mode(if theme.mode() == Appearance::Dark { Appearance::Light } else { Appearance::Dark }), "Toggle mode" } }
 }
 

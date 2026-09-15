@@ -1,7 +1,8 @@
 use dioxus::prelude::*;
 use ferriswatch::{
     dioxus::{
-        DEFAULT_STYLESHEET, ThemeConfig, ThemeProvider, ThemeScope, ThemeSelection, use_theme,
+        DEFAULT_STYLESHEET, Memory, ThemeConfig, ThemeProvider, ThemeScope, ThemeSelection,
+        use_theme,
     },
     palette::catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
     theme::{Appearance, Theme},
@@ -35,7 +36,7 @@ fn App() -> Element {
 
 #[component]
 fn Workbench() -> Element {
-    let mut theme = use_theme();
+    let mut theme = use_theme::<Memory>();
     let active = theme.current();
     let saved = theme.theme();
     let config = theme.config();
@@ -176,7 +177,7 @@ fn ColorReference() -> Element {
                 ("Text", vec!["text", "muted", "subtle", "on-primary", "on-secondary"]),
                 ("Actions", vec!["primary", "primary-hover", "primary-pressed", "primary-muted", "secondary", "secondary-hover", "secondary-pressed", "secondary-muted"]),
                 ("Borders & focus", vec!["border", "border-muted", "focus"]),
-                ("Status", vec!["success", "warning", "error", "critical", "info", "trace"]),
+                ("Status", vec!["success", "warning", "error", "critical", "info", "debug", "trace"]),
             ] {
                 h3 { "{group}" }
                 div { class: "swatches",

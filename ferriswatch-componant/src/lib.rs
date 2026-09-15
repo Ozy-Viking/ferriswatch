@@ -2,7 +2,8 @@
 //!
 //! Theme state lives in [`ferriswatch::dioxus`]. This crate owns the combobox,
 //! theme picker, and other widgets that need `dioxus-primitives` or
-//! `dioxus-attributes`.
+//! `dioxus-attributes`. [`ThemeCombobox`] ships no CSS; pass classes from the
+//! host. [`ThemePicker`] supplies Ferriswatch's default classes.
 
 pub mod combobox;
 mod theme_combobox;

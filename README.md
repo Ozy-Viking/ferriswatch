@@ -48,7 +48,8 @@ available through `ferriswatch::css`. See the [CSS guide](docs/Css.md) for
 Enable the optional `dioxus` feature for typed theme selection, a required-default
 configuration builder, shared theme state, and a provider. `ThemePicker` and
 `ThemeCombobox` live in the `ferriswatch-componant` workspace crate because they
-depend on `dioxus-primitives`. See [Dioxus integration](docs/Dioxus.md) for setup
+depend on `dioxus-primitives`. `ThemeCombobox` is unstyled and takes host classes
+plus `matching_mode_only`. See [Dioxus integration](docs/Dioxus.md) for setup
 and custom palettes.
 
 ## Palette inspector

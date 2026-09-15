@@ -1,7 +1,7 @@
 //! Browser fixture: dx serve --example css_scope --web --port 8081
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{DefaultStyles, ThemeConfig, ThemeProvider, ThemeScope, use_theme},
+    dioxus::{DefaultStyles, Memory, ThemeConfig, ThemeProvider, ThemeScope, use_theme},
     palette::{
         NoAccent,
         catppuccin::{Latte, Mocha},
@@ -50,7 +50,7 @@ fn App() -> Element {
 
 #[component]
 fn Controls() -> Element {
-    let mut theme = use_theme();
+    let mut theme = use_theme::<Memory>();
     let mut count = use_signal(|| 0);
     rsx! {
         button { id: "mode", onclick: move |_| {

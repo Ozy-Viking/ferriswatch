@@ -1,7 +1,7 @@
 # Ferriswatch theme workbench
 
 A Dioxus web application demonstrating shared theme state with a project board
-and a live reference for all 32 semantic colors. It uses the optional
+and a live reference for all 33 semantic colors. It uses the optional
 `ferriswatch::dioxus` module and keeps renderer dependencies in this standalone
 example.
 
@@ -44,9 +44,9 @@ actions, focus, borders, and feedback colors.
 
 The example uses `ferriswatch-componant::ThemePicker`, which combines the mode slider
 with `ThemeCombobox`. Its left half searches themes and its right half searches
-accents; both lists support scrolling and keyboard selection. Styling its
-`.fs-theme-picker` class shows how an application can customize its presentation
-without replacing selection behavior.
+accents; both lists support scrolling and keyboard selection. `ThemePicker`
+supplies the combobox classes; styling `.fs-theme-picker` shows how an
+application can customize presentation without replacing selection behavior.
 
 ## Verify
 
@@ -58,7 +58,7 @@ uv run --with playwright python test_browser.py
 ```
 
 The browser checks cover palette and accent selection, computed backgrounds,
-reset, saving edits, task progress, state retention, all 32 swatches, and
+reset, saving edits, task progress, state retention, all 33 swatches, and
 horizontal overflow at desktop, tablet, and phone widths. Use
 `FERRISWATCH_EXAMPLE_URL` for another address or
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium installation.

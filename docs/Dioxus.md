@@ -84,18 +84,18 @@ and `TokyoNight`. Palette types remain in their existing family modules.
 
 ## Shared state
 
-Put `ThemeProvider` at the application root. Descendants call `use_theme()` to
-read the active theme or select another allowed theme. State belongs to the
+Put `ThemeProvider` at the application root. Descendants call `use_theme::<S>()`
+to read the active theme or select another allowed theme. State belongs to the
 provider, so separate application instances and SSR requests do not share it.
 Nested providers have independent state and CSS scopes.
 
 ```rust
 use dioxus::prelude::*;
-use ferriswatch::dioxus::use_theme;
+use ferriswatch::dioxus::{LocalStorage, use_theme};
 
 #[component]
 fn ResetTheme() -> Element {
-    let mut theme = use_theme();
+    let mut theme = use_theme::<LocalStorage>();
     let active = theme.current();
     rsx! {
         button { onclick: move |_| theme.reset(), "Reset {active.name()}" }
@@ -104,18 +104,24 @@ fn ResetTheme() -> Element {
 ```
 
 `ThemeState::select(theme_id, accent_id)` updates only the active mode's saved
-variant. `select_for(mode, theme_id, accent_id)` updates a specified slot without
-switching modes. It returns errors without changing the current
-theme. `None` selects the palette default without recording an explicit accent;
-selecting that same accent by name records its ID. The picker retains a supported
-accent when switching palettes and otherwise uses the new palette's default.
-`set_mode(Appearance::Light)` switches to the saved light selection without
-changing either slot. `variant(mode)` reads one slot; `theme()` reads the pair.
-`reset()` restores both defaults and the initial mode. A Dioxus store tracks the
-pair and mode, with field subscriptions so inactive-slot changes do not notify
-components that read only `current()`.
+variant. `select_theme(id)` keeps a compatible accent or the palette default.
+`select_accent(None)` (or `""`) records the palette default. `select_for(mode,
+theme_id, accent_id)` updates a specified slot without switching modes. Failed
+selects set `last_error()` and leave the current theme unchanged. `toggle_mode()`
+and `set_mode(Appearance::Light)` switch to the saved selection for that
+appearance without changing either slot. `variant(mode)` reads one slot;
+`theme()` reads the pair. `reset()` restores both defaults and the initial mode.
+`theme_value()` and `accent_value()` are memos for combobox bindings (`""` is the
+default accent). A Dioxus store tracks the pair and mode, with field
+subscriptions so inactive-slot changes do not notify components that read only
+`current()`.
 
-Applications own persistence and handling of invalid saved settings.
+`use_theme::<Memory>()` does not persist. `use_theme::<LocalStorage>()` and
+`use_theme::<SessionStorage>()` load and save a [`ThemeSnapshot`] through
+[`dioxus_sdk_storage::StorageBacking`] under `ferriswatch.theme.v1`. Invalid
+saved ids are ignored and leave the configured default in place. Any type that
+implements [`dioxus_sdk_storage::StorageBacking`] with a `String` key gets
+`load`/`save` from [`ThemeStorage`].
 
 ## Mode support and filtering
 
@@ -134,6 +140,12 @@ to override it, and use matching metadata in its registration.
 `ThemeConfig` exposes the same methods scoped to its allowed selection, including
 custom palettes. Both methods include `Both` entries and retain catalogue order.
 Accent choices are applied through the usual resolution methods.
+
+`ThemeState::listed_palettes(matching_mode_only)` is the menu helper: `true`
+lists the active mode, `false` lists every configured palette. An explicitly
+selected out-of-mode theme stays visible because support is advisory.
+`selected_theme` is the current palette registration and `available_accents`
+are its named accents.
 
 `Theme::new(light, dark)` holds independent selections, including accents.
 `variant(mode)` reads a selection and `set(mode, variant)` replaces just that slot.
@@ -173,7 +185,7 @@ Existing custom `Palette` implementations must add `registration()`.
 ## Styling and scope
 
 The provider renders a `div.fs-theme`. By default, `ThemeScope::Scoped` publishes
-all 32 `--fs-*` variables and `color-scheme` on that wrapper. Its background and
+all 33 `--fs-*` variables and `color-scheme` on that wrapper. Its background and
 text colors retain the existing defaults. `scope: ThemeScope::Root` publishes
 variables and scheme on `:root`, including for portals in the same document.
 Use one root provider per document; nested scoped providers override inherited
@@ -206,18 +218,22 @@ See [`crate::css`] for class mappings, overrides, generation, and commit checks.
 `ferriswatch-componant` provides `ThemePicker` and `ThemeCombobox`. The picker
 combines the light/dark slider with `ThemeCombobox`, a joined theme/accent
 control built from `dx components add combobox`. Click the left half to browse
-or search themes for the active mode; use the right half to browse or search
-its accents. Arrow keys navigate, Enter selects, and Escape closes without
-changing the selection. Only one dropdown opens at a time.
+or search themes; use the right half to browse or search its accents. Arrow
+keys navigate, Enter selects, and Escape closes without changing the
+selection. Only one dropdown opens at a time.
 
 Use `ThemeCombobox {}` directly within a provider when your application has its
-own mode control. Changing theme retains a compatible accent, otherwise it
-uses the palette default. Each mode keeps its own saved selection. Explicitly
-selected out-of-mode themes remain visible because support is advisory.
+own mode control. The widget ships no layout or chrome CSS: pass `class` and
+the `*_class` props for each part. `matching_mode_only` (default `true`) lists
+only palettes that support the active appearance; set it to `false` to list
+every configured palette. Changing theme retains a compatible accent, otherwise
+it uses the palette default. Each mode keeps its own saved selection.
+Explicitly selected out-of-mode themes remain visible because support is
+advisory.
 
-The combobox's separate component stylesheet supplies its joined layout and
-scrollable popups, using `--fs-*` colors. It does not extend `DEFAULT_CSS` with
-component layout or require the Dioxus Components global theme stylesheet.
+`ThemePicker` passes Ferriswatch's joined layout and combobox classes into
+`ThemeCombobox`. Those styles use `--fs-*` colors and do not extend
+`DEFAULT_CSS` or require the Dioxus Components global theme stylesheet.
 
 ## Override Dioxus Components colors
 
@@ -278,7 +294,7 @@ typography, and Ferriswatch's default semantic stylesheet are unchanged.
 From `examples/dioxus_theme`, run `dx serve --web`. The standalone example
 offers all built-in palettes filtered by mode and presents a responsive theme workbench. It includes
 an editable project board, task progress, feedback states, a reset button, and a
-live reference for all 32 semantic colours. Project state survives theme and view
+live reference for all 33 semantic colours. Project state survives theme and view
 changes; light and dark retain their own palettes and accents. Reloading resets
 the session. See `examples/dioxus_theme/README.md` for a walkthrough.
 Its renderer dependencies stay separate from the library's feature set.
