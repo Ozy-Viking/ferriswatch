@@ -29,3 +29,9 @@ component assets with `dx`. `ThemeCombobox` is unstyled: pass classes for the
 root and each part, and set `matching_mode_only` to `false` to list every
 configured palette instead of only those that match the active appearance.
 Call `use_theme::<LocalStorage>()` in the host to persist the selection.
+
+`ThemeSelect` and `AccentSelect` can also be mounted separately inside the
+provider. Each accepts `class`, `combobox_class`, `input_class`, `list_class`,
+`option_class`, and `empty_class`. `ThemeSelect` additionally accepts
+`matching_mode_only`; `AccentSelect` follows the selected theme's accents.
+`ThemeCombobox` joins these two components and displays selection errors.

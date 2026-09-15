@@ -1,7 +1,8 @@
-use super::{ThemeConfig, ThemeError, ThemeScope, persistence::ThemeSnapshot, theme_css};
+use super::{persistence::ThemeSnapshot, theme_css};
 use crate::{
     catalogue::{AccentRegistration, PaletteRegistration},
-    theme::{Theme, ThemeStoreExt},
+    css::ThemeScope,
+    theme::{Theme, ThemeError, ThemeStoreExt, config::ThemeConfig},
     theme_variant::{Appearance, ThemeVariant},
 };
 use dioxus::prelude::*;
@@ -28,40 +29,33 @@ impl ThemeState {
     /// Reads and subscribes only to the active mode's selection.
 
     pub fn current(&self) -> ThemeVariant {
-
         self.variant(self.mode())
     }
 
     /// Reads and subscribes to the active mode.
 
     pub fn mode(&self) -> Appearance {
-
         *self.data.mode().read()
     }
 
     /// Switches modes without modifying either saved selection.
 
     pub fn set_mode(&mut self, mode: Appearance) {
-
         self.data.mode().set(mode);
     }
 
     /// Whether the active appearance is dark.
 
     pub fn is_dark(&self) -> bool {
-
         self.mode() == Appearance::Dark
     }
 
     /// Switches to the other appearance without changing either saved selection.
 
     pub fn toggle_mode(&mut self) {
-
         self.set_mode(if self.is_dark() {
-
             Appearance::Light
         } else {
-
             Appearance::Dark
         });
     }
@@ -69,7 +63,6 @@ impl ThemeState {
     /// Reads one saved variant without subscribing to the other slot.
 
     pub fn variant(&self, mode: Appearance) -> ThemeVariant {
-
         match mode {
             Appearance::Light => self.data.theme().light().read().clone(),
             Appearance::Dark => self.data.theme().dark().read().clone(),
@@ -79,12 +72,10 @@ impl ThemeState {
     /// Reads both selections.
 
     pub fn theme(&self) -> Theme {
-
         self.data.theme().read().clone()
     }
 
     pub fn config(&self) -> ThemeConfig {
-
         self.config.read().clone()
     }
 
@@ -95,10 +86,10 @@ impl ThemeState {
     /// Panics if the current theme is not in this provider's configuration.
 
     pub fn selected_theme(&self) -> &'static PaletteRegistration {
-
         let current = self.current();
 
-        self.config()
+        self.config
+            .read()
             .palettes()
             .iter()
             .copied()
@@ -109,49 +100,42 @@ impl ThemeState {
     /// Accents declared by [`Self::selected_theme`], excluding the palette default.
 
     pub fn available_accents(&self) -> &'static [AccentRegistration] {
-
         self.selected_theme().accents
     }
 
     /// Canonical id of the active palette.
 
     pub fn selected_theme_id(&self) -> String {
-
         self.current().id().to_owned()
     }
 
     /// Explicit accent id of the active selection, if any.
 
     pub fn selected_accent_id(&self) -> Option<String> {
-
         self.current().accent_id().map(str::to_owned)
     }
 
     /// Display name of the explicit accent, if any.
 
     pub fn selected_accent_name(&self) -> Option<String> {
-
         self.current().accent_name().map(str::to_owned)
     }
 
     /// Combobox binding for the active palette id.
 
     pub fn theme_value(&self) -> Memo<Option<String>> {
-
         self.theme_value
     }
 
     /// Combobox binding for the active accent; `Some("")` means the palette default.
 
     pub fn accent_value(&self) -> Memo<Option<String>> {
-
         self.accent_value
     }
 
     /// Message from the last failed select, restore, or equivalent.
 
     pub fn last_error(&self) -> Option<String> {
-
         self.last_error.read().clone()
     }
 
@@ -163,48 +147,45 @@ impl ThemeState {
     /// configured palette.
 
     pub fn listed_palettes(&self, matching_mode_only: bool) -> Vec<&'static PaletteRegistration> {
-
-        let config = self.config();
+        let config = self.config.read();
 
         if !matching_mode_only {
-
             return config.palettes().to_vec();
         }
 
         let mode = self.mode();
-
-        let current = self.current();
-
-        let mut palettes: Vec<_> = config.palettes_for(mode).collect();
-
-        if !current.supports(mode) {
-
-            let selected = self.selected_theme();
-
-            if palettes
-                .iter()
-                .all(|palette| palette.metadata.id != selected.metadata.id)
-            {
-
-                palettes.push(selected);
-            }
-        }
-
-        palettes
+        //
+        // let current = self.current();
+        //
+        // let mut palettes: Vec<_> = config.palettes_for(mode).collect();
+        //
+        // if !current.supports(mode) {
+        //
+        //     let selected = self.selected_theme();
+        //
+        //     if palettes
+        //         .iter()
+        //         .all(|palette| palette.metadata.id != selected.metadata.id)
+        //     {
+        //
+        //         palettes.push(selected);
+        //     }
+        // }
+        //
+        // palettes
+        config.theme_lists().get(mode).to_vec()
     }
 
     /// Changes only the active mode's palette and accent.
     /// Availability is enforced, but mode support remains advisory.
 
     pub fn select(&mut self, id: &str, accent: Option<&str>) -> Result<(), ThemeError> {
-
         self.select_for(self.mode(), id, accent)
     }
 
     /// Selects a palette, keeping a compatible accent or the palette default.
 
     pub fn select_theme(&mut self, id: &str) -> Result<(), ThemeError> {
-
         let accent = self
             .current()
             .accent_id()
@@ -217,7 +198,6 @@ impl ThemeState {
     /// Selects an accent on the active palette. `None` or `""` is the default.
 
     pub fn select_accent(&mut self, accent: Option<&str>) -> Result<(), ThemeError> {
-
         let id = self.current().id().to_owned();
 
         self.select(&id, accent.filter(|value| !value.is_empty()))
@@ -231,10 +211,8 @@ impl ThemeState {
         id: &str,
         accent: Option<&str>,
     ) -> Result<(), ThemeError> {
-
         match self.config.peek().resolve(id, accent) {
             Ok(theme) => {
-
                 match mode {
                     Appearance::Light => self.data.theme().light().set(theme),
                     Appearance::Dark => self.data.theme().dark().set(theme),
@@ -245,7 +223,6 @@ impl ThemeState {
                 Ok(())
             }
             Err(error) => {
-
                 self.last_error.set(Some(error.to_string()));
 
                 Err(error)
@@ -256,7 +233,6 @@ impl ThemeState {
     /// Restores both configured variants, their accents, and the initial mode.
 
     pub fn reset(&mut self) {
-
         let config = self.config.peek();
 
         self.data.set(ProviderData {
@@ -270,7 +246,6 @@ impl ThemeState {
     /// Active mode, palette id, and accent for persistence backends.
 
     pub fn snapshot(&self) -> ThemeSnapshot {
-
         let current = self.current();
 
         ThemeSnapshot {
@@ -288,7 +263,6 @@ impl ThemeState {
     /// mode when the palette or accent is not in this configuration.
 
     pub fn restore(&mut self, snapshot: ThemeSnapshot) -> Result<(), ThemeError> {
-
         self.select_for(snapshot.mode, &snapshot.id, snapshot.accent.as_deref())?;
 
         self.set_mode(snapshot.mode);
@@ -306,18 +280,15 @@ impl ThemeState {
 /// Panics when used outside `ThemeProvider`.
 
 pub fn use_theme<S: super::persistence::ThemeStorage>() -> ThemeState {
-
     let mut state = use_context::<ThemeState>();
 
     use_hook(|| {
         if let Some(snapshot) = S::load() {
-
             let _ = state.restore(snapshot);
         }
     });
 
     use_effect(move || {
-
         S::save(&state);
     });
 
@@ -337,7 +308,6 @@ pub fn ThemeProvider(
     children: Element,
     #[props(default)] scope: ThemeScope,
 ) -> Element {
-
     let data = use_store(|| ProviderData {
         theme: config.default_theme().clone(),
         mode: config.default_mode(),
@@ -348,7 +318,6 @@ pub fn ThemeProvider(
     let last_error = use_signal(|| None::<String>);
 
     let theme_value = use_memo(move || {
-
         let mode = *data.mode().read();
 
         let variant = match mode {
@@ -360,7 +329,6 @@ pub fn ThemeProvider(
     });
 
     let accent_value = use_memo(move || {
-
         let mode = *data.mode().read();
 
         let variant = match mode {
@@ -391,7 +359,6 @@ pub fn ThemeProvider(
     let override_dx = state.config().override_dx_components_theme();
 
     if override_dx {
-
         declarations.push_str(&super::dx_theme::declarations(
             current.metadata().appearance,
         ));
@@ -405,10 +372,8 @@ pub fn ThemeProvider(
     // Upstream assigns these switches directly on .dxc-system descendants, so
     // inherited provider declarations alone cannot override them.
     let system_selector = if scoped {
-
         ".fs-theme[data-fs-dx-theme][data-fs-dx-theme] .dxc-system"
     } else {
-
         ":root:root .dxc-system"
     };
 

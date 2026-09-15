@@ -15,7 +15,7 @@
   width: 100%;
   height: 2.25rem;
   box-sizing: border-box;
-  padding: 0 2rem 0 0.75rem;
+  padding: 0 0.75rem;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -28,9 +28,9 @@
   outline: none;
 }
 
+.dx-combobox-input:focus,
 .dx-combobox-input:focus-visible {
-  outline: 2px solid var(--fs-focus);
-  outline-offset: -2px;
+  outline: none;
 }
 
 .dx-combobox-input[disabled] {

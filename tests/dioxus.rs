@@ -584,7 +584,7 @@ fn css_preserves_transparency_and_every_semantic_role() {
 
     assert!(css.contains(&format!("--fs-overlay:{};", colors.surfaces.overlay)));
 
-    assert_eq!(css.matches("--fs-").count(), 33);
+    assert_eq!(css.matches("--fs-").count(), 88);
 
     assert!(css.contains("--fs-alt-raised:"));
 

@@ -187,7 +187,7 @@ with sync_playwright() as p:
     expect(page.locator('.badge')).to_have_text('In progress')
     expect(page.get_by_role('button', name='Add task', exact=True)).to_be_disabled()
     page.get_by_role('button', name='Color reference', exact=True).click()
-    expect(page.locator('.swatch')).to_have_count(33)
+    expect(page.locator('.swatch')).to_have_count(88)
     page.get_by_role('button', name='Copy --fs-primary', exact=True).click()
     expect(page.locator('.copy-status')).to_have_text('Copied --fs-primary')
     assert page.evaluate('navigator.clipboard.readText()') == '--fs-primary'
@@ -219,7 +219,7 @@ with sync_playwright() as p:
         )
         assert group_box['x'] <= theme_box['x'] and accent_box['x'] + accent_box['width'] <= group_box['x'] + group_box['width']
         page.get_by_role('button', name='Color reference', exact=True).click()
-        expect(page.locator('.swatch')).to_have_count(33)
+        expect(page.locator('.swatch')).to_have_count(88)
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Reference overflow at {width}px'
         page.get_by_role('button', name='Interface', exact=True).click()
     page.set_viewport_size({'width': 390, 'height': 700})
@@ -242,5 +242,5 @@ with sync_playwright() as p:
     page.mouse.wheel(0, 200)
     page.wait_for_function('scrollY > 0')
     assert not errors, errors
-    print('PASS: independent mode selections and filtering, theme switching, backgrounds, reset, saved edits, tasks, 33 colors, state retention, responsive layouts, no page errors')
+    print('PASS: independent mode selections and filtering, theme switching, backgrounds, reset, saved edits, tasks, 88 colors, state retention, responsive layouts, no page errors')
     browser.close()

@@ -7,3 +7,4 @@ __pycache__
 # OneDev Cargo cache and compiler fingerprint
 /.ci-cargo/
 /.ci-rust-version
+/ferriswatch-componant/src/theme_combobox.rs.bak

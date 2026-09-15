@@ -42,6 +42,9 @@ pub fn render() -> String {
         ),
         (".fs-text-muted", "muted"),
         (".fs-text-subtle", "subtle"),
+        (".fs-text-alt", "alt-text"),
+        (".fs-text-alt-muted", "alt-muted"),
+        (".fs-text-alt-subtle", "alt-subtle"),
     ] {
 
         rule(selectors, "color", &format!("var(--fs-{role})"));
@@ -68,7 +71,25 @@ pub fn render() -> String {
                 "background-color",
                 &format!("var(--fs-{role}-{value})"),
             );
+
+            rule(
+                &format!(".fs-{role}:{state}:not(:disabled, [aria-disabled=\"true\" i])"),
+                "color",
+                &format!("var(--fs-on-{role}-{value})"),
+            );
         }
+
+        rule(
+            &format!(".fs-{role}:disabled, .fs-{role}[aria-disabled=\"true\" i]"),
+            "background-color",
+            &format!("var(--fs-{role}-disabled)"),
+        );
+
+        rule(
+            &format!(".fs-{role}:disabled, .fs-{role}[aria-disabled=\"true\" i]"),
+            "color",
+            &format!("var(--fs-on-{role}-disabled)"),
+        );
     }
 
     rule(
@@ -101,6 +122,61 @@ pub fn render() -> String {
     );
 
     rule(".fs-focus:focus-visible", "outline-offset", "2px");
+
+    for hue in [
+        "red", "orange", "yellow", "green", "cyan", "blue", "purple", "pink",
+    ] {
+
+        rule(
+            &format!(".fs-chromatic-{hue}"),
+            "color",
+            &format!("var(--fs-chromatic-{hue})"),
+        );
+    }
+
+    for role in [
+        "attribute",
+        "boolean",
+        "builtin",
+        "builtin-function",
+        "builtin-type",
+        "comment",
+        "constant",
+        "control-keyword",
+        "deleted",
+        "deprecated",
+        "documentation",
+        "escape",
+        "foreground",
+        "function",
+        "heading",
+        "inserted",
+        "invalid",
+        "keyword",
+        "link",
+        "macro-name",
+        "markup-bold",
+        "markup-italic",
+        "modifier",
+        "namespace",
+        "number",
+        "operator",
+        "parameter",
+        "property",
+        "punctuation",
+        "string",
+        "tag",
+        "type-keyword",
+        "type-name",
+        "variable",
+    ] {
+
+        rule(
+            &format!(".fs-syntax-{role}"),
+            "color",
+            &format!("var(--fs-syntax-{role})"),
+        );
+    }
 
     out.push_str("}\n");
 

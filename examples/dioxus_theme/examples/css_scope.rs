@@ -1,10 +1,10 @@
 //! Browser fixture: dx serve --example css_scope --web --port 8081
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{DefaultStyles, Memory, ThemeConfig, ThemeProvider, ThemeScope, use_theme},
+    dioxus::{use_theme, DefaultStyles, Memory, ThemeConfig, ThemeProvider, ThemeScope},
     palette::{
-        NoAccent,
         catppuccin::{Latte, Mocha},
+        NoAccent,
     },
     theme::{Appearance, Theme},
     theme_variant::ThemePalette,
@@ -31,9 +31,25 @@ fn App() -> Element {
     rsx! {
         // These declarations must be revealed again when the root provider leaves.
         style { ":root {{ --fs-background: rgb(1, 2, 3); --fs-text: rgb(4, 5, 6); color-scheme: light; }}" }
-        if styles() { DefaultStyles {} DefaultStyles {} }
+        if styles() {
+            DefaultStyles {}
+            DefaultStyles {}
+        }
         button { id: "styles", onclick: move |_| styles.set(true), "Load classes" }
-        button { id: "scope", onclick: move |_| scope.set(if scope() == ThemeScope::Root { ThemeScope::Scoped } else { ThemeScope::Root }), "Toggle scope" }
+        button {
+            id: "scope",
+            onclick: move |_| {
+                scope
+                    .set(
+                        if scope() == ThemeScope::Root {
+                            ThemeScope::Scoped
+                        } else {
+                            ThemeScope::Root
+                        },
+                    )
+            },
+            "Toggle scope"
+        }
         button { id: "mount", onclick: move |_| mounted.toggle(), "Toggle provider" }
         div { id: "outside", class: "fs-page", "Outside provider" }
         if mounted() {
@@ -53,9 +69,7 @@ fn Controls() -> Element {
     let mut theme = use_theme::<Memory>();
     let mut count = use_signal(|| 0);
     rsx! {
-        button { id: "mode", onclick: move |_| {
-            theme.set_mode(if theme.mode() == Appearance::Dark { Appearance::Light } else { Appearance::Dark });
-        }, "Toggle mode" }
+        button { id: "mode", onclick: move |_| theme.toggle_mode(), "Toggle mode" }
         button { id: "counter", onclick: move |_| count += 1, "{count}" }
     }
 }

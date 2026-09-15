@@ -86,3 +86,11 @@ unexpected_cfgs = { level = "warn", check-cfg = ["cfg(docsrs)"] }
 [[bin]]
 name = "ferriswatch-generate-css"
 path = "tools/generate_css.rs"
+
+[profile.dev]
+debug = true
+strip = "none"
+
+[profile.release]
+debug = true
+strip = "none"

@@ -3,13 +3,8 @@ use ferriswatch::dioxus::{Memory, use_theme};
 
 use crate::ThemeCombobox;
 
-#[css_module("/src/theme_combobox.css")]
-
-struct Layout;
-
-#[css_module("/src/combobox/style.css")]
-
-struct Combo;
+const THEME_COMBOBOX_CSS: Asset = asset!("/src/theme_combobox.css");
+const COMBOBOX_CSS: Asset = asset!("/src/combobox/style.css");
 
 /// Basic accessible selectors for available palettes and their supported accents.
 ///
@@ -22,6 +17,8 @@ pub fn ThemePicker() -> Element {
     let mut state = use_theme::<Memory>();
 
     rsx! {
+        document::Stylesheet { href: THEME_COMBOBOX_CSS }
+        document::Stylesheet { href: COMBOBOX_CSS }
         div { class: "fs-theme-picker",
             div { class: "fs-mode-control",
                 span { "Light" }
@@ -34,14 +31,14 @@ pub fn ThemePicker() -> Element {
                 span { "Dark" }
             }
             ThemeCombobox {
-                class: Layout::fs_theme_combobox,
-                theme_class: Layout::fs_theme_half.to_string(),
-                accent_class: Layout::fs_accent_half.to_string(),
-                combobox_class: Combo::dx_combobox.to_string(),
-                input_class: Combo::dx_combobox_input.to_string(),
-                list_class: Combo::dx_combobox_list.to_string(),
-                option_class: Combo::dx_combobox_option.to_string(),
-                empty_class: Combo::dx_combobox_empty.to_string(),
+                class: "fs-theme-combobox",
+                theme_class: "fs-theme-half",
+                accent_class: "fs-accent-half",
+                combobox_class: "dx-combobox",
+                input_class: "dx-combobox-input",
+                list_class: "dx-combobox-list",
+                option_class: "dx-combobox-option",
+                empty_class: "dx-combobox-empty",
             }
         }
     }

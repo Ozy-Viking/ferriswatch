@@ -10,6 +10,7 @@
 
 use crate::{
     color::Color,
+    theme::ThemeSelection,
     theme_variant::{Appearance, ThemeMetadata, ThemeVariant},
 };
 
@@ -33,18 +34,14 @@ impl PaletteSource {
     /// Permanent source link for inspecting the imported revision.
 
     pub fn permalink(&self) -> String {
-
         use std::fmt::Write;
 
         let mut path = String::new();
 
         for byte in self.path.bytes() {
-
             if byte.is_ascii_alphanumeric() || b"-._~/".contains(&byte) {
-
                 path.push(char::from(byte));
             } else {
-
                 write!(path, "%{byte:02X}").expect("writing to a String cannot fail");
             }
         }
@@ -68,7 +65,7 @@ pub struct AccentRegistration {
 }
 
 /// One valid variant/contrast combination. This drives menus and resolution.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 
 pub struct PaletteRegistration {
     /// Stable identity, appearance and labels.
@@ -92,7 +89,6 @@ impl PaletteRegistration {
     /// Returns `UnknownAccent` for unsupported IDs, including an empty string.
 
     pub fn resolve(&self, accent_id: Option<&str>) -> Result<ThemeVariant, ResolveError> {
-
         match accent_id {
             None => Ok((self.factory)()),
             Some(id) => self
@@ -105,6 +101,51 @@ impl PaletteRegistration {
                     accent_id: id.into(),
                 }),
         }
+    }
+}
+
+#[derive(Debug)]
+pub struct ThemeLists {
+    light: Vec<&'static PaletteRegistration>,
+    dark: Vec<&'static PaletteRegistration>,
+}
+
+impl ThemeLists {
+    pub fn new(palettes: &[&'static PaletteRegistration]) -> Self {
+        let mut dark = vec![];
+        let mut light = vec![];
+
+        for &palette in palettes {
+            if palette.metadata.support.supports(Appearance::Light) {
+                light.push(palette);
+            }
+            if palette.metadata.support.supports(Appearance::Dark) {
+                dark.push(palette);
+            }
+        }
+
+        Self { light, dark }
+    }
+
+    pub fn light(&self) -> &[&'static PaletteRegistration] {
+        &self.light
+    }
+
+    pub fn dark(&self) -> &[&'static PaletteRegistration] {
+        &self.dark
+    }
+
+    pub fn get(&self, mode: Appearance) -> &[&'static PaletteRegistration] {
+        match mode {
+            Appearance::Dark => self.dark(),
+            Appearance::Light => self.light(),
+        }
+    }
+}
+
+impl From<ThemeSelection> for ThemeLists {
+    fn from(theme_selection: ThemeSelection) -> Self {
+        ThemeLists::new(theme_selection.palettes())
     }
 }
 
@@ -131,7 +172,6 @@ pub use registrations::PALETTES;
 /// Resolution remains unrestricted by mode.
 
 pub fn palettes_for(mode: Appearance) -> impl Iterator<Item = &'static PaletteRegistration> {
-
     PALETTES
         .iter()
         .copied()
@@ -141,7 +181,6 @@ pub fn palettes_for(mode: Appearance) -> impl Iterator<Item = &'static PaletteRe
 /// Resolves the default variant of each palette eligible for a mode.
 
 pub fn variants_for(mode: Appearance) -> impl Iterator<Item = ThemeVariant> {
-
     palettes_for(mode).map(|entry| (entry.factory)())
 }
 
@@ -151,9 +190,7 @@ pub fn variants_for(mode: Appearance) -> impl Iterator<Item = ThemeVariant> {
 /// Returns `UnknownTheme` or `UnsupportedContrast` for unregistered combinations.
 
 pub fn get(id: &str) -> Result<&'static PaletteRegistration, ResolveError> {
-
     if let Some(entry) = PALETTES.iter().find(|p| p.metadata.id == id) {
-
         return Ok(entry);
     }
 
@@ -164,7 +201,6 @@ pub fn get(id: &str) -> Result<&'static PaletteRegistration, ResolveError> {
             .iter()
             .any(|p| p.metadata.family_id == parts[0] && p.metadata.variant_id == parts[1])
     {
-
         return Err(ResolveError::UnsupportedContrast(id.into()));
     }
 
@@ -177,6 +213,5 @@ pub fn get(id: &str) -> Result<&'static PaletteRegistration, ResolveError> {
 /// Rejects unknown themes, unsupported contrast combinations and unknown accents.
 
 pub fn resolve(id: &str, accent_id: Option<&str>) -> Result<ThemeVariant, ResolveError> {
-
     get(id)?.resolve(accent_id)
 }

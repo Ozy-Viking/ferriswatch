@@ -1,7 +1,7 @@
 # Ferriswatch theme workbench
 
 A Dioxus web application demonstrating shared theme state with a project board
-and a live reference for all 33 semantic colors. It uses the optional
+and a live reference for every exported `--fs-*` colour. It uses the optional
 `ferriswatch::dioxus` module and keeps renderer dependencies in this standalone
 example.
 
@@ -29,16 +29,18 @@ Open the address printed by `dx`, normally http://localhost:8080.
   resetting the project.
 - Expand the sample error and use the keyboard to inspect focus styles.
 
-Project changes are held in memory for this session. Reloading resets them.
-Status messages are illustrative; there is no backend or publishing operation.
+Theme selection is stored in localStorage (`ferriswatch.theme.v1`) and restored
+on reload. Project board changes stay in memory for this session. Status
+messages are illustrative; there is no backend or publishing operation.
 
 ## Source map
 
 `src/main.rs` keeps configuration in `App`, theme controls in `Workbench`,
 independent application state in `ProjectPreview`, and color samples in
-`ColorReference`. `App` opts into Ferriswatch's generated default classes and
-uses a root-scoped provider so the semantic variables and color scheme are
-available throughout the document. `src/style.css` owns the page reset and
+`ColorReference`. `Workbench` calls `use_theme::<LocalStorage>()` so the
+selection is restored after reload. `App` opts into Ferriswatch's generated
+default classes and uses a root-scoped provider so the semantic variables and
+color scheme are available throughout the document. `src/style.css` owns the page reset and
 responsive layout while the default classes provide semantic surfaces, text,
 actions, focus, borders, and feedback colors.
 
@@ -58,7 +60,7 @@ uv run --with playwright python test_browser.py
 ```
 
 The browser checks cover palette and accent selection, computed backgrounds,
-reset, saving edits, task progress, state retention, all 33 swatches, and
+reset, saving edits, task progress, state retention, all colour swatches, and
 horizontal overflow at desktop, tablet, and phone widths. Use
 `FERRISWATCH_EXAMPLE_URL` for another address or
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium installation.

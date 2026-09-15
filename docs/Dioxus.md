@@ -185,7 +185,7 @@ Existing custom `Palette` implementations must add `registration()`.
 ## Styling and scope
 
 The provider renders a `div.fs-theme`. By default, `ThemeScope::Scoped` publishes
-all 33 `--fs-*` variables and `color-scheme` on that wrapper. Its background and
+all `--fs-*` variables and `color-scheme` on that wrapper. Its background and
 text colors retain the existing defaults. `scope: ThemeScope::Root` publishes
 variables and scheme on `:root`, including for portals in the same document.
 Use one root provider per document; nested scoped providers override inherited
@@ -294,7 +294,7 @@ typography, and Ferriswatch's default semantic stylesheet are unchanged.
 From `examples/dioxus_theme`, run `dx serve --web`. The standalone example
 offers all built-in palettes filtered by mode and presents a responsive theme workbench. It includes
 an editable project board, task progress, feedback states, a reset button, and a
-live reference for all 33 semantic colours. Project state survives theme and view
+live reference for every exported `--fs-*` colour. Project state survives theme and view
 changes; light and dark retain their own palettes and accents. Reloading resets
 the session. See `examples/dioxus_theme/README.md` for a walkthrough.
 Its renderer dependencies stay separate from the library's feature set.

@@ -13,14 +13,25 @@
   .fs-text, :where(.fs-page, .fs-panel, .fs-card, .fs-popover) { color: var(--fs-text); }
   .fs-text-muted { color: var(--fs-muted); }
   .fs-text-subtle { color: var(--fs-subtle); }
+  .fs-text-alt { color: var(--fs-alt-text); }
+  .fs-text-alt-muted { color: var(--fs-alt-muted); }
+  .fs-text-alt-subtle { color: var(--fs-alt-subtle); }
   .fs-primary { background-color: var(--fs-primary); }
   .fs-primary { color: var(--fs-on-primary); }
   .fs-primary:hover:not(:disabled, [aria-disabled="true" i]) { background-color: var(--fs-primary-hover); }
+  .fs-primary:hover:not(:disabled, [aria-disabled="true" i]) { color: var(--fs-on-primary-hover); }
   .fs-primary:active:not(:disabled, [aria-disabled="true" i]) { background-color: var(--fs-primary-pressed); }
+  .fs-primary:active:not(:disabled, [aria-disabled="true" i]) { color: var(--fs-on-primary-pressed); }
+  .fs-primary:disabled, .fs-primary[aria-disabled="true" i] { background-color: var(--fs-primary-disabled); }
+  .fs-primary:disabled, .fs-primary[aria-disabled="true" i] { color: var(--fs-on-primary-disabled); }
   .fs-secondary { background-color: var(--fs-secondary); }
   .fs-secondary { color: var(--fs-on-secondary); }
   .fs-secondary:hover:not(:disabled, [aria-disabled="true" i]) { background-color: var(--fs-secondary-hover); }
+  .fs-secondary:hover:not(:disabled, [aria-disabled="true" i]) { color: var(--fs-on-secondary-hover); }
   .fs-secondary:active:not(:disabled, [aria-disabled="true" i]) { background-color: var(--fs-secondary-pressed); }
+  .fs-secondary:active:not(:disabled, [aria-disabled="true" i]) { color: var(--fs-on-secondary-pressed); }
+  .fs-secondary:disabled, .fs-secondary[aria-disabled="true" i] { background-color: var(--fs-secondary-disabled); }
+  .fs-secondary:disabled, .fs-secondary[aria-disabled="true" i] { color: var(--fs-on-secondary-disabled); }
   .fs-border, :where(.fs-popover) { border-color: var(--fs-border); }
   .fs-border-muted, :where(.fs-card) { border-color: var(--fs-border-muted); }
   .fs-success { color: var(--fs-success); }
@@ -32,4 +43,46 @@
   .fs-trace { color: var(--fs-trace); }
   .fs-focus:focus-visible { outline: 2px solid var(--fs-focus); }
   .fs-focus:focus-visible { outline-offset: 2px; }
+  .fs-chromatic-red { color: var(--fs-chromatic-red); }
+  .fs-chromatic-orange { color: var(--fs-chromatic-orange); }
+  .fs-chromatic-yellow { color: var(--fs-chromatic-yellow); }
+  .fs-chromatic-green { color: var(--fs-chromatic-green); }
+  .fs-chromatic-cyan { color: var(--fs-chromatic-cyan); }
+  .fs-chromatic-blue { color: var(--fs-chromatic-blue); }
+  .fs-chromatic-purple { color: var(--fs-chromatic-purple); }
+  .fs-chromatic-pink { color: var(--fs-chromatic-pink); }
+  .fs-syntax-attribute { color: var(--fs-syntax-attribute); }
+  .fs-syntax-boolean { color: var(--fs-syntax-boolean); }
+  .fs-syntax-builtin { color: var(--fs-syntax-builtin); }
+  .fs-syntax-builtin-function { color: var(--fs-syntax-builtin-function); }
+  .fs-syntax-builtin-type { color: var(--fs-syntax-builtin-type); }
+  .fs-syntax-comment { color: var(--fs-syntax-comment); }
+  .fs-syntax-constant { color: var(--fs-syntax-constant); }
+  .fs-syntax-control-keyword { color: var(--fs-syntax-control-keyword); }
+  .fs-syntax-deleted { color: var(--fs-syntax-deleted); }
+  .fs-syntax-deprecated { color: var(--fs-syntax-deprecated); }
+  .fs-syntax-documentation { color: var(--fs-syntax-documentation); }
+  .fs-syntax-escape { color: var(--fs-syntax-escape); }
+  .fs-syntax-foreground { color: var(--fs-syntax-foreground); }
+  .fs-syntax-function { color: var(--fs-syntax-function); }
+  .fs-syntax-heading { color: var(--fs-syntax-heading); }
+  .fs-syntax-inserted { color: var(--fs-syntax-inserted); }
+  .fs-syntax-invalid { color: var(--fs-syntax-invalid); }
+  .fs-syntax-keyword { color: var(--fs-syntax-keyword); }
+  .fs-syntax-link { color: var(--fs-syntax-link); }
+  .fs-syntax-macro-name { color: var(--fs-syntax-macro-name); }
+  .fs-syntax-markup-bold { color: var(--fs-syntax-markup-bold); }
+  .fs-syntax-markup-italic { color: var(--fs-syntax-markup-italic); }
+  .fs-syntax-modifier { color: var(--fs-syntax-modifier); }
+  .fs-syntax-namespace { color: var(--fs-syntax-namespace); }
+  .fs-syntax-number { color: var(--fs-syntax-number); }
+  .fs-syntax-operator { color: var(--fs-syntax-operator); }
+  .fs-syntax-parameter { color: var(--fs-syntax-parameter); }
+  .fs-syntax-property { color: var(--fs-syntax-property); }
+  .fs-syntax-punctuation { color: var(--fs-syntax-punctuation); }
+  .fs-syntax-string { color: var(--fs-syntax-string); }
+  .fs-syntax-tag { color: var(--fs-syntax-tag); }
+  .fs-syntax-type-keyword { color: var(--fs-syntax-type-keyword); }
+  .fs-syntax-type-name { color: var(--fs-syntax-type-name); }
+  .fs-syntax-variable { color: var(--fs-syntax-variable); }
 }

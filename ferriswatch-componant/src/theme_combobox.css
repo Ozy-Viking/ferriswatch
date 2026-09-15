@@ -2,11 +2,100 @@
   display: flex;
   min-width: 0;
   width: 100%;
+  overflow: visible;
   border: 1px solid var(--fs-border);
   border-radius: 7px;
   background-color: var(--fs-alt-surface);
   color: var(--fs-text);
 }
-.fs-theme-half { flex: 1.8; min-width: 0; }
-.fs-accent-half { flex: 1; min-width: 0; border-left: 1px solid var(--fs-border); }
-.fs-accent-half [role="listbox"] { left: auto; right: 0; }
+.fs-theme-half,
+.fs-accent-half {
+  position: relative;
+  min-width: 0;
+  overflow: visible;
+}
+.fs-theme-half {
+  flex: 1.8;
+}
+.fs-accent-half {
+  flex: 1;
+  border-left: 1px solid var(--fs-border);
+}
+.fs-theme-combobox input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 2.25rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--fs-text);
+  box-shadow: none;
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-overflow: ellipsis;
+  outline: none;
+}
+.fs-theme-combobox input::placeholder {
+  color: var(--fs-muted);
+}
+.fs-theme-combobox input:focus,
+.fs-theme-combobox input:focus-visible {
+  outline: none;
+}
+.fs-theme-combobox:focus-within {
+  box-shadow: 0 0 0 2px var(--fs-focus);
+}
+.fs-theme-combobox [role="listbox"] {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  min-width: 100%;
+}
+.fs-accent-half [role="listbox"] {
+  left: auto;
+  right: 0;
+}
+
+.fs-mode-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+.fs-mode-toggle {
+  display: inline-flex;
+  width: 44px;
+  height: 26px;
+  padding: 3px;
+  border: 1px solid var(--fs-border);
+  border-radius: 20px;
+  background-color: var(--fs-raised);
+  color: inherit;
+  cursor: pointer;
+}
+.fs-mode-toggle[aria-checked="true"] {
+  background-color: var(--fs-primary);
+  border-color: var(--fs-primary);
+}
+.fs-mode-thumb {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--fs-text);
+  transition: transform 120ms ease;
+}
+.fs-mode-toggle[aria-checked="true"] .fs-mode-thumb {
+  transform: translateX(18px);
+  background-color: var(--fs-on-primary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-mode-thumb {
+    transition: none;
+  }
+}

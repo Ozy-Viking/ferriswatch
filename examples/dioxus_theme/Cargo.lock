@@ -1202,6 +1202,7 @@ dependencies = [
  "dioxus-primitives",
  "ferriswatch",
  "web-sys",
+ "web-time",
 ]
 
 [[package]]

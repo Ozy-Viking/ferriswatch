@@ -1,6 +1,11 @@
 ## Loading color classes
 
-`theme_css(&ThemeVariant)` exports 33 semantic `--fs-*` variable declarations.
+`theme_css(&ThemeVariant)` exports every colour on `ThemeVariantColors` as a
+`--fs-*` variable (88 declarations). Surfaces, text, actions, status, chromatic
+hues, and syntax roles are all included. Action states expose both fill
+(`--fs-primary-hover`) and foreground (`--fs-on-primary-hover`). `text_alt` is
+published as `--fs-alt-text` / `--fs-alt-muted` / `--fs-alt-subtle`, falling back
+to the normal text group when unset.
 `DEFAULT_CSS` contains optional classes that consume them. Both are available
 without the `dioxus` feature. No stylesheet is injected by importing the crate.
 
@@ -33,19 +38,21 @@ Choose scheme from the variant's actual `Appearance`.
 | `fs-bg-background`, `fs-bg-surface`, `fs-bg-raised`, `fs-bg-overlay`, `fs-bg-hover` | corresponding background role |
 | `fs-bg-alt-background`, `fs-bg-alt-surface`, `fs-bg-alt-raised`, `fs-bg-alt-overlay`, `fs-bg-alt-hover` | corresponding alternate background role |
 | `fs-text`, `fs-text-muted`, `fs-text-subtle` | normal, muted, subtle foreground |
-| `fs-primary`, `fs-secondary` | action background and on-action foreground; hover and pressed backgrounds |
+| `fs-text-alt`, `fs-text-alt-muted`, `fs-text-alt-subtle` | text on alternate surfaces |
+| `fs-primary`, `fs-secondary` | action fill and foreground; hover, pressed, and disabled pairs |
 | `fs-border`, `fs-border-muted` | border color only |
 | `fs-focus` | focus-visible outline: 2px solid focus color, offset 2px |
 | `fs-success`, `fs-warning`, `fs-error`, `fs-critical`, `fs-info`, `fs-debug`, `fs-trace` | status foreground only |
+| `fs-chromatic-*` | palette hues (`red`, `orange`, `yellow`, `green`, `cyan`, `blue`, `purple`, `pink`) |
+| `fs-syntax-*` | syntax highlighting roles |
 
 Classes do not set spacing, layout, dimensions, radius, type scale, shadows, or
 animation. Border classes do not create a border. The focus helper is the sole
 exception to color-only declarations; native focus is not reset elsewhere.
 
 Action classes do not make elements interactive or focusable. Pressed wins over
-hover while both states match. Native disabled controls and elements with
-`aria-disabled="true"` retain their normal action colors; the application owns
-disabled behavior and presentation. ARIA alone does not disable a control.
+hover while both states match. Native `:disabled` and `[aria-disabled="true"]`
+use the disabled action pair. ARIA alone does not disable a control.
 
 The stylesheet uses `@layer ferriswatch`. Explicit utilities override the
 zero-specificity convenience selectors, e.g. `fs-card fs-bg-raised`. Normal
