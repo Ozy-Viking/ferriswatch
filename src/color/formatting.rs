@@ -2,9 +2,7 @@ use std::fmt;
 
 // All formatters write the opening function and channels before this helper adds alpha.
 pub(super) fn finish(f: &mut fmt::Formatter<'_>, alpha: Option<f32>) -> fmt::Result {
-
     if let Some(alpha) = alpha {
-
         f.write_str(" / ")?;
 
         channel(f, f64::from(alpha), "")?;
@@ -14,9 +12,7 @@ pub(super) fn finish(f: &mut fmt::Formatter<'_>, alpha: Option<f32>) -> fmt::Res
 }
 
 pub(super) fn channel(f: &mut fmt::Formatter<'_>, value: f64, unit: &str) -> fmt::Result {
-
     if !value.is_finite() {
-
         return f.write_str("none");
     }
 

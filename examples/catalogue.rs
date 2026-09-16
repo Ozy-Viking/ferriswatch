@@ -8,7 +8,6 @@ use ferriswatch::{
 use std::fmt::Write;
 
 fn escape(value: &str) -> String {
-
     value
         .replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -18,13 +17,11 @@ fn escape(value: &str) -> String {
 }
 
 fn css(theme: &ThemeVariant) -> String {
-
     let c = theme.colors();
 
     let mut out = String::new();
 
     for (prefix, group) in [("", c.surfaces), ("alt-", c.surfaces_alt)] {
-
         for (name, value) in [
             ("background", group.background),
             ("surface", group.base),
@@ -32,7 +29,6 @@ fn css(theme: &ThemeVariant) -> String {
             ("overlay", group.overlay),
             ("hover", group.hover),
         ] {
-
             write!(out, "--{prefix}{name}:{value};").unwrap();
         }
     }
@@ -61,7 +57,6 @@ fn css(theme: &ThemeVariant) -> String {
         ("info", c.status.info),
         ("trace", c.status.trace),
     ] {
-
         write!(out, "--{name}:{value};").unwrap();
     }
 
@@ -69,7 +64,6 @@ fn css(theme: &ThemeVariant) -> String {
 }
 
 fn docs() {
-
     println!(
         "# Built-in catalogue\n\nGenerated with `cargo run --example catalogue -- docs`. The registry is the source\nof this table. Omit the accent ID for `NoAccent`; the listed default colour is\nstill used without recording an explicit accent selection.\n"
     );
@@ -79,7 +73,6 @@ fn docs() {
     );
 
     for p in PALETTES {
-
         println!(
             "| `{}` | {} | {:?} | `{}` | {} |",
             p.metadata.id,
@@ -97,7 +90,6 @@ fn docs() {
     println!("\n## Pinned sources\n");
 
     for p in PALETTES {
-
         println!(
             "- `{}`: {}",
             p.metadata.id,
@@ -111,7 +103,6 @@ fn docs() {
 }
 
 fn html() {
-
     let families = PALETTES
         .iter()
         .map(|p| p.metadata.family_id.as_ref())
@@ -126,7 +117,6 @@ fn html() {
     );
 
     for (i, p) in PALETTES.iter().enumerate() {
-
         let theme = p.resolve(None).unwrap();
 
         println!(
@@ -142,7 +132,6 @@ fn html() {
         );
 
         for accent in p.accents {
-
             let selected = p.resolve(Some(accent.id)).unwrap();
 
             println!(
@@ -159,7 +148,6 @@ fn html() {
             ("normal", "Main surfaces"),
             ("alternate", "Alternate surfaces"),
         ] {
-
             println!(
                 "<section class='{class}'><h3>{label}</h3><div class=panel><strong>Workspace panel</strong><p>Normal text for reading and navigation.</p><p class=muted>Muted text for supporting details.</p><p class=subtle>Subtle text for quiet labels.</p><div class=raised>Raised content <span class=muted>Nested detail</span></div><div class=surface-hover>Surface hover</div><div class=popup><strong>Popup overlay</strong><p>Floating content on this surface group.</p></div></div></section>"
             );
@@ -168,7 +156,6 @@ fn html() {
         println!("</div><div class=actions>");
 
         for kind in ["primary", "secondary"] {
-
             println!(
                 "<div><span class=eyebrow>{kind} action</span><div class=states><button class='{kind}'>Normal</button><button class='{kind} hover'>Hover</button><button class='{kind} pressed'>Pressed</button><button class='{kind} focus'>Focus</button><button class='{kind} disabled' disabled>Disabled</button></div></div>"
             );
@@ -177,7 +164,6 @@ fn html() {
         println!("</div><div class=statuses>");
 
         for status in ["success", "warning", "error", "critical", "info", "trace"] {
-
             println!("<span style='color:var(--{status})'>● {status}</span>");
         }
 
@@ -191,29 +177,22 @@ fn html() {
 
 // CSS compositing occurs in encoded sRGB here, followed by linear-light luminance.
 fn encoded(v: f32) -> f32 {
-
     if v <= 0.0031308 {
-
         12.92 * v
     } else {
-
         1.055 * v.powf(1.0 / 2.4) - 0.055
     }
 }
 
 fn linear(v: f32) -> f32 {
-
     if v <= 0.04045 {
-
         v / 12.92
     } else {
-
         ((v + 0.055) / 1.055).powf(2.4)
     }
 }
 
 fn composite(fg: Color, bg: Color) -> Color {
-
     let channel = |f, b| linear(encoded(f) * fg.a() + encoded(b) * (1.0 - fg.a()));
 
     Color::new(
@@ -226,12 +205,10 @@ fn composite(fg: Color, bg: Color) -> Color {
 }
 
 fn luminance(c: Color) -> f32 {
-
     0.2126 * c.r() + 0.7152 * c.g() + 0.0722 * c.b()
 }
 
 fn ratio(fg: Color, bg: Color, canvas: Color) -> f32 {
-
     let bg = composite(bg, canvas);
 
     let fg = composite(fg, bg);
@@ -244,13 +221,10 @@ fn ratio(fg: Color, bg: Color, canvas: Color) -> f32 {
 }
 
 fn contrast() {
-
     println!("theme_id\taccent_id\tpairing\tratio\tbelow_4_5");
 
     for p in PALETTES {
-
         for accent in std::iter::once(None).chain(p.accents.iter().map(|a| Some(a.id))) {
-
             let t = p.resolve(accent).unwrap();
 
             let c = t.colors();
@@ -258,7 +232,6 @@ fn contrast() {
             let mut pairs = Vec::new();
 
             for (prefix, group) in [("surface", c.surfaces), ("surface_alt", c.surfaces_alt)] {
-
                 for (name, bg) in [
                     ("background", group.background),
                     ("surface", group.base),
@@ -266,13 +239,11 @@ fn contrast() {
                     ("overlay", group.overlay),
                     ("hover", group.hover),
                 ] {
-
                     for (tier, fg) in [
                         ("normal", c.text.normal),
                         ("muted", c.text.muted),
                         ("subtle", c.text.subtle),
                     ] {
-
                         pairs.push((format!("{tier}/{prefix}.{name}"), fg, bg));
                     }
                 }
@@ -282,13 +253,11 @@ fn contrast() {
                 ("primary", c.primary, c.primary.normal.foreground),
                 ("secondary", c.secondary, c.secondary.normal.foreground),
             ] {
-
                 for (name, bg) in [
                     ("normal", action.normal.background),
                     ("hover", action.hover.background),
                     ("pressed", action.pressed.background),
                 ] {
-
                     pairs.push((format!("on_{prefix}/{prefix}.{name}"), fg, bg));
                 }
             }
@@ -301,12 +270,10 @@ fn contrast() {
                 ("info", c.status.info),
                 ("trace", c.status.trace),
             ] {
-
                 pairs.push((format!("{status}/background"), fg, c.surfaces.background));
             }
 
             for (name, fg, bg) in pairs {
-
                 let r = ratio(fg, bg, c.surfaces.background);
 
                 println!(
@@ -321,7 +288,6 @@ fn contrast() {
 }
 
 fn main() -> Result<(), String> {
-
     match std::env::args().nth(1).as_deref() {
         Some("docs") => docs(),
         Some("html") => html(),

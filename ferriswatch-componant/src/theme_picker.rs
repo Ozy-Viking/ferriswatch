@@ -13,7 +13,6 @@ const COMBOBOX_CSS: Asset = asset!("/src/combobox/style.css");
 #[component]
 
 pub fn ThemePicker() -> Element {
-
     let mut state = use_theme::<Memory>();
 
     rsx! {
@@ -53,14 +52,13 @@ mod tests {
 
     use super::*;
     use ferriswatch::{
-        dioxus::{ThemeConfig, ThemeProvider},
+        dioxus::ThemeProvider,
         palette::catppuccin::{Mocha, mocha::Mauve},
-        theme::{Appearance, Theme},
+        theme::{Appearance, Theme, config::ThemeConfig},
         theme_variant::ThemePalette,
     };
 
     fn app() -> Element {
-
         let config = ThemeConfig::with_default(
             Theme::new(Mocha::variant::<Mauve>(), Mocha::variant::<Mauve>()),
             Appearance::Dark,
@@ -77,7 +75,6 @@ mod tests {
     #[test]
 
     fn picker_mounts_inside_provider() {
-
         let mut dom = VirtualDom::new(app);
 
         dom.rebuild_in_place();

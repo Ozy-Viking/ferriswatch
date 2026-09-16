@@ -7,7 +7,6 @@ use ferriswatch::palette::{Accent, NoAccent};
 use ferriswatch::theme_variant::{ThemePalette, ThemeVariant};
 
 fn assert_mocha_chrome(theme: &ThemeVariant) {
-
     assert_eq!(theme.name(), "Catppuccin Mocha");
 
     assert_eq!(theme.primary().muted.background, Mocha::SURFACE_2);
@@ -39,10 +38,12 @@ fn assert_mocha_chrome(theme: &ThemeVariant) {
     assert_eq!(theme.border(), Mocha::OVERLAY_0);
 
     assert_eq!(theme.border_muted(), Mocha::SURFACE_1);
+    assert_eq!(theme.secondary().normal.foreground, Mocha::BASE);
+    assert_eq!(theme.secondary().hover.foreground, Mocha::BASE);
+    assert_eq!(theme.secondary().pressed.foreground, Mocha::BASE);
 }
 
 fn assert_accent<A: Accent<Mocha>>(expected: Color, name: &str) {
-
     let theme = Mocha::variant::<A>();
 
     assert_eq!(theme.primary().normal.background, expected);
@@ -62,14 +63,15 @@ fn assert_accent<A: Accent<Mocha>>(expected: Color, name: &str) {
     assert_eq!(theme.accent(), Some(expected));
 
     assert_eq!(theme.accent_name(), Some(name));
-
+    assert_eq!(theme.primary().normal.foreground, Mocha::BASE);
+    assert_eq!(theme.primary().hover.foreground, Mocha::BASE);
+    assert_eq!(theme.primary().pressed.foreground, Mocha::BASE);
     assert_mocha_chrome(&theme);
 }
 
 #[test]
 
 fn mocha_accents_drive_primary_hover_and_focus() {
-
     assert_accent::<Rosewater>(Mocha::ROSEWATER, "Rosewater");
 
     assert_accent::<Flamingo>(Mocha::FLAMINGO, "Flamingo");
@@ -102,7 +104,6 @@ fn mocha_accents_drive_primary_hover_and_focus() {
 #[test]
 
 fn no_accent_falls_back_to_mauve_for_primary_hover_and_focus() {
-
     let theme = Mocha::variant::<NoAccent>();
 
     assert_eq!(theme.primary().normal.background, Mocha::MAUVE);
@@ -124,7 +125,6 @@ fn no_accent_falls_back_to_mauve_for_primary_hover_and_focus() {
 #[test]
 
 fn transparent_accent_is_preserved_without_defaulting() {
-
     struct Transparent;
 
     impl Accent<Mocha> for Transparent {
@@ -151,7 +151,6 @@ fn transparent_accent_is_preserved_without_defaulting() {
 #[test]
 
 fn accent_choices_can_be_selected_at_runtime() {
-
     let variants = [
         Mocha::variant::<Mauve>(),
         Mocha::variant::<Blue>(),
@@ -180,19 +179,16 @@ fn accent_choices_can_be_selected_at_runtime() {
 #[test]
 
 fn custom_palette_returns_the_same_runtime_type() {
-
     struct CustomPalette;
 
     impl ferriswatch::palette::Palette for CustomPalette {
         fn registration() -> &'static ferriswatch::catalogue::PaletteRegistration {
-
             &Mocha::REGISTRATION
         }
     }
 
     impl ThemePalette for CustomPalette {
         fn variant<A: Accent<Self>>() -> ThemeVariant {
-
             Mocha::variant::<NoAccent>()
         }
     }
@@ -210,7 +206,6 @@ fn custom_palette_returns_the_same_runtime_type() {
 #[test]
 
 fn alternate_surfaces_and_statuses_are_independent_concrete_values() {
-
     let original = Mocha::variant::<Mauve>();
 
     let mut colors = *original.colors();
@@ -254,72 +249,15 @@ fn alternate_surfaces_and_statuses_are_independent_concrete_values() {
 
     assert_eq!(theme.status().trace, Mocha::OVERLAY_2);
 }
-
 #[test]
+fn catppuccin_uses_base_as_on_accent_foreground() {
+    let theme = Mocha::variant::<Mauve>();
 
-fn action_foregrounds_follow_explicit_accent_colours() {
+    assert_eq!(theme.primary().normal.foreground, Mocha::BASE);
+    assert_eq!(theme.primary().hover.foreground, Mocha::BASE);
+    assert_eq!(theme.primary().pressed.foreground, Mocha::BASE);
 
-    struct Black;
-
-    impl Accent<Mocha> for Black {
-        const ACCENT: Option<Color> = Some(Color::hex(0x000000));
-
-        const ID: &'static str = "black";
-
-        const NAME: &'static str = "Black";
-    }
-
-    struct White;
-
-    impl Accent<Mocha> for White {
-        const ACCENT: Option<Color> = Some(Color::hex(0xffffff));
-
-        const ID: &'static str = "white";
-
-        const NAME: &'static str = "White";
-    }
-
-    let dark = Mocha::variant::<Black>();
-
-    let light = Mocha::variant::<White>();
-
-    assert_eq!(
-        dark.colors().primary.normal.foreground,
-        Color::hex(0xffffff)
-    );
-
-    assert_eq!(
-        light.colors().primary.normal.foreground,
-        Color::hex(0x000000)
-    );
-
-    assert_eq!(dark.colors().surfaces, light.colors().surfaces);
-
-    assert_eq!(dark.colors().status, light.colors().status);
-
-    assert_eq!(
-        dark.colors().secondary.normal.foreground,
-        light.colors().secondary.normal.foreground
-    );
-}
-
-#[test]
-
-fn action_text_uses_linear_channels_without_decoding_srgb_twice() {
-
-    struct MidGray;
-
-    impl Accent<Mocha> for MidGray {
-        const ACCENT: Option<Color> = Some(Color::hex(0x808080));
-
-        const ID: &'static str = "mid_gray";
-
-        const NAME: &'static str = "Mid Gray";
-    }
-
-    // sRGB 128 has linear luminance about 0.21586. With a 30% darker pressed
-    // fill, black's worst contrast is about 4.022, versus white's 3.949.
-    let theme = Mocha::variant::<MidGray>();
-
-    assert_eq!(theme.colors().primary.normal.foreground, Color::hex(0));
+    assert_eq!(theme.secondary().normal.foreground, Mocha::BASE);
+    assert_eq!(theme.secondary().hover.foreground, Mocha::BASE);
+    assert_eq!(theme.secondary().pressed.foreground, Mocha::BASE);
 }

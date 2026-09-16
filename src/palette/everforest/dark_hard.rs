@@ -66,16 +66,34 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(primary, Self::BG_0, Self::FG),
+                primary,
+                ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(primary, Self::BG_0, Self::FG),
+                crate::palette::primary_hover(primary),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(primary, Self::BG_0, Self::FG),
+                crate::palette::action_pressed(primary),
+            ),
             muted: crate::theme_variant::ColorPair::new(Self::FG, Self::BG_2),
             disabled: crate::theme_variant::ColorPair::new(Self::GREY_0, Self::BG_2),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), Self::BLUE),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::primary_hover(Self::BLUE)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::action_pressed(Self::BLUE)),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(Self::BLUE, Self::BG_0, Self::FG),
+                Self::BLUE,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(Self::BLUE, Self::BG_0, Self::FG),
+                crate::palette::primary_hover(Self::BLUE),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(Self::BLUE, Self::BG_0, Self::FG),
+                crate::palette::action_pressed(Self::BLUE),
+            ),
             muted: crate::theme_variant::ColorPair::new(Self::FG, Self::BG_1),
             disabled: crate::theme_variant::ColorPair::new(Self::GREY_0, Self::BG_1),
         },

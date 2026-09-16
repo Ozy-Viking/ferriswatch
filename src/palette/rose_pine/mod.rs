@@ -1,5 +1,4 @@
 //! Palettes sourced from <https://github.com/rose-pine/neovim>.
-//! Semantic roles and default accents are Ferriswatch mappings.
 
 use crate::catalogue::PaletteSource;
 
@@ -17,9 +16,29 @@ pub use dawn::Dawn;
 
 /// Pinned upstream palette resources.
 
-pub(super) const SOURCE: &[PaletteSource] = &[PaletteSource {
-    repository: "https://github.com/rose-pine/neovim",
-    revision: "ff483051a47e27d84bdef47703538df1ed9f4a47",
-    path: "lua/rose-pine/palette.lua",
-    licence: Some("MIT"),
-}];
+pub(super) const SOURCE: &[PaletteSource] = &[
+    PaletteSource {
+        repository: "https://github.com/rose-pine/neovim",
+        revision: "ff483051a47e27d84bdef47703538df1ed9f4a47",
+        path: "lua/rose-pine/palette.lua",
+        licence: Some("MIT"),
+    },
+    PaletteSource {
+        repository: "https://github.com/rose-pine/neovim",
+        revision: "ff483051a47e27d84bdef47703538df1ed9f4a47",
+        path: "lua/rose-pine/config.lua",
+        licence: Some("MIT"),
+    },
+    PaletteSource {
+        repository: "https://github.com/rose-pine/neovim",
+        revision: "ff483051a47e27d84bdef47703538df1ed9f4a47",
+        path: "lua/rose-pine.lua",
+        licence: Some("MIT"),
+    },
+    PaletteSource {
+        repository: "https://github.com/rose-pine/neovim",
+        revision: "ff483051a47e27d84bdef47703538df1ed9f4a47",
+        path: "lua/lualine/themes/rose-pine.lua",
+        licence: Some("MIT"),
+    },
+];

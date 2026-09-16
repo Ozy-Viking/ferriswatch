@@ -10,7 +10,6 @@ use std::str::FromStr;
 #[test]
 
 fn latte_matches_official_colours() {
-
     use latte::Latte as P;
 
     let colours = [
@@ -43,7 +42,6 @@ fn latte_matches_official_colours() {
     ];
 
     for (actual, expected) in colours {
-
         assert_eq!(actual, Color::hex(expected));
     }
 }
@@ -51,7 +49,6 @@ fn latte_matches_official_colours() {
 #[test]
 
 fn frappe_matches_official_colours() {
-
     use frappe::Frappe as P;
 
     let colours = [
@@ -84,7 +81,6 @@ fn frappe_matches_official_colours() {
     ];
 
     for (actual, expected) in colours {
-
         assert_eq!(actual, Color::hex(expected));
     }
 }
@@ -92,7 +88,6 @@ fn frappe_matches_official_colours() {
 #[test]
 
 fn macchiato_matches_official_colours() {
-
     use macchiato::Macchiato as P;
 
     let colours = [
@@ -125,7 +120,6 @@ fn macchiato_matches_official_colours() {
     ];
 
     for (actual, expected) in colours {
-
         assert_eq!(actual, Color::hex(expected));
     }
 }
@@ -133,7 +127,6 @@ fn macchiato_matches_official_colours() {
 #[test]
 
 fn mocha_matches_official_colours() {
-
     use mocha::Mocha as P;
 
     let colours = [
@@ -166,7 +159,6 @@ fn mocha_matches_official_colours() {
     ];
 
     for (actual, expected) in colours {
-
         assert_eq!(actual, Color::hex(expected));
     }
 }
@@ -184,7 +176,6 @@ fn check_accented_flavour(
     palette_yellow: Color,
     palette_red: Color,
 ) {
-
     assert_eq!(theme.name(), flavour);
 
     assert_eq!(theme.accent_name(), Some(name));
@@ -219,11 +210,9 @@ macro_rules! check_flavour {
         #[test]
 
         fn $test() {
-
             use $module::*;
 
             let check = |theme, colour, accent_name| {
-
                 check_accented_flavour(
                     theme,
                     $name,
@@ -326,11 +315,9 @@ fn mocha_blue_parses_persisted_id(
     #[case] input: &str,
     #[case] expected: Result<mocha::Blue, ParseAccentError>,
 ) {
-
     assert_eq!(input.parse(), expected);
 
     if expected.is_ok() {
-
         assert_eq!(mocha::Blue.to_string(), "blue");
 
         assert_eq!(mocha::Blue::from_str("blue").unwrap(), mocha::Blue);
@@ -346,7 +333,6 @@ fn no_accent_parses_persisted_id(
     #[case] input: &str,
     #[case] expected: Result<NoAccent, ParseAccentError>,
 ) {
-
     assert_eq!(input.parse(), expected);
 
     assert_eq!(NoAccent.to_string(), "none");

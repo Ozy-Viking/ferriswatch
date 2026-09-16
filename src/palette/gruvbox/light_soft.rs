@@ -56,20 +56,50 @@ define_palette! {
             subtle: Self::GRAY,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::GRAY, Self::BG_2),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), Self::BLUE),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::primary_hover(Self::BLUE)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::action_pressed(Self::BLUE)),
-            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_1),
-            disabled: crate::theme_variant::ColorPair::new(Self::GRAY, Self::BG_1),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        primary,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        crate::palette::primary_hover(primary),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        crate::palette::action_pressed(primary),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::FG_1,
+        Self::BG_2,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::GRAY,
+        Self::BG_2,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        Self::BLUE,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        crate::palette::primary_hover(Self::BLUE),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BG_0,
+        crate::palette::action_pressed(Self::BLUE),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::FG_1,
+        Self::BG_1,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::GRAY,
+        Self::BG_1,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
             warning: Self::YELLOW,
@@ -87,16 +117,16 @@ define_palette! {
             orange: Self::ORANGE,
             yellow: Self::YELLOW,
             green: Self::GREEN,
-            cyan: Self::BLUE,
+            cyan: Self::AQUA,
             blue: Self::BLUE,
             purple: Self::PURPLE,
             pink: Self::PURPLE,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::YELLOW,
+            attribute: Self::AQUA,
             boolean: Self::PURPLE,
-            builtin: Self::YELLOW,
-            builtin_function: Self::GREEN,
+            builtin: Self::ORANGE,
+            builtin_function: Self::ORANGE,
             builtin_type: Self::YELLOW,
             comment: Self::GRAY,
             constant: Self::PURPLE,
@@ -111,14 +141,14 @@ define_palette! {
             inserted: Self::GREEN,
             invalid: Self::RED,
             keyword: Self::RED,
-            link: Self::GREEN,
-            macro_name: Self::GREEN,
+            link: Self::PURPLE,
+            macro_name: Self::AQUA,
             markup_bold: Self::FG_1,
             markup_italic: Self::FG_1,
-            modifier: Self::RED,
+            modifier: Self::ORANGE,
             namespace: Self::YELLOW,
             number: Self::PURPLE,
-            operator: Self::ORANGE,
+            operator: Self::FG_1,
             parameter: Self::FG_1,
             property: Self::FG_1,
             punctuation: Self::FG_1,
@@ -126,7 +156,7 @@ define_palette! {
             tag: Self::AQUA,
             type_keyword: Self::RED,
             type_name: Self::YELLOW,
-            variable: Self::FG_1,
+            variable: Self::BLUE,
         },
     }
 }

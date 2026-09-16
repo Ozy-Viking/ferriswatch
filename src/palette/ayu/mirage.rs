@@ -63,20 +63,74 @@ define_palette! {
             subtle: Self::COMMON_UI,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::COMMON_FG, Self::COMMON_BG),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMON_UI, Self::COMMON_BG),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), Self::SYNTAX_ENTITY),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), crate::palette::primary_hover(Self::SYNTAX_ENTITY)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::SYNTAX_ENTITY), crate::palette::action_pressed(Self::SYNTAX_ENTITY)),
-            muted: crate::theme_variant::ColorPair::new(Self::COMMON_FG, Self::COMMON_BG),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMON_UI, Self::COMMON_BG),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        primary,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        crate::palette::primary_hover(primary),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        crate::palette::action_pressed(primary),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::COMMON_FG,
+        Self::COMMON_BG,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::COMMON_UI,
+        Self::COMMON_BG,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::SYNTAX_ENTITY,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        Self::SYNTAX_ENTITY,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::SYNTAX_ENTITY,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        crate::palette::primary_hover(Self::SYNTAX_ENTITY),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::SYNTAX_ENTITY,
+            Self::COMMON_BG,
+            Self::COMMON_FG,
+        ),
+        crate::palette::action_pressed(Self::SYNTAX_ENTITY),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::COMMON_FG,
+        Self::COMMON_BG,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::COMMON_UI,
+        Self::COMMON_BG,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::VCS_ADDED,
             warning: Self::SYNTAX_FUNC,

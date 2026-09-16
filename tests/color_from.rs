@@ -5,7 +5,6 @@ where
     C: ColorSpace + From<Color> + From<LinearSrgb> + PartialEq + std::fmt::Debug,
     LinearSrgb: TryFrom<C>,
 {
-
     let expected = C::from(source.linear_srgb()).clamp();
 
     let converted: C = source.into();
@@ -22,13 +21,11 @@ where
 #[test]
 
 fn infallible_destinations_support_from_and_into() {
-
     for source in [
         Color::new(0.25, 0.5, 0.75, 0.25).unwrap(),
         Color::new(-0.25, 2.0, 0.5, 0.0).unwrap(),
         Color::new(f32::MAX, -f32::MAX, f32::MAX, 1.0).unwrap(),
     ] {
-
         check_from::<LinearSrgb>(source);
 
         check_from::<Srgb>(source);
@@ -58,9 +55,7 @@ fn infallible_destinations_support_from_and_into() {
 #[test]
 
 fn byte_rgb_survives_conversion_to_color() {
-
     for byte in 0..=255_u8 {
-
         let source = Rgb::new(byte, 255 - byte, byte / 2);
 
         let color: Color = source.into();
@@ -78,7 +73,6 @@ fn byte_rgb_survives_conversion_to_color() {
 #[test]
 
 fn alpha_linear_conversion_clamps_and_preserves_alpha() {
-
     let source = Color::new(-0.25, 2.0, 0.5, 0.375).unwrap();
 
     let linear: LinearSrgb = source.into();
@@ -93,7 +87,6 @@ fn alpha_linear_conversion_clamps_and_preserves_alpha() {
 #[test]
 
 fn fallible_directions_keep_errors() {
-
     let outside = Color::new(2.0, 0.5, 0.5, 1.0).unwrap();
 
     assert!(matches!(
@@ -118,7 +111,6 @@ fn fallible_directions_keep_errors() {
 #[test]
 
 fn byte_conversion_clamps_quantizes_and_preserves_wrapper_alpha() {
-
     let source = Color::new(-0.25, 0.5, 2.0, 0.375).unwrap();
 
     let rgb: Rgb = source.into();
@@ -141,7 +133,6 @@ fn byte_conversion_clamps_quantizes_and_preserves_wrapper_alpha() {
 #[test]
 
 fn encoded_srgb_conversion_clamps_even_extreme_finite_values() {
-
     let source = Srgb::new(-f32::MAX, 0.5, f32::MAX).unwrap();
 
     let color: Color = source.into();

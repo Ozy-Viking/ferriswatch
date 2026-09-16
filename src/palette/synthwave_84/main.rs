@@ -1,6 +1,8 @@
 //! Synthwave '84. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Editor UI keys supply surfaces and source alpha is retained. Terminal accents supply filled actions. Critical uses bright red; trace uses subdued source text. Roles that share an upstream colour intentionally repeat.
+//! Editor UI keys supply surfaces and controls, and source alpha is retained.
+//! The authored button supplies the primary action; terminal magenta remains
+//! the secondary accent. SynthWave '84 explicitly renders warning UI in green.
 
 define_palette! {
     Main, "Synthwave '84",
@@ -219,7 +221,8 @@ define_palette! {
         TOKEN_GO_KEYWORDS = crate::color::Color::hex(0xfede5d),
         TOKEN_GO_INTERFACES = crate::color::Color::hex(0x72f1b8),
         TOKEN_GO_CONSTANTS_E_G_NIL_STRING_FORMAT_S_D_ETC = crate::color::Color::hex(0x2ee2fa),
-        TOKEN_MARKDOWN_LINKS_AND_IMAGE_PATHS = crate::color::Color::hex(0xfede5d),
+        TOKEN_MARKDOWN_LINKS_AND_IMAGE_PATHS = crate::color::Color::hex(0x72f1b8),
+        TOKEN_MARKDOWN_LINK_TITLE = crate::color::Color::hex(0xfede5d),
         TOKEN_MARKDOWN_HEADINGS = crate::color::Color::hex(0xff7edb),
         TOKEN_MARKDOWN_ITALIC = crate::color::Color::hex(0x2ee2fa),
         TOKEN_MARKDOWN_BOLD = crate::color::Color::hex(0x2ee2fa),
@@ -257,44 +260,86 @@ define_palette! {
         },
         text: crate::theme_variant::TextColors {
             normal: Self::FOREGROUND,
-            muted: Self::FOREGROUND,
+            muted: Self::SIDE_BAR_FOREGROUND,
             subtle: Self::EDITOR_LINE_NUMBER_FOREGROUND,
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::SIDE_BAR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), Self::TERMINAL_ANSI_MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::TERMINAL_ANSI_MAGENTA,
+                    Self::STATUS_BAR_DEBUGGING_FOREGROUND,
+                    Self::FOREGROUND,
+                ),
+                Self::TERMINAL_ANSI_MAGENTA,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::TERMINAL_ANSI_MAGENTA,
+                    Self::STATUS_BAR_DEBUGGING_FOREGROUND,
+                    Self::FOREGROUND,
+                ),
+                crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::TERMINAL_ANSI_MAGENTA,
+                    Self::STATUS_BAR_DEBUGGING_FOREGROUND,
+                    Self::FOREGROUND,
+                ),
+                crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::SIDE_BAR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_GREEN,
-            warning: Self::TERMINAL_ANSI_YELLOW,
+            warning: Self::EDITOR_WARNING_FOREGROUND,
             error: Self::EDITOR_ERROR_FOREGROUND,
             critical: Self::TERMINAL_ANSI_BRIGHT_RED,
             info: Self::TERMINAL_ANSI_BLUE,
-            debug: Self::FOREGROUND,
+            debug: Self::STATUS_BAR_DEBUGGING_BACKGROUND,
             trace: Self::EDITOR_LINE_NUMBER_FOREGROUND,
         },
-        border: Self::EDITOR_WIDGET_BORDER,
-        border_muted: Self::SIDE_BAR_BACKGROUND,
+        border: Self::EDITOR_GROUP_BORDER,
+        border_muted: Self::EDITOR_WIDGET_BORDER,
         focus: primary,
         chromatic: crate::theme_variant::ChromaticColors {
             red: Self::TERMINAL_ANSI_RED,
             orange: Self::TOKEN_STRING,
-            yellow: Self::TERMINAL_ANSI_YELLOW,
+            yellow: Self::TERMINAL_ANSI_BRIGHT_YELLOW,
             green: Self::TERMINAL_ANSI_GREEN,
             cyan: Self::TERMINAL_ANSI_CYAN,
             blue: Self::TOKEN_COMMENT,
-            purple: Self::TERMINAL_ANSI_MAGENTA,
+            purple: Self::MINIMAP_GUTTER_MODIFIED_BACKGROUND,
             pink: Self::TERMINAL_ANSI_MAGENTA,
         },
         syntax: crate::theme_variant::SyntaxColors {
@@ -306,20 +351,20 @@ define_palette! {
             comment: Self::TOKEN_COMMENT,
             constant: Self::TOKEN_CONSTANT,
             control_keyword: Self::TOKEN_CONTROL_KEYWORD,
-            deleted: Self::EDITOR_ERROR_FOREGROUND,
-            deprecated: Self::EDITOR_ERROR_FOREGROUND,
+            deleted: Self::GIT_DECORATION_DELETED_RESOURCE_FOREGROUND,
+            deprecated: Self::GIT_DECORATION_IGNORED_RESOURCE_FOREGROUND,
             documentation: Self::TOKEN_COMMENT,
             escape: Self::TOKEN_CHARACTER_ESCAPE,
             foreground: Self::FOREGROUND,
             function: Self::TOKEN_FUNCTION,
             heading: Self::TOKEN_MARKUP_HEADING,
-            inserted: Self::TERMINAL_ANSI_GREEN,
+            inserted: Self::GIT_DECORATION_ADDED_RESOURCE_FOREGROUND,
             invalid: Self::EDITOR_ERROR_FOREGROUND,
             keyword: Self::TOKEN_KEYWORD,
-            link: Self::TOKEN_MARKUP_LINK,
+            link: Self::TOKEN_MARKDOWN_LINKS_AND_IMAGE_PATHS,
             macro_name: Self::TOKEN_FUNCTION,
-            markup_bold: Self::FOREGROUND,
-            markup_italic: Self::FOREGROUND,
+            markup_bold: Self::TOKEN_MARKDOWN_BOLD,
+            markup_italic: Self::TOKEN_MARKDOWN_ITALIC,
             modifier: Self::TOKEN_STORAGE_DECLARATION_OR_MODIFIER_KEYWORD,
             namespace: Self::TOKEN_ENTITY,
             number: Self::TOKEN_NUMBER,
@@ -327,7 +372,7 @@ define_palette! {
             parameter: Self::TOKEN_VARIABLE,
             property: Self::TOKEN_VARIABLE,
             punctuation: Self::FOREGROUND,
-            string: Self::TERMINAL_ANSI_GREEN,
+            string: Self::TOKEN_STRING,
             tag: Self::TOKEN_HTML_OR_XML_TAG,
             type_keyword: Self::TOKEN_STORAGE_DECLARATION_OR_MODIFIER_KEYWORD,
             type_name: Self::TOKEN_CLASS,

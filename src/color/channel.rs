@@ -122,7 +122,6 @@ impl Channel<()> {
     /// ```
 
     pub fn with_name(name: &'static str) -> ChannelBuilder {
-
         ChannelBuilder {
             name,
             value: (),
@@ -135,7 +134,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     /// Supplies or replaces the value without validating it.
 
     pub fn with_value<U>(self, value: U) -> ChannelBuilder<U, R, WRAPPING> {
-
         ChannelBuilder {
             name: self.name,
             value,
@@ -146,7 +144,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     /// Supplies or replaces the range; validation happens in `build()`.
 
     pub fn with_range<S>(self, range: S) -> ChannelBuilder<T, S, WRAPPING> {
-
         ChannelBuilder {
             name: self.name,
             value: self.value,
@@ -168,7 +165,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     where
         R: RangeBounds<U>,
     {
-
         let upper = self.range.end_bound().map(|value| *value);
 
         self.with_range((
@@ -191,7 +187,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     where
         R: RangeBounds<U>,
     {
-
         let lower = self.range.start_bound().map(|value| *value);
 
         self.with_range((
@@ -203,7 +198,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     /// Requests wrapping. Building then also requires [`WrappingValue`].
 
     pub fn with_wrapping(self) -> ChannelBuilder<T, R, true> {
-
         ChannelBuilder {
             name: self.name,
             value: self.value,
@@ -214,7 +208,6 @@ impl<T, R, const WRAPPING: bool> ChannelBuilder<T, R, WRAPPING> {
     /// Disables wrapping, preserving the configured value and range.
 
     pub fn without_wrapping(self) -> ChannelBuilder<T, R, false> {
-
         ChannelBuilder {
             name: self.name,
             value: self.value,
@@ -230,7 +223,6 @@ impl<T: AdjacentValue, R: RangeBounds<T>> ChannelBuilder<T, R, false> {
     /// Returns [`ChannelError::InvalidRange`] with the bounds and reason if invalid.
 
     pub fn build(self) -> Result<Channel<T>, ChannelError<T>> {
-
         Channel::new(self.name, self.value, self.range)
     }
 }
@@ -243,13 +235,11 @@ impl<T: AdjacentValue + WrappingValue, R: RangeBounds<T>> ChannelBuilder<T, R, t
     /// with the bounds and reason if the configuration is invalid.
 
     pub fn build(self) -> Result<Channel<T>, ChannelError<T>> {
-
         Channel::new(self.name, self.value, self.range)?.with_wrapping()
     }
 }
 
 fn format_bounds<T: std::fmt::Display>(bounds: &(Bound<T>, Bound<T>)) -> String {
-
     let describe = |bound: &Bound<T>| match bound {
         Bound::Included(value) => format!("Included({value})"),
         Bound::Excluded(value) => format!("Excluded({value})"),
@@ -263,21 +253,18 @@ impl<T> Channel<T> {
     /// Returns the channel's name.
 
     pub fn name(&self) -> &'static str {
-
         self.name
     }
 
     /// Borrows the current value.
 
     pub fn value(&self) -> &T {
-
         &self.value
     }
 
     /// Replaces the value without clamping or validating it.
 
     pub fn set_value(&mut self, value: T) -> &mut Self {
-
         self.value = value;
 
         self
@@ -286,21 +273,18 @@ impl<T> Channel<T> {
     /// Returns the value, consuming the channel.
 
     pub fn into_value(self) -> T {
-
         self.value
     }
 
     /// Borrows the configured lower and upper bounds, preserving inclusion and exclusion.
 
     pub fn range(&self) -> &(Bound<T>, Bound<T>) {
-
         &self.range
     }
 
     /// Returns whether clamping wraps around the range.
 
     pub fn is_wrapping(&self) -> bool {
-
         self.wrapping.is_some()
     }
 
@@ -308,7 +292,6 @@ impl<T> Channel<T> {
     /// Subsequent clamping uses the effective minimum and maximum.
 
     pub fn without_wrapping(mut self) -> Self {
-
         self.wrapping = None;
 
         self
@@ -319,7 +302,6 @@ impl<T> AsRef<T> for Channel<T> {
     /// Borrows the current channel value.
 
     fn as_ref(&self) -> &T {
-
         &self.value
     }
 }
@@ -328,7 +310,6 @@ impl<T> AsRef<T> for Channel<T> {
 
 impl fmt::LowerHex for Channel<u8> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-
         fmt::LowerHex::fmt(&self.value, f)
     }
 }
@@ -337,7 +318,6 @@ impl fmt::LowerHex for Channel<u8> {
 
 impl fmt::UpperHex for Channel<u8> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-
         fmt::UpperHex::fmt(&self.value, f)
     }
 }
@@ -346,7 +326,6 @@ impl<T> AsMut<T> for Channel<T> {
     /// Mutably borrows the value without clamping or validating changes.
 
     fn as_mut(&mut self) -> &mut T {
-
         &mut self.value
     }
 }
@@ -357,7 +336,6 @@ impl<T> Deref for Channel<T> {
     /// Borrows the current channel value.
 
     fn deref(&self) -> &Self::Target {
-
         &self.value
     }
 }
@@ -366,7 +344,6 @@ impl<T> DerefMut for Channel<T> {
     /// Mutably borrows the value without clamping or validating changes.
 
     fn deref_mut(&mut self) -> &mut Self::Target {
-
         &mut self.value
     }
 }
@@ -377,7 +354,6 @@ impl<T: PartialOrd> Channel<T> {
     /// NaN is outside every range, including an unbounded range.
 
     pub fn in_bounds(&self) -> bool {
-
         self.value.partial_cmp(&self.value).is_some() && self.range.contains(&self.value)
     }
 
@@ -393,12 +369,9 @@ impl<T: PartialOrd> Channel<T> {
     where
         T: Copy,
     {
-
         if self.in_bounds() {
-
             Ok(self.value)
         } else {
-
             Err(ChannelError::OutsideRange(self.name, self.value))
         }
     }
@@ -419,7 +392,6 @@ impl<T: AdjacentValue> Channel<T> {
         value: T,
         range: R,
     ) -> Result<Self, ChannelError<T>> {
-
         let bounds = (
             range.start_bound().map(|value| *value),
             range.end_bound().map(|value| *value),
@@ -437,19 +409,15 @@ impl<T: AdjacentValue> Channel<T> {
         let end = endpoint(bounds.1);
 
         for endpoint in [start, end].into_iter().flatten() {
-
             if endpoint.partial_cmp(&endpoint).is_none() {
-
                 return Err(invalid(RangeErrorReason::UnorderedBounds));
             }
         }
 
         if let (Some(start), Some(end)) = (start, end) {
-
             match start.partial_cmp(&end) {
                 None => return Err(invalid(RangeErrorReason::UnorderedBounds)),
                 Some(std::cmp::Ordering::Greater) => {
-
                     return Err(invalid(RangeErrorReason::ReversedBounds));
                 }
                 _ => {}
@@ -477,11 +445,9 @@ impl<T: AdjacentValue> Channel<T> {
         };
 
         if let (Some(lower), Some(upper)) = (lower, upper) {
-
             match lower.partial_cmp(&upper) {
                 None => return Err(invalid(RangeErrorReason::UnorderedBounds)),
                 Some(std::cmp::Ordering::Greater) => {
-
                     return Err(invalid(RangeErrorReason::EmptyRange));
                 }
                 _ => {}
@@ -489,14 +455,11 @@ impl<T: AdjacentValue> Channel<T> {
         }
 
         for limit in [lower, upper].into_iter().flatten() {
-
             if limit.partial_cmp(&limit).is_none() {
-
                 return Err(invalid(RangeErrorReason::UnorderedBounds));
             }
 
             if !range.contains(&limit) {
-
                 return Err(invalid(RangeErrorReason::EmptyRange));
             }
         }
@@ -524,7 +487,6 @@ impl<T: AdjacentValue> Channel<T> {
         &mut self,
         minimum: impl Into<Option<T>>,
     ) -> Result<&mut Self, ChannelError<T>> {
-
         self.set_bounds((
             minimum.into().map_or(Bound::Unbounded, Bound::Included),
             self.range.1,
@@ -544,7 +506,6 @@ impl<T: AdjacentValue> Channel<T> {
         &mut self,
         maximum: impl Into<Option<T>>,
     ) -> Result<&mut Self, ChannelError<T>> {
-
         self.set_bounds((
             self.range.0,
             maximum.into().map_or(Bound::Unbounded, Bound::Included),
@@ -552,11 +513,9 @@ impl<T: AdjacentValue> Channel<T> {
     }
 
     fn set_bounds(&mut self, bounds: (Bound<T>, Bound<T>)) -> Result<&mut Self, ChannelError<T>> {
-
         let mut updated = Self::new(self.name, self.value, bounds)?;
 
         if let Some(wrapping) = &self.wrapping {
-
             let rebuild = match wrapping {
                 Wrapping::Continuous { rebuild, .. } | Wrapping::Discrete { rebuild, .. } => {
                     rebuild
@@ -576,14 +535,12 @@ impl<T: Copy> Channel<T> {
     /// Returns the effective inclusive minimum, or `None` if unbounded.
 
     pub fn min_value(&self) -> Option<T> {
-
         self.limits.0
     }
 
     /// Returns the effective inclusive maximum, or `None` if unbounded.
 
     pub fn max_value(&self) -> Option<T> {
-
         self.limits.1
     }
 }
@@ -600,7 +557,6 @@ impl<T: WrappingValue> Channel<T> {
     /// when the range cannot support wrapping for this value type.
 
     pub fn with_wrapping(mut self) -> Result<Self, ChannelError<T>> {
-
         let bounds = (
             self.range.start_bound().map(|value| *value),
             self.range.end_bound().map(|value| *value),
@@ -609,9 +565,7 @@ impl<T: WrappingValue> Channel<T> {
         let invalid = |reason| ChannelError::InvalidWrappingRange(self.name, bounds, reason);
 
         if let Some(apply) = T::discrete_wrapping() {
-
             let (Some(lower), Some(upper)) = self.limits else {
-
                 return Err(invalid(WrappingRangeErrorReason::UnboundedRange));
             };
 
@@ -628,12 +582,10 @@ impl<T: WrappingValue> Channel<T> {
         let (Bound::Included(start), Bound::Excluded(end)) =
             (self.range.start_bound(), self.range.end_bound())
         else {
-
             return Err(invalid(WrappingRangeErrorReason::UnsupportedBounds));
         };
 
         if !start.is_finite() || !end.is_finite() {
-
             return Err(invalid(WrappingRangeErrorReason::NonFiniteBounds));
         }
 
@@ -641,14 +593,12 @@ impl<T: WrappingValue> Channel<T> {
             .checked_sub(*start)
             .filter(|width| width.is_finite())
             .ok_or_else(|| {
-
                 invalid(WrappingRangeErrorReason::UnrepresentableWidth(
                     std::any::type_name::<T>(),
                 ))
             })?;
 
         if width.partial_cmp(&T::ZERO) != Some(std::cmp::Ordering::Greater) {
-
             return Err(invalid(WrappingRangeErrorReason::NonPositiveWidth));
         }
 
@@ -666,9 +616,7 @@ impl<T: WrappingValue> Channel<T> {
 
 impl<T: Copy + PartialOrd> Clamp for Channel<T> {
     fn clamp(mut self) -> Self {
-
         if let Some(wrapping) = &self.wrapping {
-
             self.value = match wrapping {
                 Wrapping::Continuous {
                     start,
@@ -685,18 +633,15 @@ impl<T: Copy + PartialOrd> Clamp for Channel<T> {
                 } => apply(self.value, *lower, *upper),
             };
         } else {
-
             if let Some(lower) = self.limits.0
                 && self.value < lower
             {
-
                 self.value = lower;
             }
 
             if let Some(upper) = self.limits.1
                 && self.value > upper
             {
-
                 self.value = upper;
             }
         }
@@ -729,7 +674,6 @@ enum Wrapping<T> {
 
 impl<T: PartialEq> PartialEq for Wrapping<T> {
     fn eq(&self, other: &Self) -> bool {
-
         // Operations are fixed by T; function addresses are not equality keys.
         match (self, other) {
             (
@@ -759,63 +703,49 @@ impl<T: PartialEq> PartialEq for Wrapping<T> {
 // Integer coordinates are mapped monotonically to u128, with the type's minimum
 // at zero. Full-width ranges return before computing a possibly overflowing size.
 fn wrap_integer(value: u128, lower: u128, upper: u128) -> u128 {
-
     if value >= lower && value <= upper {
-
         return value;
     }
 
     let width = upper - lower + 1;
 
     if value > upper {
-
         lower + (value - lower) % width
     } else {
-
         let remainder = (lower - value) % width;
 
         if remainder == 0 {
-
             lower
         } else {
-
             upper - (remainder - 1)
         }
     }
 }
 
 fn wrap<T: WrappingValue>(value: T, start: T, end: T, width: T) -> T {
-
     if !value.is_finite() || (value >= start && value < end) {
-
         return value;
     }
 
     // Reduce first, avoiding overflow and loss of small offsets in value - start.
     let residue = |v: T| {
-
         let r = v % width;
 
         if r < T::ZERO {
-
             r.checked_add(width)
         } else {
-
             Some(r)
         }
     };
 
     let result = (|| {
-
         let r = residue(value)?;
 
         let s = residue(start)?;
 
         let offset = if r >= s {
-
             r.checked_sub(s)?
         } else {
-
             width.checked_sub(s.checked_sub(r)?)?
         };
 
@@ -864,7 +794,6 @@ pub trait WrappingValue: Copy + PartialOrd + Rem<Output = Self> {
     /// Return the same operation on every call. The default uses continuous wrapping.
 
     fn discrete_wrapping() -> Option<fn(Self, Self, Self) -> Self> {
-
         None
     }
 
@@ -950,7 +879,6 @@ impl<T: AdjacentValue> Channel<T> {
     /// Use [`Self::new`] to receive a range error instead.
 
     pub fn color_channel<R: RangeBounds<T>>(name: &'static str, value: T, range: R) -> Self {
-
         match Self::new(name, value, range) {
             Ok(channel) => channel,
             Err(_) => panic!("invalid range for channel {name}"),
@@ -962,7 +890,6 @@ impl Channel<u8> {
     /// Creates a byte channel with inclusive bounds `0..=255` and no wrapping.
 
     pub const fn byte_color_channel(name: &'static str, value: u8) -> Self {
-
         Self {
             name,
             value,
@@ -977,7 +904,6 @@ impl Channel<f32> {
     /// Creates an `alpha` channel in `0..=1` by dividing a byte by 255.
 
     pub const fn alpha_byte_channel(value: u8) -> Self {
-
         Self::unit_color_channel("alpha", value as f32 / 255.0)
     }
 
@@ -997,7 +923,6 @@ impl Channel<f32> {
     /// ```
 
     pub const fn unit_color_channel(name: &'static str, value: f32) -> Self {
-
         Self {
             name,
             value,

@@ -5,10 +5,8 @@ use std::ops::Bound::{Included, Unbounded};
 #[test]
 
 fn every_space_configures_channel_names() {
-
     macro_rules! check {
         ($ty:ident, [$a:ident, $b:ident, $c:ident]) => {
-
             let color = $ty::new(0.25, 0.5, 0.75);
 
             assert_eq!(
@@ -23,7 +21,6 @@ fn every_space_configures_channel_names() {
                 (color.$b, converted.$b),
                 (color.$c, converted.$c),
             ] {
-
                 assert_eq!(original.name(), converted.name());
 
                 assert_eq!(original.range(), converted.range());
@@ -73,9 +70,7 @@ fn every_space_configures_channel_names() {
         [srgb.r_channel(), srgb.g_channel(), srgb.b_channel()],
         [linear.r_channel(), linear.g_channel(), linear.b_channel()],
     ] {
-
         for (channel, name) in channels.into_iter().zip(["r", "g", "b"]) {
-
             assert_eq!(channel.name(), name);
 
             assert_eq!(*channel.range(), (Included(0.0), Included(1.0)));
@@ -91,7 +86,6 @@ fn every_space_configures_channel_names() {
     let rgb = Rgb::new(0, 128, 255);
 
     for (channel, name) in [rgb.0, rgb.1, rgb.2].into_iter().zip(["r", "g", "b"]) {
-
         assert_eq!(channel.name(), name);
 
         assert_eq!(*channel.range(), (Included(0), Included(255)));
@@ -108,7 +102,6 @@ fn every_space_configures_channel_names() {
 #[case(Oklch::new(0.5, 0.1, 0.0).h)]
 
 fn hue_channels_validate_and_wrap_mutations(#[case] mut hue: Channel<f32>) {
-
     hue.set_value(-30.0);
 
     assert_eq!(
@@ -128,7 +121,6 @@ fn hue_channels_validate_and_wrap_mutations(#[case] mut hue: Channel<f32>) {
 #[test]
 
 fn unbounded_axes_and_nonnegative_channels_keep_distinct_bounds() {
-
     let lab = Lab::new(50.0, -200.0, 200.0);
 
     let xyz = Xyz::new(-1.0, 2.0, 3.0);
@@ -136,14 +128,12 @@ fn unbounded_axes_and_nonnegative_channels_keep_distinct_bounds() {
     let polar = Oklch::new(0.5, 500.0, 20.0);
 
     for axis in [lab.a, lab.b, Lms::new(-1.0, 0.0, 1.0).l] {
-
         assert_eq!(*axis.range(), (Unbounded, Unbounded));
 
         assert!(axis.in_bounds());
     }
 
     for channel in [xyz.x, xyz.y, xyz.z, polar.c] {
-
         assert_eq!(*channel.range(), (Included(0.0), Unbounded));
     }
 
@@ -157,11 +147,9 @@ fn unbounded_axes_and_nonnegative_channels_keep_distinct_bounds() {
 #[test]
 
 fn alpha_setters_preserve_bounds_and_reject_invalid_values() {
-
     let mut color = Alpha::new(Rgb::new(10, 20, 30), 0.5).unwrap();
 
     for invalid in [-0.1, 1.1, f32::NAN, f32::INFINITY] {
-
         assert!(matches!(
             color.set_alpha(invalid),
             Err(ColorError::InvalidAlpha(_))

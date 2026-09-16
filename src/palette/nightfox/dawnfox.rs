@@ -1,6 +1,8 @@
 //! Dawnfox. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Nightfox base shades and declared UI roles. bg0 remains the floating surface, sel0 is hover, and red serves both error levels. Generated bright/dim shades are outside the raw import.
+//! Nightfox base shades and declared UI roles. bg0 remains the floating
+//! surface, sel0 is hover, and generated bright/dim shades used by upstream
+//! semantic roles are preserved as their exact resolved values.
 
 define_palette! {
     Dawnfox, "Dawnfox",
@@ -30,6 +32,13 @@ define_palette! {
         FG_3 = crate::color::Color::hex(0xa8a3b3),
         SEL_0 = crate::color::Color::hex(0xd0d8d8),
         SEL_1 = crate::color::Color::hex(0xb8cece),
+        RED_BRIGHT = crate::color::Color::hex(0xc26d85),
+        YELLOW_DIM = crate::color::Color::hex(0xdd9024),
+        BLUE_DIM = crate::color::Color::hex(0x295e73),
+        MAGENTA_DIM = crate::color::Color::hex(0x816b9a),
+        CYAN_DIM = crate::color::Color::hex(0x50848c),
+        ORANGE_DIM = crate::color::Color::hex(0xca6e69),
+        PINK_DIM = crate::color::Color::hex(0xc9709e),
     }
     accents {
         Red = RED => ("red", "Red"),
@@ -64,18 +73,48 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BG_2),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                primary,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                crate::palette::primary_hover(primary),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                crate::palette::action_pressed(primary),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::FG_3,
+                Self::BG_0,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::COMMENT,
+                Self::BG_0,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), Self::MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), crate::palette::primary_hover(Self::MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::MAGENTA), crate::palette::action_pressed(Self::MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::FG_1, Self::BG_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BG_2),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                Self::MAGENTA,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                crate::palette::primary_hover(Self::MAGENTA),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BG_0,
+                crate::palette::action_pressed(Self::MAGENTA),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::FG_3,
+                Self::BG_0,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::COMMENT,
+                Self::BG_0,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
@@ -100,40 +139,40 @@ define_palette! {
             pink: Self::PINK,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::YELLOW,
+            attribute: Self::ORANGE_DIM,
             boolean: Self::ORANGE,
-            builtin: Self::YELLOW,
-            builtin_function: Self::BLUE,
-            builtin_type: Self::YELLOW,
+            builtin: Self::RED,
+            builtin_function: Self::RED,
+            builtin_type: Self::CYAN_DIM,
             comment: Self::COMMENT,
-            constant: Self::ORANGE,
-            control_keyword: Self::MAGENTA,
+            constant: Self::ORANGE_DIM,
+            control_keyword: Self::MAGENTA_DIM,
             deleted: Self::RED,
-            deprecated: Self::RED,
+            deprecated: Self::FG_3,
             documentation: Self::COMMENT,
-            escape: Self::CYAN,
+            escape: Self::YELLOW_DIM,
             foreground: Self::FG_1,
-            function: Self::BLUE,
-            heading: Self::BLUE,
+            function: Self::BLUE_DIM,
+            heading: Self::BLUE_DIM,
             inserted: Self::GREEN,
             invalid: Self::RED,
             keyword: Self::MAGENTA,
-            link: Self::BLUE,
-            macro_name: Self::BLUE,
-            markup_bold: Self::FG_1,
+            link: Self::ORANGE_DIM,
+            macro_name: Self::PINK_DIM,
+            markup_bold: Self::RED_BRIGHT,
             markup_italic: Self::FG_1,
-            modifier: Self::MAGENTA,
-            namespace: Self::YELLOW,
+            modifier: Self::YELLOW,
+            namespace: Self::CYAN_DIM,
             number: Self::ORANGE,
-            operator: Self::CYAN,
-            parameter: Self::FG_1,
-            property: Self::FG_1,
-            punctuation: Self::FG_1,
+            operator: Self::FG_2,
+            parameter: Self::CYAN_DIM,
+            property: Self::BLUE,
+            punctuation: Self::FG_2,
             string: Self::GREEN,
             tag: Self::MAGENTA,
-            type_keyword: Self::MAGENTA,
+            type_keyword: Self::YELLOW,
             type_name: Self::YELLOW,
-            variable: Self::FG_1,
+            variable: Self::BLACK,
         },
     }
 }

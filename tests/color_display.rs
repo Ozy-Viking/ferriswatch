@@ -31,7 +31,6 @@ where
     C: Display,
     Alpha<C>: Display,
 {
-
     assert_eq!(color.to_string(), expected);
 
     let alpha = Alpha::new(color, 0.5).unwrap();
@@ -44,7 +43,6 @@ where
 #[test]
 
 fn precision_and_extended_values() {
-
     let color = Alpha::new(Srgb::new(-0.125, 1.25, 0.375).unwrap(), 0.5).unwrap();
 
     assert_eq!(format!("{color:.2}"), "color(srgb -0.12 1.25 0.38 / 0.50)");
@@ -64,14 +62,12 @@ fn precision_and_extended_values() {
 #[case(1.0, 1.0, "hwb(240.000 0.000% 0.000%)")]
 
 fn hsv_achromatic_and_saturated_colors(#[case] s: f32, #[case] v: f32, #[case] expected: &str) {
-
     assert_eq!(Hsv::new(240.0, s, v).to_string(), expected);
 }
 
 #[test]
 
 fn non_finite_public_channels_are_missing_css_components() {
-
     let color = Hsl::new(f32::NAN, f32::INFINITY, f32::NEG_INFINITY);
 
     assert_eq!(color.to_string(), "hsl(none none none)");
@@ -80,7 +76,6 @@ fn non_finite_public_channels_are_missing_css_components() {
 #[test]
 
 fn rgb_hex_case_prefix_padding_and_alpha() {
-
     let rgb = Rgb::new(0, 10, 255);
 
     assert_eq!(
@@ -105,7 +100,6 @@ fn rgb_hex_case_prefix_padding_and_alpha() {
 #[test]
 
 fn srgb_hex_clamps_and_quantizes() {
-
     let rgb = Srgb::new(-0.25, 0.5, 1.25).unwrap();
 
     assert_eq!(
@@ -124,7 +118,6 @@ fn srgb_hex_clamps_and_quantizes() {
 #[test]
 
 fn color_retains_linear_encoding_and_alpha() {
-
     let color = Color::new(0.25, 0.5, 0.75, 0.5).unwrap();
 
     assert_eq!(
@@ -136,12 +129,10 @@ fn color_retains_linear_encoding_and_alpha() {
 #[test]
 
 fn propagates_writer_errors() {
-
     struct FailingWriter;
 
     impl Write for FailingWriter {
         fn write_str(&mut self, _: &str) -> fmt::Result {
-
             Err(fmt::Error)
         }
     }

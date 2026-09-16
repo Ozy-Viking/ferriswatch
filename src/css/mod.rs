@@ -14,7 +14,6 @@ pub const DEFAULT_CSS: &str = include_str!(concat!(env!("OUT_DIR"), "/default.cs
 #[cfg(feature = "dioxus")]
 
 pub const DEFAULT_STYLESHEET: dioxus::prelude::Asset = {
-
     use dioxus::prelude::*;
 
     asset!("/src/css/default.css")
@@ -37,7 +36,6 @@ pub enum ThemeScope {
 #[dioxus::prelude::component]
 
 pub fn DefaultStyles() -> dioxus::prelude::Element {
-
     use dioxus::prelude::*;
 
     rsx! {

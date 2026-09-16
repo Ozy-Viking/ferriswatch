@@ -21,8 +21,11 @@ define_palette! {
         HUE_6_2 = crate::color::Color::hex(0xc18401),
         SYNTAX_BG = crate::color::Color::hex(0xfafafa),
         SYNTAX_ACCENT = crate::color::Color::hex(0x526fff),
+        SYNTAX_DEPRECATED_FG = crate::color::Color::hex(0x000000),
+        SYNTAX_ILLEGAL_FG = crate::color::Color::hex(0xffffff),
     }
     accents {
+        Accent = SYNTAX_ACCENT => ("accent", "Accent"),
         Hue1 = HUE_1 => ("hue_1", "Hue 1"),
         Hue2 = HUE_2 => ("hue_2", "Hue 2"),
         Hue3 = HUE_3 => ("hue_3", "Hue 3"),
@@ -30,7 +33,7 @@ define_palette! {
         Hue5 = HUE_5 => ("hue_5", "Hue 5"),
         Hue6 = HUE_6 => ("hue_6", "Hue 6"),
     }
-    default HUE_2 => "hue_2";
+    default SYNTAX_ACCENT => "accent";
     roles(primary) {
         surfaces: crate::theme_variant::SurfaceColors {
             background: Self::SYNTAX_BG,
@@ -53,18 +56,72 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::MONO_1, Self::SYNTAX_BG),
-            disabled: crate::theme_variant::ColorPair::new(Self::MONO_3, Self::SYNTAX_BG),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                primary,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                crate::palette::primary_hover(primary),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                crate::palette::action_pressed(primary),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::MONO_1,
+                Self::SYNTAX_BG,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::MONO_3,
+                Self::SYNTAX_BG,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::HUE_3), Self::HUE_3),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::HUE_3), crate::palette::primary_hover(Self::HUE_3)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::HUE_3), crate::palette::action_pressed(Self::HUE_3)),
-            muted: crate::theme_variant::ColorPair::new(Self::MONO_1, Self::SYNTAX_BG),
-            disabled: crate::theme_variant::ColorPair::new(Self::MONO_3, Self::SYNTAX_BG),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::HUE_3,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                Self::HUE_3,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::HUE_3,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                crate::palette::primary_hover(Self::HUE_3),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::HUE_3,
+                    Self::SYNTAX_BG,
+                    Self::MONO_1,
+                ),
+                crate::palette::action_pressed(Self::HUE_3),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::MONO_1,
+                Self::SYNTAX_BG,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::MONO_3,
+                Self::SYNTAX_BG,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::HUE_4,
@@ -89,37 +146,37 @@ define_palette! {
             pink: Self::HUE_3,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::HUE_6_2,
+            attribute: Self::HUE_6,
             boolean: Self::HUE_6,
-            builtin: Self::HUE_6_2,
-            builtin_function: Self::HUE_2,
-            builtin_type: Self::HUE_6_2,
+            builtin: Self::MONO_1,
+            builtin_function: Self::HUE_1,
+            builtin_type: Self::HUE_1,
             comment: Self::MONO_3,
             constant: Self::HUE_6,
             control_keyword: Self::HUE_3,
             deleted: Self::HUE_5,
-            deprecated: Self::HUE_5,
+            deprecated: Self::SYNTAX_DEPRECATED_FG,
             documentation: Self::MONO_3,
             escape: Self::HUE_1,
             foreground: Self::MONO_1,
             function: Self::HUE_2,
-            heading: Self::HUE_2,
+            heading: Self::HUE_5,
             inserted: Self::HUE_4,
-            invalid: Self::HUE_5,
+            invalid: Self::SYNTAX_ILLEGAL_FG,
             keyword: Self::HUE_3,
-            link: Self::HUE_2,
+            link: Self::HUE_1,
             macro_name: Self::HUE_2,
-            markup_bold: Self::MONO_1,
-            markup_italic: Self::MONO_1,
+            markup_bold: Self::HUE_6,
+            markup_italic: Self::HUE_3,
             modifier: Self::HUE_3,
-            namespace: Self::HUE_6_2,
+            namespace: Self::MONO_1,
             number: Self::HUE_6,
-            operator: Self::HUE_1,
+            operator: Self::MONO_1,
             parameter: Self::MONO_1,
-            property: Self::HUE_5,
+            property: Self::MONO_1,
             punctuation: Self::MONO_1,
             string: Self::HUE_4,
-            tag: Self::HUE_3,
+            tag: Self::HUE_5,
             type_keyword: Self::HUE_3,
             type_name: Self::HUE_6_2,
             variable: Self::HUE_5,

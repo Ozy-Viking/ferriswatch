@@ -212,20 +212,51 @@ define_palette! {
             subtle: Self::EDITOR_LINE_NUMBER_FOREGROUND,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), Self::TERMINAL_ANSI_MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::ACTIVITY_BAR_BADGE_FOREGROUND,
+        Self::EXTENSION_BUTTON_PROMINENT_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::ACTIVITY_BAR_BADGE_FOREGROUND,
+        Self::EXTENSION_BUTTON_PROMINENT_HOVER_BACKGROUND,
+    ),
+    // Horizon has no authored pressed state for the prominent button.
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::ACTIVITY_BAR_BADGE_FOREGROUND,
+        Self::EXTENSION_BUTTON_PROMINENT_HOVER_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_LINE_NUMBER_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BADGE_FOREGROUND,
+        Self::BUTTON_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BADGE_FOREGROUND,
+        Self::BUTTON_BACKGROUND,
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BADGE_FOREGROUND,
+        Self::BUTTON_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_LINE_NUMBER_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_GREEN,
             warning: Self::TERMINAL_ANSI_YELLOW,
@@ -257,14 +288,14 @@ define_palette! {
             comment: Self::TOKEN_COMMENTS,
             constant: Self::TOKEN_CONSTANTS,
             control_keyword: Self::TOKEN_KEYWORDS,
-            deleted: Self::EDITOR_ERROR_FOREGROUND,
+            deleted: Self::GIT_DECORATION_DELETED_RESOURCE_FOREGROUND,
             deprecated: Self::EDITOR_ERROR_FOREGROUND,
             documentation: Self::TOKEN_COMMENTS,
             escape: Self::TOKEN_ESCAPE_CHARACTERS,
             foreground: Self::FOREGROUND,
             function: Self::TOKEN_FUNCTION_NAMES,
             heading: Self::TOKEN_MARKUP_HEADINGS,
-            inserted: Self::TERMINAL_ANSI_GREEN,
+            inserted: Self::GIT_DECORATION_ADDED_RESOURCE_FOREGROUND,
             invalid: Self::EDITOR_ERROR_FOREGROUND,
             keyword: Self::TOKEN_KEYWORDS,
             link: Self::TOKEN_MARKUP_LINKS,
@@ -277,8 +308,8 @@ define_palette! {
             operator: Self::TOKEN_OPERATORS,
             parameter: Self::TOKEN_VARIABLE_NAMES,
             property: Self::TOKEN_VARIABLE_NAMES,
-            punctuation: Self::FOREGROUND,
-            string: Self::TERMINAL_ANSI_GREEN,
+            punctuation: Self::TOKEN_KEY_VALUE_SEPARATORS,
+            string: Self::TOKEN_STRINGS,
             tag: Self::TOKEN_TAGS,
             type_keyword: Self::TOKEN_STORAGE_KEYWORDS,
             type_name: Self::TOKEN_STATIC_TYPES,

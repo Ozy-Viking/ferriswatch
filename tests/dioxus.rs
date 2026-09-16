@@ -3,10 +3,7 @@
 use dioxus::prelude::*;
 use ferriswatch::{
     catalogue::{AccentRegistration, PaletteRegistration},
-    dioxus::{
-        Memory, ThemeConfig, ThemeError, ThemeProvider, ThemeSelection, ThemeState, theme_css,
-        use_theme,
-    },
+    dioxus::{Memory, ThemeProvider, ThemeState, theme_css, use_theme},
     palette::{
         Accent, NoAccent, Palette,
         catppuccin::{
@@ -16,19 +13,20 @@ use ferriswatch::{
         families::{Catppuccin, RosePine},
         nord::Main as Nord,
     },
-    theme::{Appearance, Theme},
+    theme::{
+        Appearance, Theme, ThemeError, ThemeSelection,
+        config::{ThemeConfig, ThemeConfigBuilder},
+    },
     theme_variant::{ResolvedAccent, ThemePalette, ThemeSupport, ThemeVariant},
 };
 use std::{cell::RefCell, sync::LazyLock};
 
 // These tests use the same variant in both slots to exercise advisory support.
-fn single_default(variant: ThemeVariant) -> ferriswatch::dioxus::ThemeConfigBuilder {
-
+fn single_default(variant: ThemeVariant) -> ThemeConfigBuilder {
     ThemeConfig::with_default(Theme::new(variant.clone(), variant), Appearance::Dark)
 }
 
 fn mixed_mode_config() -> ThemeConfig {
-
     ThemeConfig::with_default(
         Theme::new(Latte::variant::<NoAccent>(), Mocha::variant::<Mauve>()),
         Appearance::Dark,
@@ -43,7 +41,6 @@ fn mixed_mode_config() -> ThemeConfig {
 }
 
 fn palette_ids(palettes: Vec<&'static PaletteRegistration>) -> Vec<&'static str> {
-
     palettes
         .into_iter()
         .map(|palette| palette.metadata.id.as_ref())
@@ -57,7 +54,6 @@ thread_local! {
 #[component]
 
 fn CaptureMenuState() -> Element {
-
     let state = use_theme::<Memory>();
 
     use_hook(|| MENU_STATE.with(|slot| *slot.borrow_mut() = Some(state)));
@@ -66,7 +62,6 @@ fn CaptureMenuState() -> Element {
 }
 
 fn mixed_mode_app() -> Element {
-
     let config = mixed_mode_config();
 
     rsx! {
@@ -78,7 +73,6 @@ fn mixed_mode_app() -> Element {
 #[test]
 
 fn listed_palettes_selected_theme_and_available_accents_follow_state() {
-
     MENU_STATE.with(|slot| *slot.borrow_mut() = None);
 
     let mut dom = VirtualDom::new(mixed_mode_app);
@@ -88,7 +82,6 @@ fn listed_palettes_selected_theme_and_available_accents_follow_state() {
     let mut state = MENU_STATE.with(|slot| slot.borrow().expect("captured theme state"));
 
     dom.in_runtime(|| {
-
         assert_eq!(
             state.selected_theme().metadata.id.as_ref(),
             "catppuccin/mocha"
@@ -176,7 +169,6 @@ fn listed_palettes_selected_theme_and_available_accents_follow_state() {
 }
 
 fn kitchen_config() -> ThemeConfig {
-
     ThemeConfig::with_default(
         Theme::new(Latte::variant::<NoAccent>(), Mocha::variant::<Mauve>()),
         Appearance::Dark,
@@ -192,7 +184,6 @@ fn kitchen_config() -> ThemeConfig {
 }
 
 fn kitchen_app() -> Element {
-
     let config = kitchen_config();
 
     rsx! {
@@ -204,7 +195,6 @@ fn kitchen_app() -> Element {
 #[test]
 
 fn theme_state_selects_toggles_and_binds_combobox_values() {
-
     MENU_STATE.with(|slot| *slot.borrow_mut() = None);
 
     let mut dom = VirtualDom::new(kitchen_app);
@@ -214,7 +204,6 @@ fn theme_state_selects_toggles_and_binds_combobox_values() {
     let mut state = MENU_STATE.with(|slot| slot.borrow().expect("captured theme state"));
 
     dom.in_runtime(|| {
-
         assert!(state.is_dark());
 
         assert_eq!(state.selected_theme_id(), "catppuccin/mocha");
@@ -278,7 +267,6 @@ fn theme_state_selects_toggles_and_binds_combobox_values() {
 #[test]
 
 fn memory_storage_does_not_round_trip() {
-
     use ferriswatch::dioxus::ThemeStorage;
     use ferriswatch::dioxus::persistence::Memory;
 
@@ -288,7 +276,6 @@ fn memory_storage_does_not_round_trip() {
 #[test]
 
 fn dx_component_colors_are_explicitly_opt_in() {
-
     let builder = single_default(Mocha::variant::<Mauve>());
 
     assert!(
@@ -321,7 +308,6 @@ fn dx_component_colors_are_explicitly_opt_in() {
 #[test]
 
 fn selection_is_additive_ordered_and_deduplicated() {
-
     let selected = ThemeSelection::new()
         .with_palette::<Mocha>()
         .with_family::<Catppuccin>()
@@ -360,7 +346,6 @@ fn selection_is_additive_ordered_and_deduplicated() {
 #[test]
 
 fn builder_requires_an_available_exact_default() {
-
     let default = Mocha::variant::<Mauve>();
 
     assert_eq!(
@@ -423,7 +408,6 @@ impl Accent<Custom> for Violet {
 
 impl ThemePalette for Custom {
     fn variant<A: Accent<Self>>() -> ThemeVariant {
-
         let base = Mocha::variant::<NoAccent>();
 
         ThemeVariant::new(
@@ -440,7 +424,6 @@ impl ThemePalette for Custom {
 
 impl Palette for Custom {
     fn registration() -> &'static PaletteRegistration {
-
         static REGISTRATION: LazyLock<PaletteRegistration> =
             LazyLock::new(|| PaletteRegistration {
                 metadata: Custom::variant::<NoAccent>().metadata().clone(),
@@ -463,7 +446,6 @@ impl Palette for Custom {
 #[test]
 
 fn custom_registration_supplies_accents_and_default() {
-
     let config = single_default(Custom::variant::<Violet>())
         .available(ThemeSelection::new().with_custom::<Custom>())
         .build()
@@ -488,7 +470,6 @@ thread_local! {
 #[component]
 
 fn Observer() -> Element {
-
     let state = use_theme::<Memory>();
 
     use_hook(|| STATES.with(|states| states.borrow_mut().push(state)));
@@ -496,7 +477,6 @@ fn Observer() -> Element {
     let theme = state.current();
 
     READS.with(|reads| {
-
         reads
             .borrow_mut()
             .push(format!("{}:{:?}", theme.id(), theme.accent_id()))
@@ -509,7 +489,6 @@ fn Observer() -> Element {
 }
 
 fn app() -> Element {
-
     let config = ThemeConfig::with_default(
         Theme::new(Latte::variant::<NoAccent>(), Mocha::variant::<Mauve>()),
         Appearance::Dark,
@@ -526,7 +505,6 @@ fn app() -> Element {
 #[test]
 
 fn providers_react_reset_reject_bad_input_and_isolate_apps() {
-
     STATES.with(|s| s.borrow_mut().clear());
 
     READS.with(|s| s.borrow_mut().clear());
@@ -542,7 +520,6 @@ fn providers_react_reset_reject_bad_input_and_isolate_apps() {
     let (mut a, b) = STATES.with(|s| (s.borrow()[0], s.borrow()[1]));
 
     first.in_runtime(|| {
-
         a.select("catppuccin/mocha", Some("blue")).unwrap();
 
         assert_eq!(a.current(), Mocha::variant::<Blue>());
@@ -557,7 +534,6 @@ fn providers_react_reset_reject_bad_input_and_isolate_apps() {
     assert!(!mutations.edits.is_empty());
 
     READS.with(|r| {
-
         assert_eq!(
             r.borrow().last().unwrap(),
             "catppuccin/mocha:Some(\"blue\")"
@@ -576,7 +552,6 @@ fn providers_react_reset_reject_bad_input_and_isolate_apps() {
 #[test]
 
 fn css_preserves_transparency_and_every_semantic_role() {
-
     let base = Mocha::variant::<Mauve>();
 
     let mut colors = *base.colors();
@@ -609,7 +584,6 @@ struct InvalidPalette;
 
 impl Palette for InvalidPalette {
     fn registration() -> &'static PaletteRegistration {
-
         static REGISTRATION: LazyLock<PaletteRegistration> =
             LazyLock::new(|| PaletteRegistration {
                 metadata: Custom::registration().metadata.clone(),
@@ -626,7 +600,6 @@ impl Palette for InvalidPalette {
 
 impl ThemePalette for InvalidPalette {
     fn variant<A: Accent<Self>>() -> ThemeVariant {
-
         Custom::variant::<NoAccent>()
     }
 }
@@ -634,7 +607,6 @@ impl ThemePalette for InvalidPalette {
 #[test]
 
 fn rejects_invalid_defaults_and_conflicting_custom_registrations() {
-
     let default = Custom::variant::<NoAccent>();
 
     let bad = ThemeSelection::new().with_custom::<InvalidPalette>();
@@ -681,7 +653,6 @@ fn rejects_invalid_defaults_and_conflicting_custom_registrations() {
 #[test]
 
 fn removing_a_conflicting_palette_allows_a_later_replacement() {
-
     let selection = ThemeSelection::new()
         .with_custom::<Custom>()
         .with_custom::<InvalidPalette>()
@@ -699,7 +670,6 @@ fn removing_a_conflicting_palette_allows_a_later_replacement() {
 #[test]
 
 fn mode_lists_include_both_and_selection_remains_advisory() {
-
     let config = ThemeConfig::with_default(
         Theme::new(Mocha::variant::<Mauve>(), Latte::variant::<NoAccent>()),
         Appearance::Light,
@@ -736,14 +706,12 @@ fn mode_lists_include_both_and_selection_remains_advisory() {
 #[test]
 
 fn both_defaults_are_validated_even_when_one_is_inactive() {
-
     let missing = Custom::variant::<NoAccent>();
 
     for defaults in [
         Theme::new(missing.clone(), Mocha::variant::<Mauve>()),
         Theme::new(Mocha::variant::<Mauve>(), missing),
     ] {
-
         assert!(matches!(
             ThemeConfig::with_default(defaults, Appearance::Dark).build(),
             Err(ThemeError::Unavailable(_))
@@ -754,7 +722,6 @@ fn both_defaults_are_validated_even_when_one_is_inactive() {
 #[test]
 
 fn mode_switches_preserve_both_accents_and_inactive_updates_do_not_rerender_current() {
-
     STATES.with(|s| s.borrow_mut().clear());
 
     READS.with(|s| s.borrow_mut().clear());
@@ -768,7 +735,6 @@ fn mode_switches_preserve_both_accents_and_inactive_updates_do_not_rerender_curr
     let reads = READS.with(|r| r.borrow().len());
 
     dom.in_runtime(|| {
-
         state
             .select_for(Appearance::Light, "catppuccin/latte", Some("green"))
             .unwrap();
@@ -779,7 +745,6 @@ fn mode_switches_preserve_both_accents_and_inactive_updates_do_not_rerender_curr
     assert_eq!(READS.with(|r| r.borrow().len()), reads);
 
     dom.in_runtime(|| {
-
         state.select("catppuccin/mocha", Some("blue")).unwrap();
 
         state.set_mode(Appearance::Light);

@@ -28,7 +28,6 @@ impl Lms {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(l: f32, m: f32, s: f32) -> Self {
-
         Self {
             l: Channel::color_channel("l", l, ..),
             m: Channel::color_channel("m", m, ..),

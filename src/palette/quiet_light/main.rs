@@ -1,6 +1,8 @@
 //! Quiet Light. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Quiet Light is its own family. Source syntax foreground and named token colours supply readable statuses; pale validation borders are not used as status text.
+//! Editor UI keys supply surfaces and source alpha is retained. Authored
+//! primary and secondary button tokens supply actions. Critical uses bright
+//! red; trace uses subdued source text.
 
 define_palette! {
     Main, "Quiet Light",
@@ -68,6 +70,12 @@ define_palette! {
         TITLE_BAR_ACTIVE_BACKGROUND = crate::color::Color::hex(0xc4b7d7),
         TITLE_BAR_INACTIVE_BACKGROUND = crate::color::Color::hex(0xd6cfe2),
         BUTTON_BACKGROUND = crate::color::Color::hex(0x705697),
+        // Resolved from VS Code's light-theme button defaults at the pinned revision.
+        BUTTON_FOREGROUND = crate::color::Color::hex(0xffffff),
+        BUTTON_HOVER_BACKGROUND = crate::color::Color::hex(0x5a4579),
+        BUTTON_SECONDARY_BACKGROUND = crate::color::Color::hex(0xe0e0e0),
+        BUTTON_SECONDARY_FOREGROUND = crate::color::Color::hex(0x616161),
+        BUTTON_SECONDARY_HOVER_BACKGROUND = crate::color::Color::hex(0xffffff),
         EDITOR_GROUP_DROP_BACKGROUND = crate::color::Color::hex_alpha(0xc9d0d988),
         INPUT_VALIDATION_INFO_BORDER = crate::color::Color::hex(0x4ec1e5),
         INPUT_VALIDATION_INFO_BACKGROUND = crate::color::Color::hex(0xf2fcff),
@@ -165,18 +173,50 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::TOKEN_0, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::TOKEN_COMMENTS, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            // VS Code has no distinct pressed button colour.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::TOKEN_0,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::TOKEN_COMMENTS,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), Self::BUTTON_BACKGROUND),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), crate::palette::primary_hover(Self::BUTTON_BACKGROUND)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BUTTON_BACKGROUND), crate::palette::action_pressed(Self::BUTTON_BACKGROUND)),
-            muted: crate::theme_variant::ColorPair::new(Self::TOKEN_0, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::TOKEN_COMMENTS, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            // VS Code likewise has no separate pressed secondary state.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::TOKEN_0,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::TOKEN_COMMENTS,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TOKEN_STRINGS,
@@ -201,25 +241,25 @@ define_palette! {
             pink: Self::TOKEN_FUNCTIONS,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::LIST_WARNING_FOREGROUND,
+            attribute: Self::TOKEN_HTML_ATTRIBUTE_NAMES,
             boolean: Self::TOKEN_LANGUAGE_CONSTANTS,
-            builtin: Self::LIST_WARNING_FOREGROUND,
+            builtin: Self::TOKEN_VARIABLES,
             builtin_function: Self::TOKEN_FUNCTIONS,
             builtin_type: Self::TOKEN_TYPES,
             comment: Self::TOKEN_COMMENTS,
             constant: Self::TOKEN_NUMBERS_CHARACTERS,
             control_keyword: Self::TOKEN_KEYWORDS,
-            deleted: Self::TOKEN_MARKUP_DELETION,
-            deprecated: Self::TOKEN_INVALID,
+            deleted: Self::TOKEN_DIFF_DELETED,
+            deprecated: Self::TOKEN_0,
             documentation: Self::TOKEN_COMMENTS_DOCUMENTATION,
             escape: Self::TOKEN_STRINGS_ESCAPE_SEQUENCES,
             foreground: Self::TOKEN_0,
             function: Self::TOKEN_FUNCTIONS,
             heading: Self::TOKEN_MARKUP_HEADING,
-            inserted: Self::TOKEN_MARKUP_INSERTION,
+            inserted: Self::TOKEN_DIFF_INSERTED,
             invalid: Self::TOKEN_INVALID,
             keyword: Self::TOKEN_KEYWORDS,
-            link: Self::BUTTON_BACKGROUND,
+            link: Self::TOKEN_MARKUP_LINK,
             macro_name: Self::TOKEN_FUNCTIONS,
             markup_bold: Self::TOKEN_MARKUP_STYLING,
             markup_italic: Self::TOKEN_MARKUP_STYLING,

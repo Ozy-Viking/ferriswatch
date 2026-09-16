@@ -1,7 +1,9 @@
 //! Poimandres. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Editor UI keys supply surfaces and source alpha is retained. Terminal accents supply filled actions. Critical uses bright red. Trace uses normal foreground because the gutter
-//! colour has too little contrast on the canvas. Roles that share an upstream colour intentionally repeat.
+//! Editor UI keys supply surfaces and source alpha is retained. Authored
+//! primary and secondary button tokens supply actions. Critical uses bright
+//! red. Trace uses normal foreground because the gutter colour has too little
+//! contrast on the canvas.
 
 define_palette! {
     Main, "Poimandres",
@@ -579,26 +581,58 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            // Poimandres does not author a distinct pressed button state.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), Self::TERMINAL_ANSI_MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            // No separate pressed secondary state is authored upstream.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_GREEN,
-            warning: Self::EDITOR_WARNING_FOREGROUND,
-            error: Self::EDITOR_ERROR_FOREGROUND,
+            warning: Self::TOKEN_83,
+            error: Self::TOKEN_84,
             critical: Self::TERMINAL_ANSI_BRIGHT_RED,
-            info: Self::EDITOR_INFO_FOREGROUND,
-            debug: Self::DESCRIPTION_FOREGROUND,
+            info: Self::TOKEN_82,
+            debug: Self::TOKEN_85,
             trace: Self::FOREGROUND,
         },
         border: Self::EDITOR_WIDGET_BORDER,
@@ -610,18 +644,18 @@ define_palette! {
             yellow: Self::TERMINAL_ANSI_YELLOW,
             green: Self::TERMINAL_ANSI_GREEN,
             cyan: Self::TERMINAL_ANSI_CYAN,
-            blue: Self::EDITOR_LINK_ACTIVE_FOREGROUND,
+            blue: Self::TERMINAL_ANSI_BLUE,
             purple: Self::TERMINAL_ANSI_MAGENTA,
             pink: Self::TERMINAL_ANSI_MAGENTA,
         },
         syntax: crate::theme_variant::SyntaxColors {
             attribute: Self::TOKEN_40,
             boolean: Self::TOKEN_28,
-            builtin: Self::EDITOR_WARNING_FOREGROUND,
-            builtin_function: Self::TERMINAL_ANSI_MAGENTA,
+            builtin: Self::TOKEN_37,
+            builtin_function: Self::TOKEN_FUNCTION_CALL,
             builtin_type: Self::TOKEN_32,
             comment: Self::TOKEN_0,
-            constant: Self::EDITOR_WARNING_FOREGROUND,
+            constant: Self::TOKEN_28,
             control_keyword: Self::TOKEN_15,
             deleted: Self::TOKEN_45,
             deprecated: Self::TOKEN_14,
@@ -633,7 +667,7 @@ define_palette! {
             inserted: Self::TOKEN_44,
             invalid: Self::TOKEN_13,
             keyword: Self::TOKEN_15,
-            link: Self::TOKEN_68,
+            link: Self::TOKEN_49,
             macro_name: Self::TOKEN_FUNCTION_CLASS_NAME,
             markup_bold: Self::TOKEN_66,
             markup_italic: Self::TOKEN_65,
@@ -648,7 +682,7 @@ define_palette! {
             tag: Self::TOKEN_23,
             type_keyword: Self::TOKEN_16,
             type_name: Self::TOKEN_32,
-            variable: Self::EDITOR_FOREGROUND,
+            variable: Self::TOKEN_6,
         },
     }
 }

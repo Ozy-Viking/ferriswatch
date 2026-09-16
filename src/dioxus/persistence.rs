@@ -34,7 +34,6 @@ pub trait ThemeStorage {
     /// Restores a previously saved selection, if one exists.
 
     fn load() -> Option<ThemeSnapshot> {
-
         None
     }
 
@@ -57,12 +56,10 @@ where
     S: StorageBacking<Key = String>,
 {
     fn load() -> Option<ThemeSnapshot> {
-
         S::get(&KEY.to_string())
     }
 
     fn save(theme: &ThemeState) {
-
         S::set(KEY.to_string(), &theme.snapshot());
     }
 }

@@ -1,6 +1,8 @@
 //! Shades of Purple. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Editor UI keys supply surfaces and source alpha is retained. Terminal accents supply filled actions. Critical uses bright red; trace uses subdued source text. Roles that share an upstream colour intentionally repeat.
+//! Editor UI keys supply surfaces and source alpha is retained. Authored
+//! primary and secondary button tokens supply actions. Critical uses bright
+//! red; trace uses subdued source text.
 
 define_palette! {
     Main, "Shades of Purple",
@@ -436,18 +438,50 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            // Shades of Purple does not author a separate pressed button state.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_FOREGROUND,
+                Self::BUTTON_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), Self::TERMINAL_ANSI_MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_BACKGROUND,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            // No distinct pressed state is authored upstream.
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::BUTTON_SECONDARY_FOREGROUND,
+                Self::BUTTON_SECONDARY_HOVER_BACKGROUND,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::EDITOR_LINE_NUMBER_FOREGROUND,
+                Self::SIDE_BAR_BACKGROUND,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_GREEN,
@@ -462,8 +496,8 @@ define_palette! {
         border_muted: Self::SIDE_BAR_BACKGROUND,
         focus: primary,
         chromatic: crate::theme_variant::ChromaticColors {
-            red: Self::TOKEN_MARKDOWN_DIFF_DELETED_CODE_BLOCK,
-            orange: Self::TOKEN_CSS_COLOR_FOR_ID_SELECTOR,
+            red: Self::TERMINAL_ANSI_RED,
+            orange: Self::TOKEN_KEYWORD_THE_MAIN_COLOR_FOR_KEYWORD,
             yellow: Self::TERMINAL_ANSI_YELLOW,
             green: Self::TERMINAL_ANSI_GREEN,
             cyan: Self::TERMINAL_ANSI_CYAN,
@@ -479,31 +513,31 @@ define_palette! {
             builtin_type: Self::TOKEN_SUPPORT,
             comment: Self::TOKEN_COMMENTS_THE_MAIN_COMMENTS_COLOR,
             constant: Self::TOKEN_CONSTANT_THE_MAIN_CONSTANTS_COLOR,
-            control_keyword: Self::TOKEN_JAVASCRIPT_STORAGE_TYPES,
+            control_keyword: Self::TOKEN_KEYWORD_THE_MAIN_COLOR_FOR_KEYWORD,
             deleted: Self::TOKEN_DELETED,
             deprecated: Self::TOKEN_INVALID_THE_MAIN_COLOR_FOR_INVALID,
             documentation: Self::TOKEN_COMMENTS_THE_MAIN_COMMENTS_COLOR,
             escape: Self::TOKEN_CONSTANT_THE_MAIN_CONSTANTS_COLOR,
             foreground: Self::EDITOR_FOREGROUND,
             function: Self::TOKEN_ENTITY_THE_MAIN_ENTITY_COLOR,
-            heading: Self::TERMINAL_ANSI_MAGENTA,
+            heading: Self::TOKEN_MARKDOWN_COLOR_FOR_HEADING_NAME_SECTION,
             inserted: Self::TOKEN_INSERTED,
             invalid: Self::TOKEN_INVALID_THE_MAIN_COLOR_FOR_INVALID,
             keyword: Self::TOKEN_KEYWORD_THE_MAIN_COLOR_FOR_KEYWORD,
-            link: Self::TERMINAL_ANSI_MAGENTA,
+            link: Self::TOKEN_MARKDOWN_LINK_ALT_URI,
             macro_name: Self::TOKEN_ENTITY_THE_MAIN_ENTITY_COLOR,
             markup_bold: Self::EDITOR_FOREGROUND,
             markup_italic: Self::EDITOR_FOREGROUND,
-            modifier: Self::TOKEN_JAVASCRIPT_STORAGE_TYPES,
+            modifier: Self::TOKEN_STORAGE_THE_MAIN_COLOR_FOR_STORAGE,
             namespace: Self::TOKEN_ENTITY_THE_MAIN_ENTITY_COLOR,
             number: Self::TOKEN_CONSTANT_THE_MAIN_CONSTANTS_COLOR,
-            operator: Self::TOKEN_JAVASCRIPT_STORAGE_TYPES,
+            operator: Self::TOKEN_KEYWORD_THE_MAIN_COLOR_FOR_KEYWORD,
             parameter: Self::TOKEN_JAVASCRIPT_PARAMETERS,
-            property: Self::TOKEN_VARIABLE,
+            property: Self::TOKEN_JAVASCRIPT_SOMETHING,
             punctuation: Self::TOKEN_PUNCTUATION_THE_MAIN_COLOR_FOR_PUNCTUATION,
             string: Self::TOKEN_STRING,
             tag: Self::TOKEN_HTML_COLOR_FOR_ENTITY_NAME,
-            type_keyword: Self::TOKEN_JAVASCRIPT_STORAGE_TYPES,
+            type_keyword: Self::TOKEN_STORAGE_THE_MAIN_COLOR_FOR_STORAGE,
             type_name: Self::TOKEN_ENTITY_THE_MAIN_ENTITY_COLOR,
             variable: Self::TOKEN_VARIABLE,
         },

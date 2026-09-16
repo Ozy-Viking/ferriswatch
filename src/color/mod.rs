@@ -74,7 +74,6 @@ pub enum ColorError {
 
 impl PartialEq for ColorError {
     fn eq(&self, other: &Self) -> bool {
-
         match (self, other) {
             (Self::InvalidLength(l0), Self::InvalidLength(r0)) => l0 == r0,
             (
@@ -100,18 +99,14 @@ impl Eq for ColorError {}
 
 impl From<Infallible> for ColorError {
     fn from(value: Infallible) -> Self {
-
         match value {}
     }
 }
 
 fn floats_eq(a: &f32, b: &f32) -> bool {
-
     if a.is_nan() && b.is_nan() {
-
         true
     } else {
-
         a == b
     }
 }
@@ -136,7 +131,6 @@ where
     U: ClampedFrom<T>,
 {
     fn clamped_into(self) -> ColorResult<U> {
-
         U::clamped_from(self)
     }
 }
@@ -155,7 +149,6 @@ where
     U: ColorSpace,
 {
     fn clamped_from(value: T) -> ColorResult<Self> {
-
         let linear = value.try_into_linear_srgb_raw()?;
 
         U::try_from_linear_srgb_clamped(linear)

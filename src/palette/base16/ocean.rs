@@ -57,20 +57,74 @@ define_palette! {
             subtle: Self::BASE_03,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::BASE_05, Self::BASE_01),
-            disabled: crate::theme_variant::ColorPair::new(Self::BASE_03, Self::BASE_01),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BASE_0E), Self::BASE_0E),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BASE_0E), crate::palette::primary_hover(Self::BASE_0E)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BASE_0E), crate::palette::action_pressed(Self::BASE_0E)),
-            muted: crate::theme_variant::ColorPair::new(Self::BASE_05, Self::BASE_01),
-            disabled: crate::theme_variant::ColorPair::new(Self::BASE_03, Self::BASE_01),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        primary,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        crate::palette::primary_hover(primary),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            primary,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        crate::palette::action_pressed(primary),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::BASE_05,
+        Self::BASE_01,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::BASE_03,
+        Self::BASE_01,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::BASE_0E,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        Self::BASE_0E,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::BASE_0E,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        crate::palette::primary_hover(Self::BASE_0E),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::BASE_0E,
+            Self::BASE_00,
+            Self::BASE_07,
+        ),
+        crate::palette::action_pressed(Self::BASE_0E),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::BASE_05,
+        Self::BASE_01,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::BASE_03,
+        Self::BASE_01,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::BASE_0B,
             warning: Self::BASE_0A,
@@ -94,17 +148,17 @@ define_palette! {
             pink: Self::BASE_0E,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::BASE_0A,
+            attribute: Self::BASE_09,
             boolean: Self::BASE_09,
             builtin: Self::BASE_0A,
             builtin_function: Self::BASE_0D,
             builtin_type: Self::BASE_0A,
-            comment: Self::BASE_04,
+            comment: Self::BASE_03,
             constant: Self::BASE_09,
             control_keyword: Self::BASE_0E,
             deleted: Self::BASE_08,
-            deprecated: Self::BASE_08,
-            documentation: Self::BASE_04,
+            deprecated: Self::BASE_0F,
+            documentation: Self::BASE_03,
             escape: Self::BASE_0C,
             foreground: Self::BASE_05,
             function: Self::BASE_0D,
@@ -114,20 +168,20 @@ define_palette! {
             keyword: Self::BASE_0E,
             link: Self::BASE_0D,
             macro_name: Self::BASE_0D,
-            markup_bold: Self::BASE_05,
-            markup_italic: Self::BASE_05,
+            markup_bold: Self::BASE_0A,
+            markup_italic: Self::BASE_0E,
             modifier: Self::BASE_0E,
             namespace: Self::BASE_0A,
             number: Self::BASE_09,
-            operator: Self::BASE_0C,
+            operator: Self::BASE_05,
             parameter: Self::BASE_05,
             property: Self::BASE_05,
             punctuation: Self::BASE_05,
             string: Self::BASE_0B,
-            tag: Self::BASE_0E,
+            tag: Self::BASE_08,
             type_keyword: Self::BASE_0E,
             type_name: Self::BASE_0A,
-            variable: Self::BASE_05,
+            variable: Self::BASE_08,
         },
     }
 }

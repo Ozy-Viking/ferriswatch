@@ -1,6 +1,6 @@
-//! JetBrains Dark. See `REGISTRATION` for pinned upstream sources.
-//!
-//! Editor scheme inherits Default → Darcula → Dark as applicable. UI surfaces use each theme’s declared palette. Translucent Dark action hover is retained; Darcula has its own editor background and console colours.
+//! Editor scheme inherits Default → Darcula → Dark as applicable. UI surfaces
+//! use each theme's declared palette. Primary and secondary actions map to
+//! JetBrains default and regular Button tokens respectively.
 
 define_palette! {
     Dark, "JetBrains Dark",
@@ -478,6 +478,7 @@ define_palette! {
         EDITOR_UNRESOLVED_REFERENCE_ACCESS_EFFECT_COLOR = crate::color::Color::hex(0x6a707a),
         EDITOR_WARNING_ATTRIBUTES_EFFECT_COLOR = crate::color::Color::hex(0xf2c55c),
         EDITOR_XML_CUSTOM_TAG_NAME_FOREGROUND = crate::color::Color::hex(0x2fbaa3),
+
         GRAY_1 = crate::color::Color::hex(0x1e1f22),
         GRAY_2 = crate::color::Color::hex(0x2b2d30),
         GRAY_3 = crate::color::Color::hex(0x393b40),
@@ -575,6 +576,7 @@ define_palette! {
         TEAL_10 = crate::color::Color::hex(0x7dcec5),
         TEAL_11 = crate::color::Color::hex(0x9bddd6),
         TEAL_12 = crate::color::Color::hex(0xb9ebe6),
+
         UI_FOREGROUND = crate::color::Color::hex(0xdfe1e5),
         UI_BACKGROUND = crate::color::Color::hex(0x2b2d30),
         UI_BORDER_COLOR = crate::color::Color::hex(0x1e1f22),
@@ -1205,20 +1207,50 @@ define_palette! {
             subtle: Self::GRAY_8,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::GRAY_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::GRAY_8, Self::GRAY_2),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::GRAY_3),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::UI_ACTION_BUTTON_HOVER_BACKGROUND),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::GRAY_3), Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::GRAY_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::GRAY_8, Self::GRAY_2),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::UI_DISABLED_TEXT,
+        Self::UI_DISABLED_BACKGROUND,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::UI_DISABLED_TEXT,
+        Self::UI_DISABLED_BACKGROUND,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN_7,
             warning: Self::YELLOW_7,
@@ -1242,37 +1274,37 @@ define_palette! {
             pink: Self::EDITOR_RAINBOW_COLOR_4_FOREGROUND,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::EDITOR_DEFAULT_METADATA_FOREGROUND,
-            boolean: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            builtin: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
-            builtin_function: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            builtin_type: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
+            attribute: Self::EDITOR_XML_ATTRIBUTE_NAME_FOREGROUND,
+            boolean: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
+            builtin: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
+            builtin_function: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
+            builtin_type: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             comment: Self::EDITOR_DEFAULT_LINE_COMMENT_FOREGROUND,
             constant: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
             control_keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            deleted: Self::RED_7,
-            deprecated: Self::RED_7,
+            deleted: Self::EDITOR_TEXT_FOREGROUND,
+            deprecated: Self::EDITOR_TEXT_FOREGROUND,
             documentation: Self::EDITOR_DEFAULT_DOC_COMMENT_FOREGROUND,
             escape: Self::EDITOR_DEFAULT_VALID_STRING_ESCAPE_FOREGROUND,
             foreground: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             function: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            heading: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            inserted: Self::GREEN_7,
-            invalid: Self::RED_7,
+            heading: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
+            inserted: Self::EDITOR_TEXT_FOREGROUND,
+            invalid: Self::EDITOR_BAD_CHARACTER_FOREGROUND,
             keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            link: Self::GRAY_3,
+            link: Self::EDITOR_MARKDOWN_LINK_TEXT_FOREGROUND,
             macro_name: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
             markup_bold: Self::EDITOR_TEXT_FOREGROUND,
             markup_italic: Self::EDITOR_TEXT_FOREGROUND,
             modifier: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
             namespace: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
             number: Self::EDITOR_DEFAULT_NUMBER_FOREGROUND,
-            operator: Self::EDITOR_DEFAULT_OPERATION_SIGN_FOREGROUND,
+            operator: Self::EDITOR_TEXT_FOREGROUND,
             parameter: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             property: Self::EDITOR_DEFAULT_INSTANCE_FIELD_FOREGROUND,
-            punctuation: Self::EDITOR_DEFAULT_COMMA_FOREGROUND,
+            punctuation: Self::EDITOR_TEXT_FOREGROUND,
             string: Self::EDITOR_DEFAULT_STRING_FOREGROUND,
-            tag: Self::EDITOR_DEFAULT_TAG_FOREGROUND,
+            tag: Self::EDITOR_XML_TAG_NAME_FOREGROUND,
             type_keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
             type_name: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
             variable: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,

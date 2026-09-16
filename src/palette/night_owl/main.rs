@@ -1,6 +1,8 @@
 //! Night Owl. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Editor UI keys supply surfaces and source alpha is retained. Terminal accents supply filled actions. Critical uses bright red; trace uses subdued source text. Roles that share an upstream colour intentionally repeat.
+//! Editor UI keys supply surfaces and source alpha is retained. The authored
+//! button tokens supply the primary action; the secondary retains the terminal
+//! magenta accent. Critical uses bright red; trace uses subdued source text.
 
 define_palette! {
     Main, "Night Owl",
@@ -423,20 +425,63 @@ define_palette! {
             subtle: Self::EDITOR_LINE_NUMBER_FOREGROUND,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), Self::TERMINAL_ANSI_MAGENTA),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::TERMINAL_ANSI_MAGENTA), crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::EDITOR_LINE_NUMBER_FOREGROUND, Self::SIDE_BAR_BACKGROUND),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BUTTON_FOREGROUND,
+        Self::BUTTON_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BUTTON_FOREGROUND,
+        Self::BUTTON_HOVER_BACKGROUND,
+    ),
+    // Night Owl has no distinct pressed button colour.
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BUTTON_FOREGROUND,
+        Self::BUTTON_HOVER_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_LINE_NUMBER_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::TERMINAL_ANSI_MAGENTA,
+            Self::EDITOR_BACKGROUND,
+            Self::EDITOR_FOREGROUND,
+        ),
+        Self::TERMINAL_ANSI_MAGENTA,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::TERMINAL_ANSI_MAGENTA,
+            Self::EDITOR_BACKGROUND,
+            Self::EDITOR_FOREGROUND,
+        ),
+        crate::palette::primary_hover(Self::TERMINAL_ANSI_MAGENTA),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        crate::palette::action_text(
+            Self::TERMINAL_ANSI_MAGENTA,
+            Self::EDITOR_BACKGROUND,
+            Self::EDITOR_FOREGROUND,
+        ),
+        crate::palette::action_pressed(Self::TERMINAL_ANSI_MAGENTA),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::EDITOR_LINE_NUMBER_FOREGROUND,
+        Self::SIDE_BAR_BACKGROUND,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::TERMINAL_ANSI_GREEN,
             warning: Self::EDITOR_WARNING_FOREGROUND,
@@ -459,41 +504,41 @@ define_palette! {
             purple: Self::TERMINAL_ANSI_MAGENTA,
             pink: Self::TOKEN_NULL,
         },
-        syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::TOKEN_TAG_ATTRIBUTE,
-            boolean: Self::TOKEN_BOOLEAN,
-            builtin: Self::EDITOR_WARNING_FOREGROUND,
-            builtin_function: Self::TOKEN_SUPPORT_FUNCTION,
-            builtin_type: Self::TOKEN_LIBRARY_CLASS_TYPE,
-            comment: Self::TOKEN_COMMENT,
-            constant: Self::EDITOR_WARNING_FOREGROUND,
-            control_keyword: Self::TOKEN_PYTHON_IMPORT_CONTROL_KEYWORD,
-            deleted: Self::TOKEN_TEXTMATE_DELETED,
-            deprecated: Self::TOKEN_INVALID_DEPRECATED,
-            documentation: Self::TOKEN_COMMENT,
-            escape: Self::TOKEN_CONSTANT_CHARACTER_ESCAPE,
-            foreground: Self::EDITOR_FOREGROUND,
-            function: Self::TOKEN_ENTITY_NAME_FUNCTION,
-            heading: Self::TOKEN_MARKDOWN_HEADINGS,
-            inserted: Self::TOKEN_TEXTMATE_INSERTED,
-            invalid: Self::TOKEN_INVALID,
-            keyword: Self::TOKEN_KEYWORD,
-            link: Self::TOKEN_MARKDOWN_LINKS,
-            macro_name: Self::TOKEN_ENTITY_NAME_FUNCTION,
-            markup_bold: Self::TOKEN_MARKDOWN_BOLD,
-            markup_italic: Self::TOKEN_MARKDOWN_ITALICS,
-            modifier: Self::TOKEN_STORAGE,
-            namespace: Self::EDITOR_WARNING_FOREGROUND,
-            number: Self::TOKEN_NUMBER,
-            operator: Self::TOKEN_KEYWORD_OPERATOR,
-            parameter: Self::TOKEN_JAVA_SCRIPT_VARIABLE_OTHER_READ_WRITE,
-            property: Self::TOKEN_VARIABLE,
-            punctuation: Self::EDITOR_FOREGROUND,
-            string: Self::TOKEN_STRING,
-            tag: Self::TOKEN_HTML_TAG_NAMES,
-            type_keyword: Self::TOKEN_STORAGE_TYPE,
-            type_name: Self::EDITOR_WARNING_FOREGROUND,
-            variable: Self::TOKEN_VARIABLE,
-        },
+syntax: crate::theme_variant::SyntaxColors {
+    attribute: Self::TOKEN_TAG_ATTRIBUTE,
+    boolean: Self::TOKEN_BOOLEAN,
+    builtin: Self::TOKEN_SUPPORT_CONSTANT_NEW_KEYWORD_SPECIAL_METHOD_KEYWORD_DEBUGGER_OTHER_KEYWORDS,
+    builtin_function: Self::TOKEN_SUPPORT_FUNCTION,
+    builtin_type: Self::TOKEN_LIBRARY_CLASS_TYPE,
+    comment: Self::TOKEN_COMMENT,
+    constant: Self::TOKEN_USER_DEFINED_CONSTANT,
+    control_keyword: Self::TOKEN_SUPPORT_CONSTANT_NEW_KEYWORD_SPECIAL_METHOD_KEYWORD_DEBUGGER_OTHER_KEYWORDS,
+    deleted: Self::TOKEN_TEXTMATE_DELETED,
+    deprecated: Self::TOKEN_INVALID_DEPRECATED,
+    documentation: Self::TOKEN_COMMENT,
+    escape: Self::TOKEN_CONSTANT_CHARACTER_ESCAPE,
+    foreground: Self::EDITOR_FOREGROUND,
+    function: Self::TOKEN_ENTITY_NAME_FUNCTION,
+    heading: Self::TOKEN_MARKDOWN_HEADINGS,
+    inserted: Self::TOKEN_TEXTMATE_INSERTED,
+    invalid: Self::TOKEN_INVALID,
+    keyword: Self::TOKEN_KEYWORD,
+    link: Self::TOKEN_MARKDOWN_LINKS,
+    macro_name: Self::TOKEN_ENTITY_NAME_FUNCTION,
+    markup_bold: Self::TOKEN_MARKDOWN_BOLD,
+    markup_italic: Self::TOKEN_MARKDOWN_ITALICS,
+    modifier: Self::TOKEN_STORAGE,
+    namespace: Self::TOKEN_C_NAMESPACES,
+    number: Self::TOKEN_NUMBER,
+    operator: Self::TOKEN_KEYWORD_OPERATOR,
+    parameter: Self::TOKEN_JAVA_SCRIPT_VARIABLE_OTHER_READ_WRITE,
+    property: Self::TOKEN_VARIABLE_INSTANCES,
+    punctuation: Self::EDITOR_FOREGROUND,
+    string: Self::TOKEN_STRING,
+    tag: Self::TOKEN_HTML_TAG_NAMES,
+    type_keyword: Self::TOKEN_STORAGE_TYPE,
+    type_name: Self::TOKEN_CLASS_NAME,
+    variable: Self::TOKEN_VARIABLE,
+},
     }
 }

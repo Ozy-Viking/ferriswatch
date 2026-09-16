@@ -26,7 +26,6 @@ impl XyzD50 {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(x: f32, y: f32, z: f32) -> Self {
-
         Self {
             x: Channel::color_channel("x", x, 0.0..),
             y: Channel::color_channel("y", y, 0.0..),

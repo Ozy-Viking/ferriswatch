@@ -68,7 +68,6 @@ pub struct ComboboxProps<T: Clone + PartialEq + 'static = String> {
 #[component]
 
 pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Element {
-
     let base = attributes!(div {
         class: Styles::dx_combobox
     });
@@ -110,7 +109,6 @@ pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Elem
 #[component]
 
 pub fn ComboboxEmpty(props: ComboboxEmptyProps) -> Element {
-
     let base = attributes!(div {
         class: Styles::dx_combobox_empty
     });
@@ -125,7 +123,6 @@ pub fn ComboboxEmpty(props: ComboboxEmptyProps) -> Element {
 #[component]
 
 pub fn ComboboxOption<T: Clone + PartialEq + 'static>(props: ComboboxOptionProps<T>) -> Element {
-
     let base = attributes!(div {
         class: Styles::dx_combobox_option
     });

@@ -31,7 +31,6 @@ const COLORS: &str = "\
 --secondary-info-color:var(--fs-info);";
 
 pub(super) fn declarations(appearance: Appearance) -> String {
-
     let mode = match appearance {
         Appearance::Dark => "--dark:initial;--light: ;--dxc-dark-on:initial;--dxc-light-on: ;",
         Appearance::Light => "--dark: ;--light:initial;--dxc-dark-on: ;--dxc-light-on:initial;",
@@ -49,7 +48,6 @@ mod tests {
     #[test]
 
     fn maps_upstream_colors_and_switches_only() {
-
         let upstream = include_str!("../../examples/dioxus_theme/fixtures/dx-components-theme.css");
 
         let names: std::collections::BTreeSet<_> = upstream
@@ -60,7 +58,6 @@ mod tests {
             .collect();
 
         for appearance in [Appearance::Light, Appearance::Dark] {
-
             let css = declarations(appearance);
 
             let actual: std::collections::BTreeSet<_> = css

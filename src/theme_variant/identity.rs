@@ -28,7 +28,6 @@ impl ThemeSupport {
     /// Filters a choice list; it does not restrict theme construction or selection.
 
     pub const fn supports(self, mode: Appearance) -> bool {
-
         matches!(
             (self, mode),
             (Self::Both, _) | (Self::Light, Appearance::Light) | (Self::Dark, Appearance::Dark)
@@ -38,7 +37,6 @@ impl ThemeSupport {
 
 impl From<Appearance> for ThemeSupport {
     fn from(appearance: Appearance) -> Self {
-
         match appearance {
             Appearance::Light => Self::Light,
             Appearance::Dark => Self::Dark,
@@ -62,7 +60,6 @@ impl Contrast {
     /// Persisted contrast segment.
 
     pub const fn id(self) -> &'static str {
-
         match self {
             Self::Soft => "soft",
             Self::Medium => "medium",
@@ -115,13 +112,11 @@ impl ResolvedAccent {
         name: impl Into<Cow<'static, str>>,
         color: Color,
     ) -> Result<Self, IdentityError> {
-
         let id = id.into();
 
         let name = name.into();
 
         if !valid_segment(&id) || name.trim().is_empty() {
-
             return Err(IdentityError::InvalidAccent);
         }
 
@@ -131,21 +126,18 @@ impl ResolvedAccent {
     /// Stable accent identifier.
 
     pub fn id(&self) -> &str {
-
         &self.id
     }
 
     /// Display label.
 
     pub fn name(&self) -> &str {
-
         &self.name
     }
 
     /// Explicit colour, including its alpha channel.
 
     pub const fn color(&self) -> Color {
-
         self.color
     }
 }
@@ -166,7 +158,6 @@ pub enum IdentityError {
 }
 
 pub(crate) fn valid_segment(value: &str) -> bool {
-
     !value.is_empty()
         && value.as_bytes()[0].is_ascii_lowercase()
         && value

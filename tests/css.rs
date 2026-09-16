@@ -10,7 +10,6 @@ use std::path::PathBuf;
 use std::process::Command;
 
 fn css_lines() -> Vec<&'static str> {
-
     DEFAULT_CSS
         .lines()
         .map(str::trim)
@@ -21,7 +20,6 @@ fn css_lines() -> Vec<&'static str> {
 #[test]
 
 fn default_css_has_exact_public_rules_and_declaration_allowlist() {
-
     let expected = [
         ".fs-bg-background, :where(.fs-page) { background-color: var(--fs-background); }",
         ".fs-bg-surface, :where(.fs-panel, .fs-card) { background-color: var(--fs-surface); }",
@@ -133,7 +131,6 @@ fn default_css_has_exact_public_rules_and_declaration_allowlist() {
     assert!(!DEFAULT_CSS.contains("!important"));
 
     for line in &expected {
-
         let declaration = line.split_once('{').unwrap().1;
 
         let property = declaration.split(':').next().unwrap().trim();
@@ -146,12 +143,10 @@ fn default_css_has_exact_public_rules_and_declaration_allowlist() {
 }
 
 fn rgba(n: u32) -> Color {
-
     Color::hex_alpha(n)
 }
 
 fn custom_theme() -> ThemeVariant {
-
     let colors = ThemeVariantColors {
         chromatic: ferriswatch::catalogue::resolve("catppuccin/mocha", None)
             .unwrap()
@@ -228,7 +223,6 @@ fn custom_theme() -> ThemeVariant {
 #[test]
 
 fn theme_css_exports_all_roles_once_and_preserves_alpha() {
-
     let theme = custom_theme();
 
     let exported = theme_css(&theme);
@@ -334,7 +328,6 @@ fn theme_css_exports_all_roles_once_and_preserves_alpha() {
     assert_eq!(declarations.len(), expected.len());
 
     for (name, color) in expected {
-
         assert_eq!(
             declarations.get(format!("--fs-{name}").as_str()),
             Some(&color.to_string().as_str())
@@ -345,12 +338,10 @@ fn theme_css_exports_all_roles_once_and_preserves_alpha() {
 }
 
 fn generator() -> Command {
-
     Command::new(env!("CARGO_BIN_EXE_ferriswatch-generate-css"))
 }
 
 fn temp_root() -> PathBuf {
-
     let root = std::env::temp_dir().join(format!(
         "ferriswatch-css-{}-{}",
         std::process::id(),
@@ -368,7 +359,6 @@ fn temp_root() -> PathBuf {
 #[test]
 
 fn generator_check_regeneration_and_determinism() {
-
     let root = temp_root();
 
     let path = root.join("src/css/default.css");
@@ -434,7 +424,6 @@ fn generator_check_regeneration_and_determinism() {
 #[test]
 
 fn generator_rejects_invalid_arguments() {
-
     let root = temp_root();
 
     let output = generator()

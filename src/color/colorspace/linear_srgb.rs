@@ -24,19 +24,15 @@ pub struct LinearSrgb {
 
 impl LinearSrgb {
     pub fn new(r: f32, g: f32, b: f32) -> ColorResult<Self> {
-
         if !r.is_finite() {
-
             return Err(ColorError::InvalidColorChannel("r", r));
         }
 
         if !g.is_finite() {
-
             return Err(ColorError::InvalidColorChannel("g", g));
         }
 
         if !b.is_finite() {
-
             return Err(ColorError::InvalidColorChannel("b", b));
         }
 
@@ -50,48 +46,40 @@ impl LinearSrgb {
     /// Borrows the r channel and its bounds.
 
     pub fn r_channel(&self) -> &Channel<f32> {
-
         &self.r
     }
 
     pub fn r(&self) -> f32 {
-
         *self.r
     }
 
     /// Borrows the g channel and its bounds.
 
     pub fn g_channel(&self) -> &Channel<f32> {
-
         &self.g
     }
 
     pub fn g(&self) -> f32 {
-
         *self.g
     }
 
     /// Borrows the b channel and its bounds.
 
     pub fn b_channel(&self) -> &Channel<f32> {
-
         &self.b
     }
 
     pub fn b(&self) -> f32 {
-
         *self.b
     }
 
     pub fn is_in_gamut(&self) -> bool {
-
         self.r.in_bounds() && self.g.in_bounds() && self.b.in_bounds()
     }
 }
 
 impl Clamp for LinearSrgb {
     fn clamp(mut self) -> Self {
-
         self.r = self.r.clamp();
 
         self.g = self.g.clamp();
@@ -104,7 +92,6 @@ impl Clamp for LinearSrgb {
 
 impl PartialEq for LinearSrgb {
     fn eq(&self, other: &Self) -> bool {
-
         floats_eq(&self.r, &other.r) && floats_eq(&self.g, &other.g) && floats_eq(&self.b, &other.b)
     }
 }
@@ -113,12 +100,10 @@ impl Eq for LinearSrgb {}
 
 impl ColorSpace for LinearSrgb {
     fn try_into_linear_srgb_raw(self) -> ColorResult<LinearSrgb> {
-
         Ok(self)
     }
 
     fn try_from_linear_srgb_raw(color: LinearSrgb) -> ColorResult<Self> {
-
         Ok(color)
     }
 }

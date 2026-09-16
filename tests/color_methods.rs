@@ -3,7 +3,6 @@ use ferriswatch::color::*;
 #[test]
 
 fn finite_linear_inputs_have_infallible_named_conversions() {
-
     // Matrix-only D50 XYZ and LMS transforms are linear. The eight extreme
     // corners bound each output coordinate. Other transforms compress the
     // magnitudes using signed powers/cube roots, or compute bounded hue ratios.
@@ -22,11 +21,8 @@ fn finite_linear_inputs_have_infallible_named_conversions() {
     ];
 
     for r in values {
-
         for g in values {
-
             for b in values {
-
                 let color = Color::new(r, g, b, 0.25).unwrap();
 
                 let srgb = color.srgb();
@@ -64,7 +60,6 @@ fn finite_linear_inputs_have_infallible_named_conversions() {
                     [*prime.l, *prime.m, *prime.s],
                     [*xyz.x, *xyz.y, *xyz.z],
                 ] {
-
                     assert!(
                         coordinates.into_iter().all(f32::is_finite),
                         "input: {r}, {g}, {b}; output: {coordinates:?}"
@@ -78,7 +73,6 @@ fn finite_linear_inputs_have_infallible_named_conversions() {
 #[test]
 
 fn fallible_named_conversions_preserve_real_failure_cases() {
-
     assert!(Color::new(2.0, 0.0, 0.0, 1.0).unwrap().rgb().is_err());
 
     assert!(Color::new(-1.0, 1.0, 0.0, 1.0).unwrap().hsl().is_err());
@@ -101,7 +95,6 @@ fn fallible_named_conversions_preserve_real_failure_cases() {
 #[test]
 
 fn clamped_conversion_handles_bytes_and_target_bounds() {
-
     let color = Color::new(2.0, -0.5, 0.0, 0.25).unwrap();
 
     assert!(color.to_colorspace::<Rgb>().is_err());
@@ -134,7 +127,6 @@ fn clamped_conversion_handles_bytes_and_target_bounds() {
 #[test]
 
 fn try_from_colorspace_preserves_extended_values_and_reports_errors() {
-
     let color = Color::try_from(Hsl::new(120.0, 0.5, 0.25)).unwrap();
 
     assert_eq!(color.to_clamped::<Rgb>().unwrap(), Rgb::new(32, 96, 32));
@@ -166,7 +158,6 @@ fn try_from_colorspace_preserves_extended_values_and_reports_errors() {
 #[test]
 
 fn clamped_from_color_matches_trait_paths_and_rejects_invalid_input() {
-
     let source = DisplayP3::new(1.0, 0.0, 0.0);
 
     let color = Color::clamped_from(source).unwrap();
@@ -197,7 +188,6 @@ fn clamped_from_color_matches_trait_paths_and_rejects_invalid_input() {
 #[test]
 
 fn wide_gamut_intermediates_are_not_clamped_to_srgb() {
-
     let source = DisplayP3::new(1.0, 0.0, 0.0);
 
     let stored = Color::try_from(source).unwrap();
@@ -213,7 +203,6 @@ fn wide_gamut_intermediates_are_not_clamped_to_srgb() {
     let via_linear = DisplayP3::try_from_linear_srgb_clamped(stored.linear_srgb()).unwrap();
 
     for restored in [via_into, via_from, via_stored, via_linear] {
-
         assert!((*restored.r - 1.0).abs() < 0.000001);
 
         assert!(restored.g.abs() < 0.000001);
@@ -244,7 +233,6 @@ fn wide_gamut_intermediates_are_not_clamped_to_srgb() {
 #[test]
 
 fn clamped_from_does_not_clamp_source_channels() {
-
     let source = Hsl::new(20.0, 2.0, 0.5);
 
     assert!(!source.s.in_bounds());

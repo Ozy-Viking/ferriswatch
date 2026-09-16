@@ -10,7 +10,6 @@ use rstest::rstest;
 #[case("#ffffff", 0xffffff)]
 
 fn parses_hex(#[case] input: &str, #[case] packed: u32) {
-
     let expected = Rgb::from_hex(packed);
 
     assert_eq!(Rgb::from_hex_str(input).unwrap(), expected);
@@ -32,7 +31,6 @@ fn parses_hex(#[case] input: &str, #[case] packed: u32) {
 #[case("ééé", ColorError::InvalidHex)]
 
 fn rejects_invalid_hex(#[case] input: &str, #[case] error: ColorError) {
-
     assert_eq!(Rgb::from_hex_str(input), Err(error));
 }
 
@@ -40,14 +38,12 @@ fn rejects_invalid_hex(#[case] input: &str, #[case] error: ColorError) {
 #[should_panic(expected = "RGB hex value must fit in 24 bits")]
 
 fn rejects_alpha_in_packed_rgb() {
-
     Rgb::from_hex(0xff112233);
 }
 
 #[test]
 
 fn const_hex_and_colorspace_conversion() {
-
     const COLOR: Rgb = Rgb::from_hex(0x804020);
 
     let linear = COLOR.try_into_linear_srgb_raw().unwrap();
@@ -79,7 +75,6 @@ fn const_hex_and_colorspace_conversion() {
 #[case("#ffffffff", 0xffffffff)]
 
 fn parses_rgba_hex(#[case] input: &str, #[case] packed: u32) {
-
     use ferriswatch::color::Rgba;
 
     let expected = Rgba::from_hex(packed);
@@ -103,14 +98,12 @@ fn parses_rgba_hex(#[case] input: &str, #[case] packed: u32) {
 #[case("éé", ColorError::InvalidHex)]
 
 fn rejects_invalid_rgba_hex(#[case] input: &str, #[case] error: ColorError) {
-
     assert_eq!(ferriswatch::color::Rgba::from_hex_str(input), Err(error));
 }
 
 #[test]
 
 fn rgba_const_constructor_preserves_every_alpha_byte() {
-
     use ferriswatch::color::Rgba;
 
     const COLOR: Rgba = Rgba::from_hex(0x12345680);
@@ -120,7 +113,6 @@ fn rgba_const_constructor_preserves_every_alpha_byte() {
     assert_eq!(COLOR.alpha_u8(), 128);
 
     for alpha in 0..=255_u32 {
-
         let color = Rgba::from_hex(0x12345600 | alpha);
 
         assert_eq!(color.alpha_u8(), alpha as u8);
@@ -138,7 +130,6 @@ fn rgba_const_constructor_preserves_every_alpha_byte() {
 #[case("#00000000", 0, 0)]
 
 fn color_parses_rgb_and_rgba(#[case] input: &str, #[case] rgb: u32, #[case] alpha: u8) {
-
     use ferriswatch::color::{Color, Rgba};
 
     let expected = Color::from(Rgba::from_hex((rgb << 8) | u32::from(alpha)));
@@ -157,7 +148,6 @@ fn color_parses_rgb_and_rgba(#[case] input: &str, #[case] rgb: u32, #[case] alph
 #[test]
 
 fn packed_color_hex_dispatches_by_value() {
-
     use ferriswatch::color::Color;
 
     for (packed, text) in [
@@ -167,7 +157,6 @@ fn packed_color_hex_dispatches_by_value() {
         (0x01000000, "#01000000"),
         (0, "#000000"),
     ] {
-
         assert_eq!(
             Color::from_hex(packed).unwrap(),
             Color::from_hex_str(text).unwrap()
@@ -186,14 +175,12 @@ fn packed_color_hex_dispatches_by_value() {
 #[case("#gggg", ColorError::InvalidHex)]
 
 fn color_hex_propagates_parse_errors(#[case] input: &str, #[case] error: ColorError) {
-
     assert_eq!(ferriswatch::color::Color::from_hex_str(input), Err(error));
 }
 
 #[test]
 
 fn const_color_construction_matches_runtime_decoding() {
-
     use ferriswatch::color::{Color, Rgba};
 
     const ROSEWATER: Color = Color::hex(0xf5e0dc);
@@ -211,7 +198,6 @@ fn const_color_construction_matches_runtime_decoding() {
     assert_eq!(BLACK.r(), 0.0);
 
     for byte in 0..=255_u8 {
-
         let color = Color::from_rgba8(byte, 255 - byte, byte / 2, byte);
 
         let expected = LinearSrgb::from(Rgb::new(byte, 255 - byte, byte / 2));
@@ -222,7 +208,6 @@ fn const_color_construction_matches_runtime_decoding() {
             (color.g(), expected.g()),
             (color.b(), expected.b()),
         ] {
-
             assert!((actual - expected).abs() <= f32::EPSILON);
         }
 
@@ -236,14 +221,12 @@ fn const_color_construction_matches_runtime_decoding() {
 #[should_panic(expected = "RGB hex value must fit in 24 bits")]
 
 fn color_hex_rejects_more_than_24_bits() {
-
     ferriswatch::color::Color::hex(0x01000000);
 }
 
 #[test]
 
 fn color_hex_bounds_are_opaque() {
-
     use ferriswatch::color::Color;
 
     const BLACK: Color = Color::hex(0x000000);
@@ -263,7 +246,6 @@ fn color_hex_bounds_are_opaque() {
 #[case(0xffffffff)]
 
 fn color_hex_alpha_decodes_rgba(#[case] packed: u32) {
-
     use ferriswatch::color::{Color, Rgba};
 
     assert_eq!(Color::hex_alpha(packed), Color::from(Rgba::hex(packed)));

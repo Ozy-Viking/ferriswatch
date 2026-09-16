@@ -24,7 +24,6 @@ impl Hwb {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(h: f32, w: f32, b: f32) -> Self {
-
         Self {
             h: Channel::color_channel("h", h, 0.0..360.0)
                 .with_wrapping()
@@ -53,11 +52,9 @@ crate::color::conversions::impl_colorspace!(
 
 impl Hwb {
     fn normalize(&mut self) {
-
         let sum = *self.w + *self.b;
 
         if sum > 1.0 {
-
             *self.w /= sum;
 
             *self.b /= sum;

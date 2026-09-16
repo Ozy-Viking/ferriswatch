@@ -2,7 +2,6 @@ use ferriswatch::color::*;
 use rstest::rstest;
 
 fn close(actual: f32, expected: f32, tolerance: f32) {
-
     assert!(
         (actual - expected).abs() <= tolerance,
         "{actual} != {expected} (tolerance {tolerance})"
@@ -14,7 +13,6 @@ where
     C: ColorSpace,
     LinearSrgb: TryFrom<C>,
 {
-
     let linear = LinearSrgb::new(input[0], input[1], input[2]).unwrap();
 
     let space = C::try_from_linear_srgb_raw(linear).unwrap();
@@ -25,7 +23,6 @@ where
         .into_iter()
         .zip(input)
     {
-
         close(actual, expected, tolerance);
     }
 }
@@ -40,7 +37,6 @@ where
 #[case([0.003, 0.001, 0.0001])]
 
 fn every_space_round_trips_srgb(#[case] rgb: [f32; 3]) {
-
     round_trip::<LinearSrgb>(rgb, 0.00001);
 
     round_trip::<Srgb>(rgb, 0.00001);
@@ -85,7 +81,6 @@ fn every_space_round_trips_srgb(#[case] rgb: [f32; 3]) {
 #[case([2.0, 3.0, 4.0])]
 
 fn raw_float_conversions_preserve_extended_colors(#[case] rgb: [f32; 3]) {
-
     round_trip::<A98Rgb>(rgb, 0.00002);
 
     round_trip::<DisplayP3>(rgb, 0.00002);
@@ -120,14 +115,10 @@ fn raw_float_conversions_preserve_extended_colors(#[case] rgb: [f32; 3]) {
 #[test]
 
 fn invalid_public_channels_are_rejected() {
-
     macro_rules! check {
         ($ty:ident, $a:ident, $b:ident, $c:ident) => {
-
             for invalid in [f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
-
                 for index in 0..3 {
-
                     let mut values = [0.5; 3];
 
                     values[index] = invalid;
@@ -138,7 +129,6 @@ fn invalid_public_channels_are_rejected() {
 
                     match error {
                         ColorError::InvalidColorChannel(name, _) => {
-
                             assert_eq!(
                                 name,
                                 [stringify!($a), stringify!($b), stringify!($c)][index]
@@ -189,7 +179,6 @@ fn invalid_public_channels_are_rejected() {
 #[test]
 
 fn overflowing_conversion_is_an_error() {
-
     assert!(
         Lab::new(f32::MAX, 0.0, 0.0)
             .try_into_linear_srgb_raw()
@@ -216,7 +205,6 @@ fn overflowing_conversion_is_an_error() {
 #[test]
 
 fn clamp_respects_each_spaces_bounds() {
-
     assert_eq!(
         DisplayP3::new(-1.0, 0.5, 2.0).clamp(),
         DisplayP3::new(0.0, 0.5, 1.0)
@@ -249,7 +237,6 @@ fn clamp_respects_each_spaces_bounds() {
 #[test]
 
 fn normalized_hwb_and_wrapped_hue() {
-
     let gray = Hwb::new(123.0, 0.75, 0.75)
         .try_into_linear_srgb_raw()
         .unwrap();
@@ -279,7 +266,6 @@ fn normalized_hwb_and_wrapped_hue() {
 #[test]
 
 fn generic_color_and_clamped_conversion_paths() {
-
     let input = DisplayP3::new(1.0, 0.0, 0.0);
 
     let color = input.try_into_color().unwrap();
@@ -306,7 +292,6 @@ fn generic_color_and_clamped_conversion_paths() {
 #[test]
 
 fn d50_and_d65_white_points_are_adapted() {
-
     let white = LinearSrgb::new(1.0, 1.0, 1.0).unwrap();
 
     let d50 = XyzD50::from(white);
@@ -336,7 +321,6 @@ fn d50_and_d65_white_points_are_adapted() {
 #[test]
 
 fn matches_css_reference_values() {
-
     let linear = LinearSrgb::new(0.25, 0.5, 0.75).unwrap();
 
     let value = Xyz::try_from(linear).unwrap();
@@ -429,7 +413,6 @@ fn matches_css_reference_values() {
 }
 
 fn reference_close(actual: f32, expected: f64, tolerance: f64) {
-
     assert!(
         (f64::from(actual) - expected).abs() <= tolerance,
         "{actual} != {expected}"
@@ -439,7 +422,6 @@ fn reference_close(actual: f32, expected: f64, tolerance: f64) {
 #[test]
 
 fn lms_is_the_oklab_intermediate() {
-
     let red = LinearSrgb::new(1.0, 0.0, 0.0).unwrap();
 
     let lms = Lms::from(red);
@@ -470,15 +452,12 @@ fn lms_is_the_oklab_intermediate() {
 #[case(300.0, [1.0, 0.0, 1.0])]
 
 fn hue_sectors_match_rgb_primaries(#[case] h: f32, #[case] expected: [f32; 3]) {
-
     for color in [
         Hsl::new(h, 1.0, 0.5).try_into_linear_srgb_raw().unwrap(),
         Hsv::new(h, 1.0, 1.0).try_into_linear_srgb_raw().unwrap(),
         Hwb::new(h, 0.0, 0.0).try_into_linear_srgb_raw().unwrap(),
     ] {
-
         for (actual, expected) in [color.r(), color.g(), color.b()].into_iter().zip(expected) {
-
             close(actual, expected, 0.000001);
         }
     }
@@ -495,7 +474,6 @@ fn hue_sectors_match_rgb_primaries(#[case] h: f32, #[case] expected: [f32; 3]) {
 #[case(-f32::EPSILON, 0.0)]
 
 fn clamp_wraps_every_hue_channel(#[case] hue: f32, #[case] expected: f32) {
-
     let hues = [
         Hsl::new(hue, 0.5, 0.5).clamp().h,
         Hsv::new(hue, 0.5, 0.5).clamp().h,
@@ -505,7 +483,6 @@ fn clamp_wraps_every_hue_channel(#[case] hue: f32, #[case] expected: f32) {
     ];
 
     for actual in hues {
-
         assert_eq!(*actual, expected);
 
         assert!((0.0..360.0).contains(&*actual));
@@ -515,10 +492,8 @@ fn clamp_wraps_every_hue_channel(#[case] hue: f32, #[case] expected: f32) {
 #[test]
 
 fn clamp_leaves_unbounded_channels_unchanged() {
-
     // Include signed zero and a NaN payload to catch unnecessary conversions.
     for value in [-f32::MAX, f32::MAX, -0.0, f32::from_bits(0x7fc01234)] {
-
         let lms = Lms::new(value, value, value).clamp();
 
         let prime = LmsPrime::new(value, value, value).clamp();
@@ -530,7 +505,6 @@ fn clamp_leaves_unbounded_channels_unchanged() {
         for actual in [
             lms.l, lms.m, lms.s, prime.l, prime.m, prime.s, lab.a, lab.b, oklab.a, oklab.b,
         ] {
-
             assert_eq!(actual.to_bits(), value.to_bits());
         }
     }

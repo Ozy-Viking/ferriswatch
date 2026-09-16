@@ -42,7 +42,6 @@ pub mod vscode;
 /// Darkens linear RGB by 15% while retaining the accent's alpha.
 
 fn primary_hover(accent: Color) -> Color {
-
     Color::new(
         accent.r() * 0.85,
         accent.g() * 0.85,
@@ -75,12 +74,9 @@ pub(crate) fn parse_accent_id<A: Default>(
     value: &str,
     expected: &'static str,
 ) -> Result<A, ParseAccentError> {
-
     if value == expected {
-
         Ok(A::default())
     } else {
-
         Err(ParseAccentError {
             expected,
             found: value.to_owned(),
@@ -110,7 +106,6 @@ pub trait Accent<P: Palette> {
     const NAME: &'static str;
 
     fn accent(&self) -> Option<Color> {
-
         Self::ACCENT
     }
 }
@@ -140,7 +135,6 @@ impl<P: Palette> Accent<P> for NoAccent {
 
 impl std::fmt::Display for NoAccent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-
         f.write_str(Self::ID)
     }
 }
@@ -149,39 +143,52 @@ impl std::str::FromStr for NoAccent {
     type Err = ParseAccentError;
 
     fn from_str(value: &str) -> Result<Self, Self::Err> {
-
         parse_accent_id(value, Self::ID)
     }
 }
 
-// Choose the black/white foreground with the best worst-state contrast.
-// Color channels are already linear sRGB, including values made by Color::hex.
-// Decoding them as sRGB again would calculate the wrong luminance.
-// Derived states darken RGB, so normal and pressed bound the luminance range.
-// Alpha is retained; applications must also check compositing over their own canvas.
-fn action_text(color: Color) -> Color {
+/// Chooses between two palette-native foreground colours for a filled action.
+///
+/// `dark` and `light` should come from the palette itself. This deliberately
+/// avoids introducing absolute black or white unless the upstream palette
+/// actually defines those colours for the role.
+///
+/// The same foreground is retained across normal, hover and pressed states, so
+/// selection is based on the worst contrast across the derived state range.
+fn action_text(color: Color, dark: Color, light: Color) -> Color {
+    fn luminance(color: Color) -> f32 {
+        0.2126 * color.r().clamp(0.0, 1.0)
+            + 0.7152 * color.g().clamp(0.0, 1.0)
+            + 0.0722 * color.b().clamp(0.0, 1.0)
+    }
 
-    let luminance = 0.2126 * color.r().clamp(0.0, 1.0)
-        + 0.7152 * color.g().clamp(0.0, 1.0)
-        + 0.0722 * color.b().clamp(0.0, 1.0);
+    fn contrast(a: f32, b: f32) -> f32 {
+        let lighter = a.max(b);
+        let darker = a.min(b);
+        (lighter + 0.05) / (darker + 0.05)
+    }
 
-    let black_worst = (luminance * 0.70 + 0.05) / 0.05;
+    let normal = luminance(color);
 
-    let white_worst = 1.05 / (luminance + 0.05);
+    // action_pressed() is the darkest generated state and therefore bounds the
+    // generated normal/hover/pressed luminance range.
+    let pressed = normal * 0.70;
 
-    if black_worst >= white_worst {
+    let dark_luminance = luminance(dark);
+    let light_luminance = luminance(light);
 
-        Color::hex(0x000000)
+    let dark_worst = contrast(dark_luminance, normal).min(contrast(dark_luminance, pressed));
+
+    let light_worst = contrast(light_luminance, normal).min(contrast(light_luminance, pressed));
+
+    if dark_worst >= light_worst {
+        dark
     } else {
-
-        Color::hex(0xffffff)
+        light
     }
 }
-
 fn selected_accent<P: Palette, A: Accent<P>>() -> Option<crate::theme_variant::ResolvedAccent> {
-
     A::ACCENT.map(|color| {
-
         crate::theme_variant::ResolvedAccent::new(A::ID, A::NAME, color)
             .expect("Accent IDs must be snake_case and names nonempty")
     })
@@ -190,7 +197,6 @@ fn selected_accent<P: Palette, A: Accent<P>>() -> Option<crate::theme_variant::R
 /// Pressed actions retain their hue and alpha, with a stronger darkening than hover.
 
 fn action_pressed(color: Color) -> Color {
-
     Color::new(
         color.r() * 0.70,
         color.g() * 0.70,

@@ -2,7 +2,6 @@
 mod definitions;
 
 fn main() {
-
     println!("cargo:rerun-if-changed=src/css/definitions.rs");
 
     let output = std::path::PathBuf::from(std::env::var_os("OUT_DIR").unwrap());

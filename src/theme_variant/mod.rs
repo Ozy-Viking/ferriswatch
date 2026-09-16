@@ -21,7 +21,6 @@ pub struct ColorPair {
 
 impl ColorPair {
     pub const fn new(foreground: Color, background: Color) -> Self {
-
         Self {
             foreground,
             background,
@@ -54,12 +53,9 @@ impl ThemeVariantColors {
     /// Falls back to [`Self::text`] when [`Self::text_alt`] is not set.
 
     pub const fn resolved_text_alt(&self) -> &TextColors {
-
         if let Some(text_alt) = self.text_alt.as_ref() {
-
             text_alt
         } else {
-
             &self.text
         }
     }
@@ -198,7 +194,6 @@ pub struct ChromaticColors {
 
 impl ChromaticColors {
     pub const fn get(&self, hue: ChromaticHue) -> Color {
-
         match hue {
             ChromaticHue::Red => self.red,
             ChromaticHue::Orange => self.orange,
@@ -234,7 +229,6 @@ impl ThemeVariant {
         colors: ThemeVariantColors,
         accent: Option<ResolvedAccent>,
     ) -> Result<Self, IdentityError> {
-
         let id = id.into();
 
         let variant = id
@@ -246,7 +240,6 @@ impl ThemeVariant {
         let name = name.into();
 
         if name.trim().is_empty() {
-
             return Err(IdentityError::EmptyName);
         }
 
@@ -272,7 +265,6 @@ impl ThemeVariant {
         colors: ThemeVariantColors,
         accent: Option<ResolvedAccent>,
     ) -> Self {
-
         Self {
             metadata: metadata.clone(),
             colors,
@@ -283,7 +275,6 @@ impl ThemeVariant {
     /// Declares which mode lists should include this variant. This is advisory.
 
     pub fn with_support(mut self, support: ThemeSupport) -> Self {
-
         self.metadata.support = support;
 
         self
@@ -292,130 +283,108 @@ impl ThemeVariant {
     /// Mode eligibility declared by the palette, independent of its appearance.
 
     pub const fn support(&self) -> ThemeSupport {
-
         self.metadata.support
     }
 
     /// Whether this variant belongs in the requested mode's filtered list.
 
     pub const fn supports(&self, mode: Appearance) -> bool {
-
         self.support().supports(mode)
     }
 
     /// Stable theme identity and display metadata.
 
     pub const fn metadata(&self) -> &ThemeMetadata {
-
         &self.metadata
     }
 
     /// Canonical ID for persistence.
 
     pub fn id(&self) -> &str {
-
         &self.metadata.id
     }
 
     /// Complete display label supplied by the palette or application.
 
     pub fn name(&self) -> &str {
-
         &self.metadata.name
     }
 
     /// Explicit accent metadata, absent for `NoAccent`.
 
     pub const fn selected_accent(&self) -> Option<&ResolvedAccent> {
-
         self.accent.as_ref()
     }
 
     /// Explicit accent colour, including transparency.
 
     pub fn accent(&self) -> Option<Color> {
-
         self.accent.as_ref().map(ResolvedAccent::color)
     }
 
     /// Explicit accent's display label.
 
     pub fn accent_name(&self) -> Option<&str> {
-
         self.accent.as_ref().map(ResolvedAccent::name)
     }
 
     /// Explicit accent's persisted ID.
 
     pub fn accent_id(&self) -> Option<&str> {
-
         self.accent.as_ref().map(ResolvedAccent::id)
     }
 
     /// All resolved colour groups, including the alternate surfaces.
 
     pub const fn colors(&self) -> &ThemeVariantColors {
-
         &self.colors
     }
 
     pub const fn primary(&self) -> &ActionColors {
-
         &self.colors.primary
     }
 
     pub const fn secondary(&self) -> &ActionColors {
-
         &self.colors.secondary
     }
 
     pub const fn status(&self) -> &StatusColors {
-
         &self.colors.status
     }
 
     pub const fn surfaces(&self) -> &SurfaceColors {
-
         &self.colors.surfaces
     }
 
     pub const fn surfaces_alt(&self) -> &SurfaceColors {
-
         &self.colors.surfaces_alt
     }
 
     pub const fn text(&self) -> &TextColors {
-
         &self.colors.text
     }
 
     pub const fn text_alt(&self) -> &TextColors {
-
         self.colors.resolved_text_alt()
     }
 
     pub const fn border(&self) -> Color {
-
         self.colors.border
     }
 
     pub const fn border_muted(&self) -> Color {
-
         self.colors.border_muted
     }
 
     pub const fn focus(&self) -> Color {
-
         self.colors.focus
     }
 
     pub const fn syntax(&self) -> &SyntaxColors {
-
         &self.colors.syntax
     }
 
     pub const fn chromatic(&self) -> &ChromaticColors {
-
         &self.colors.chromatic
     }
 }

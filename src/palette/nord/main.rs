@@ -1,6 +1,7 @@
 //! Nord. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Polar Night supplies surfaces. Frost supplies actions and trace; critical repeats the single Aurora error red.
+//! Polar Night supplies surfaces and secondary controls. Frost supplies the
+//! primary action and informational accents; Aurora supplies semantic states.
 
 define_palette! {
     Main, "Nord",
@@ -59,18 +60,48 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::NORD_4, Self::NORD_1),
-            disabled: crate::theme_variant::ColorPair::new(Self::NORD_3, Self::NORD_1),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::NORD_0,
+                Self::NORD_8,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::NORD_0,
+                Self::NORD_8,
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::NORD_0,
+                Self::NORD_8,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_1,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_3,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), Self::NORD_9),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), crate::palette::primary_hover(Self::NORD_9)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::NORD_9), crate::palette::action_pressed(Self::NORD_9)),
-            muted: crate::theme_variant::ColorPair::new(Self::NORD_4, Self::NORD_1),
-            disabled: crate::theme_variant::ColorPair::new(Self::NORD_3, Self::NORD_1),
+            normal: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_2,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_3,
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_2,
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_1,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::NORD_4,
+                Self::NORD_3,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::NORD_14,
@@ -96,22 +127,22 @@ define_palette! {
         },
         syntax: crate::theme_variant::SyntaxColors {
             attribute: Self::NORD_7,
-            boolean: Self::NORD_15,
+            boolean: Self::NORD_9,
             builtin: Self::NORD_7,
             builtin_function: Self::NORD_8,
             builtin_type: Self::NORD_7,
-            comment: Self::NORD_5,
-            constant: Self::NORD_15,
+            comment: Self::NORD_3,
+            constant: Self::NORD_4,
             control_keyword: Self::NORD_9,
             deleted: Self::NORD_11,
-            deprecated: Self::NORD_11,
-            documentation: Self::NORD_5,
-            escape: Self::NORD_9,
+            deprecated: Self::NORD_4,
+            documentation: Self::NORD_3,
+            escape: Self::NORD_13,
             foreground: Self::NORD_4,
             function: Self::NORD_8,
             heading: Self::NORD_8,
             inserted: Self::NORD_14,
-            invalid: Self::NORD_11,
+            invalid: Self::NORD_4,
             keyword: Self::NORD_9,
             link: Self::NORD_8,
             macro_name: Self::NORD_8,
@@ -123,7 +154,7 @@ define_palette! {
             operator: Self::NORD_9,
             parameter: Self::NORD_4,
             property: Self::NORD_4,
-            punctuation: Self::NORD_4,
+            punctuation: Self::NORD_6,
             string: Self::NORD_14,
             tag: Self::NORD_9,
             type_keyword: Self::NORD_9,

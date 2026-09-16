@@ -1,6 +1,6 @@
-//! Darcula. See `REGISTRATION` for pinned upstream sources.
-//!
-//! Editor scheme inherits Default → Darcula → Dark as applicable. UI surfaces use each theme’s declared palette. Translucent Dark action hover is retained; Darcula has its own editor background and console colours.
+//! Editor scheme inherits Default → Darcula → Dark as applicable. UI surfaces
+//! use each theme's declared palette. Primary and secondary actions map to
+//! JetBrains default and regular Button tokens respectively.
 
 define_palette! {
     Darcula, "Darcula",
@@ -941,20 +941,50 @@ define_palette! {
             subtle: Self::UI_COMPONENT_INFO_FOREGROUND,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::UI_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::UI_COMPONENT_INFO_FOREGROUND, Self::UI_BACKGROUND),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_BUTTON_START_BACKGROUND),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_ACTION_BUTTON_HOVER_BACKGROUND),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::UI_BUTTON_START_BACKGROUND), Self::UI_ACTION_BUTTON_PRESSED_BACKGROUND),
-            muted: crate::theme_variant::ColorPair::new(Self::EDITOR_TEXT_FOREGROUND, Self::UI_BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::UI_COMPONENT_INFO_FOREGROUND, Self::UI_BACKGROUND),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DEFAULT_FOREGROUND,
+        Self::UI_BUTTON_DEFAULT_START_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DISABLED_TEXT,
+        Self::UI_BACKGROUND,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BUTTON_START_BACKGROUND,
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::UI_FOREGROUND,
+        Self::UI_BACKGROUND,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::UI_BUTTON_DISABLED_TEXT,
+        Self::UI_BACKGROUND,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::EDITOR_CONSOLE_GREEN_OUTPUT_FOREGROUND,
             warning: Self::EDITOR_CONSOLE_YELLOW_OUTPUT_FOREGROUND,
@@ -978,25 +1008,25 @@ define_palette! {
             pink: Self::EDITOR_RAINBOW_COLOR_4_FOREGROUND,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::EDITOR_DEFAULT_METADATA_FOREGROUND,
-            boolean: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            builtin: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
-            builtin_function: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            builtin_type: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
+            attribute: Self::EDITOR_XML_ATTRIBUTE_NAME_FOREGROUND,
+            boolean: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
+            builtin: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
+            builtin_function: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
+            builtin_type: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             comment: Self::EDITOR_DEFAULT_LINE_COMMENT_FOREGROUND,
             constant: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
             control_keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            deleted: Self::EDITOR_CONSOLE_RED_OUTPUT_FOREGROUND,
-            deprecated: Self::EDITOR_CONSOLE_RED_OUTPUT_FOREGROUND,
+            deleted: Self::EDITOR_TEXT_FOREGROUND,
+            deprecated: Self::EDITOR_TEXT_FOREGROUND,
             documentation: Self::EDITOR_DEFAULT_DOC_COMMENT_FOREGROUND,
             escape: Self::EDITOR_DEFAULT_VALID_STRING_ESCAPE_FOREGROUND,
             foreground: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             function: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            heading: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
-            inserted: Self::EDITOR_CONSOLE_GREEN_OUTPUT_FOREGROUND,
-            invalid: Self::EDITOR_CONSOLE_RED_OUTPUT_FOREGROUND,
+            heading: Self::EDITOR_DEFAULT_CONSTANT_FOREGROUND,
+            inserted: Self::EDITOR_TEXT_FOREGROUND,
+            invalid: Self::EDITOR_TEXT_FOREGROUND,
             keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
-            link: Self::UI_BUTTON_START_BACKGROUND,
+            link: Self::EDITOR_HYPERLINK_ATTRIBUTES_FOREGROUND,
             macro_name: Self::EDITOR_DEFAULT_FUNCTION_DECLARATION_FOREGROUND,
             markup_bold: Self::EDITOR_TEXT_FOREGROUND,
             markup_italic: Self::EDITOR_TEXT_FOREGROUND,
@@ -1006,9 +1036,9 @@ define_palette! {
             operator: Self::EDITOR_TEXT_FOREGROUND,
             parameter: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,
             property: Self::EDITOR_DEFAULT_INSTANCE_FIELD_FOREGROUND,
-            punctuation: Self::EDITOR_DEFAULT_COMMA_FOREGROUND,
+            punctuation: Self::EDITOR_TEXT_FOREGROUND,
             string: Self::EDITOR_DEFAULT_STRING_FOREGROUND,
-            tag: Self::UI_BUTTON_START_BACKGROUND,
+            tag: Self::EDITOR_XML_TAG_NAME_FOREGROUND,
             type_keyword: Self::EDITOR_DEFAULT_KEYWORD_FOREGROUND,
             type_name: Self::EDITOR_DEFAULT_CLASS_REFERENCE_FOREGROUND,
             variable: Self::EDITOR_DEFAULT_IDENTIFIER_FOREGROUND,

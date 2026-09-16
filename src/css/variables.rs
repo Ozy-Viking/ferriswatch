@@ -42,19 +42,15 @@ const SYNTAX: &[(
 ];
 
 fn write_var(out: &mut String, name: &str, value: crate::color::Color) {
-
     write!(out, "--fs-{name}:{value};").unwrap();
 }
 
 fn write_pair(out: &mut String, role: &str, state: &str, pair: ColorPair) {
-
     if state.is_empty() {
-
         write_var(out, &format!("on-{role}"), pair.foreground);
 
         write_var(out, role, pair.background);
     } else {
-
         write_var(out, &format!("on-{role}-{state}"), pair.foreground);
 
         write_var(out, &format!("{role}-{state}"), pair.background);
@@ -62,7 +58,6 @@ fn write_pair(out: &mut String, role: &str, state: &str, pair: ColorPair) {
 }
 
 fn write_action(out: &mut String, role: &str, action: ActionColors) {
-
     write_pair(out, role, "", action.normal);
 
     write_pair(out, role, "hover", action.hover);
@@ -77,13 +72,11 @@ fn write_action(out: &mut String, role: &str, action: ActionColors) {
 /// Exports every colour on [`ThemeVariant`] as a prefixed CSS variable, preserving alpha.
 
 pub fn theme_css(theme: &ThemeVariant) -> String {
-
     let c = theme.colors();
 
     let mut out = String::new();
 
     for (prefix, group) in [("", c.surfaces), ("alt-", c.surfaces_alt)] {
-
         write_var(&mut out, &format!("{prefix}background"), group.background);
 
         write_var(&mut out, &format!("{prefix}surface"), group.base);
@@ -143,12 +136,10 @@ pub fn theme_css(theme: &ThemeVariant) -> String {
         ("purple", c.chromatic.purple),
         ("pink", c.chromatic.pink),
     ] {
-
         write_var(&mut out, &format!("chromatic-{name}"), value);
     }
 
     for (name, getter) in SYNTAX {
-
         write_var(&mut out, &format!("syntax-{name}"), getter(&c.syntax));
     }
 

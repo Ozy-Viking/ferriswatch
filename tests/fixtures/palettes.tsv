@@ -6101,6 +6101,7 @@ rose_pine/moon	HIGHLIGHT_HIGH	56526eff
 tokyo_night/day	BG	e1e2e7ff
 tokyo_night/day	BG_DARK	d0d5e3ff
 tokyo_night/day	BG_DARK_1	c1c9dfff
+tokyo_night/day	BLACK	b4b5b9ff
 tokyo_night/day	BG_HIGHLIGHT	c4c8daff
 tokyo_night/day	BLUE	2e7de9ff
 tokyo_night/day	BLUE_0	7890ddff
@@ -6116,6 +6117,9 @@ tokyo_night/day	DARK_5	68709aff
 tokyo_night/day	FG	3760bfff
 tokyo_night/day	FG_DARK	6172b0ff
 tokyo_night/day	FG_GUTTER	a8aecbff
+tokyo_night/day	GIT_ADD	4197a4ff
+tokyo_night/day	GIT_CHANGE	506d9cff
+tokyo_night/day	GIT_DELETE	c47981ff
 tokyo_night/day	GREEN	587539ff
 tokyo_night/day	GREEN_1	387068ff
 tokyo_night/day	GREEN_2	38919fff
@@ -6131,6 +6135,7 @@ tokyo_night/day	YELLOW	8c6c3eff
 tokyo_night/moon	BG	222436ff
 tokyo_night/moon	BG_DARK	1e2030ff
 tokyo_night/moon	BG_DARK_1	191b29ff
+tokyo_night/moon	BLACK	1b1d2bff
 tokyo_night/moon	BG_HIGHLIGHT	2f334dff
 tokyo_night/moon	BLUE	82aaffff
 tokyo_night/moon	BLUE_0	3e68d7ff
@@ -6146,6 +6151,9 @@ tokyo_night/moon	DARK_5	737aa2ff
 tokyo_night/moon	FG	c8d3f5ff
 tokyo_night/moon	FG_DARK	828bb8ff
 tokyo_night/moon	FG_GUTTER	3b4261ff
+tokyo_night/moon	GIT_ADD	b8db87ff
+tokyo_night/moon	GIT_CHANGE	7ca1f2ff
+tokyo_night/moon	GIT_DELETE	e26a75ff
 tokyo_night/moon	GREEN	c3e88dff
 tokyo_night/moon	GREEN_1	4fd6beff
 tokyo_night/moon	GREEN_2	41a6b5ff
@@ -6161,6 +6169,7 @@ tokyo_night/moon	YELLOW	ffc777ff
 tokyo_night/night	BG	1a1b26ff
 tokyo_night/night	BG_DARK	16161eff
 tokyo_night/night	BG_DARK_1	0c0e14ff
+tokyo_night/night	BLACK	15161eff
 tokyo_night/night	BG_HIGHLIGHT	292e42ff
 tokyo_night/night	BLUE	7aa2f7ff
 tokyo_night/night	BLUE_0	3d59a1ff
@@ -6176,6 +6185,9 @@ tokyo_night/night	DARK_5	737aa2ff
 tokyo_night/night	FG	c0caf5ff
 tokyo_night/night	FG_DARK	a9b1d6ff
 tokyo_night/night	FG_GUTTER	3b4261ff
+tokyo_night/night	GIT_ADD	449dabff
+tokyo_night/night	GIT_CHANGE	6183bbff
+tokyo_night/night	GIT_DELETE	914c54ff
 tokyo_night/night	GREEN	9ece6aff
 tokyo_night/night	GREEN_1	73dacaff
 tokyo_night/night	GREEN_2	41a6b5ff
@@ -6191,6 +6203,7 @@ tokyo_night/night	YELLOW	e0af68ff
 tokyo_night/storm	BG	24283bff
 tokyo_night/storm	BG_DARK	1f2335ff
 tokyo_night/storm	BG_DARK_1	1b1e2dff
+tokyo_night/storm	BLACK	1d202fff
 tokyo_night/storm	BG_HIGHLIGHT	292e42ff
 tokyo_night/storm	BLUE	7aa2f7ff
 tokyo_night/storm	BLUE_0	3d59a1ff
@@ -6206,6 +6219,9 @@ tokyo_night/storm	DARK_5	737aa2ff
 tokyo_night/storm	FG	c0caf5ff
 tokyo_night/storm	FG_DARK	a9b1d6ff
 tokyo_night/storm	FG_GUTTER	3b4261ff
+tokyo_night/storm	GIT_ADD	449dabff
+tokyo_night/storm	GIT_CHANGE	6183bbff
+tokyo_night/storm	GIT_DELETE	914c54ff
 tokyo_night/storm	GREEN	9ece6aff
 tokyo_night/storm	GREEN_1	73dacaff
 tokyo_night/storm	GREEN_2	41a6b5ff

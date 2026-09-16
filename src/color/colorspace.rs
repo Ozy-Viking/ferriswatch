@@ -177,7 +177,6 @@ where
     /// Converts to an opaque linear-sRGB color without clamping.
 
     fn try_into_color(self) -> ColorResult<Color> {
-
         let color = self.try_into_linear_srgb_raw()?;
 
         Color::new(color.r(), color.g(), color.b(), 1.0)
@@ -186,7 +185,6 @@ where
     /// Converts the color channels, ignoring alpha, without clamping.
 
     fn try_from_color(color: Color) -> ColorResult<Self> {
-
         Self::try_from_linear_srgb_raw(color.linear_srgb())
     }
 
@@ -203,7 +201,6 @@ where
     /// Byte representations override this to clamp before quantization.
 
     fn try_from_linear_srgb_clamped(color: LinearSrgb) -> ColorResult<Self> {
-
         Ok(Self::try_from_linear_srgb_raw(color)?.clamp())
     }
 }

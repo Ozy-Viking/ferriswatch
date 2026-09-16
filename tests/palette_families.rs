@@ -71,7 +71,7 @@ check_variant!(
     0x1a1b26,
     0xc0caf5,
     0x16161e,
-    0x9ece6a,
+    0x73daca,
     0xe0af68,
     0xdb4b4b,
     [
@@ -97,7 +97,7 @@ check_variant!(
     0x24283b,
     0xc0caf5,
     0x1f2335,
-    0x9ece6a,
+    0x73daca,
     0xe0af68,
     0xdb4b4b,
     [
@@ -123,7 +123,7 @@ check_variant!(
     0x222436,
     0xc8d3f5,
     0x1e2030,
-    0xc3e88d,
+    0x4fd6be,
     0xffc777,
     0xc53b53,
     [
@@ -149,7 +149,7 @@ check_variant!(
     0xe1e2e7,
     0x3760bf,
     0xd0d5e3,
-    0x587539,
+    0x387068,
     0x8c6c3e,
     0xc64343,
     [
@@ -603,7 +603,6 @@ check_variant!(
 #[test]
 
 fn families_can_share_runtime_theme_selection() {
-
     let themes = [
         palette::tokyo_night::Night::variant::<NoAccent>(),
         palette::rose_pine::Dawn::variant::<NoAccent>(),

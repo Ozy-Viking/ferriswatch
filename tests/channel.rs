@@ -12,7 +12,6 @@ use std::ops::Bound::{Excluded, Included, Unbounded};
 #[case(f32::INFINITY, 1.0)]
 
 fn bounded_channels(#[case] value: f32, #[case] expected: f32) {
-
     let channel = Channel::new("red", value, 0.0..=1.0).unwrap().clamp();
 
     assert_eq!(*channel.value(), expected);
@@ -28,7 +27,6 @@ fn bounded_channels(#[case] value: f32, #[case] expected: f32) {
 #[case(-f32::EPSILON, 0.0)]
 
 fn circular_channels(#[case] value: f32, #[case] expected: f32) {
-
     let channel = Channel::new("hue", value, 0.0..360.0)
         .unwrap()
         .with_wrapping()
@@ -45,9 +43,7 @@ fn circular_channels(#[case] value: f32, #[case] expected: f32) {
 #[test]
 
 fn shifted_wrapping_and_large_values() {
-
     for (value, expected) in [(190.0, -170.0), (-190.0, 170.0), (180.0, -180.0)] {
-
         let channel = Channel::new("angle", value, -180.0..180.0)
             .unwrap()
             .with_wrapping()
@@ -80,7 +76,6 @@ fn shifted_wrapping_and_large_values() {
 #[test]
 
 fn excluded_and_one_sided_bounds() {
-
     let channel = Channel::new("fraction", 1.0, 0.0..1.0).unwrap().clamp();
 
     assert_eq!(*channel.value(), 1.0_f32.next_down());
@@ -115,7 +110,6 @@ fn excluded_and_one_sided_bounds() {
 #[test]
 
 fn unbounded_channels_preserve_bits() {
-
     for value in [
         f32::MAX,
         -f32::MAX,
@@ -124,7 +118,6 @@ fn unbounded_channels_preserve_bits() {
         f32::NEG_INFINITY,
         f32::from_bits(0x7fc01234),
     ] {
-
         let channel = Channel::new("lms", value, ..).unwrap();
 
         assert_eq!(channel.in_bounds(), !value.is_nan());
@@ -136,9 +129,7 @@ fn unbounded_channels_preserve_bits() {
 #[test]
 
 fn nonfinite_wrapping_values_remain_invalid() {
-
     for value in [f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
-
         let channel = Channel::new("hue", value, 0.0..360.0)
             .unwrap()
             .with_wrapping()
@@ -154,7 +145,6 @@ fn nonfinite_wrapping_values_remain_invalid() {
 #[test]
 
 fn invalid_ranges_are_rejected() {
-
     for bounds in [
         (Included(2.0), Included(1.0)),
         (Included(f32::NAN), Unbounded),
@@ -164,7 +154,6 @@ fn invalid_ranges_are_rejected() {
         (Excluded(f32::INFINITY), Unbounded),
         (Unbounded, Excluded(f32::NEG_INFINITY)),
     ] {
-
         assert!(matches!(
             Channel::new("test", 0.0, bounds),
             Err(ChannelError::InvalidRange("test", actual, _))
@@ -183,7 +172,6 @@ fn invalid_ranges_are_rejected() {
 #[test]
 
 fn wrapping_requires_finite_half_open_bounds() {
-
     for bounds in [
         (Unbounded, Unbounded),
         (Included(0.0), Included(360.0)),
@@ -191,7 +179,6 @@ fn wrapping_requires_finite_half_open_bounds() {
         (Included(f32::NEG_INFINITY), Excluded(360.0)),
         (Included(0.0), Excluded(f32::INFINITY)),
     ] {
-
         assert!(matches!(
             Channel::new("hue", 0.0, bounds).unwrap().with_wrapping(),
             Err(ChannelError::InvalidWrappingRange("hue", actual, _)) if actual == bounds
@@ -202,7 +189,6 @@ fn wrapping_requires_finite_half_open_bounds() {
 #[test]
 
 fn accessors_and_replacement() {
-
     let mut channel = Channel::new("red", 0.5, 0.0..=1.0).unwrap();
 
     assert_eq!(channel.name(), "red");
@@ -226,7 +212,6 @@ fn accessors_and_replacement() {
 #[case(1.1, Err(ChannelError::OutsideRange("red", 1.1)))]
 
 fn value_in_range_checks_bounds(#[case] value: f32, #[case] expected: Result<f32, ChannelError>) {
-
     let channel = Channel::new("red", value, 0.0..=1.0).unwrap();
 
     assert_eq!(channel.value_in_range(), expected);
@@ -237,7 +222,6 @@ fn value_in_range_checks_bounds(#[case] value: f32, #[case] expected: Result<f32
 #[test]
 
 fn value_in_range_does_not_wrap() {
-
     let hue = Channel::new("hue", 360.0, 0.0..360.0)
         .unwrap()
         .with_wrapping()
@@ -258,14 +242,12 @@ fn value_in_range_does_not_wrap() {
 #[test]
 
 fn outside_range_error_retains_name_and_value() {
-
     let value = f32::from_bits(0x7fc01234);
 
     let channel = Channel::new("red", value, 0.0..=1.0).unwrap();
 
     match channel.value_in_range() {
         Err(ChannelError::OutsideRange(name, rejected)) => {
-
             assert_eq!(name, "red");
 
             assert_eq!(rejected.to_bits(), value.to_bits());
@@ -282,7 +264,6 @@ fn outside_range_error_retains_name_and_value() {
 #[test]
 
 fn range_error_messages_survive_color_error_conversion() {
-
     let invalid = Channel::new("red", 0.0_f32, 2.0..=1.0).unwrap_err();
 
     let wrapping = Channel::new("hue", 0.0_f32, 0.0..=360.0)
@@ -300,7 +281,6 @@ fn range_error_messages_survive_color_error_conversion() {
             "invalid wrapping range for channel hue: (Included(0), Included(360)): wrapping requires an included start and excluded end (start..end)",
         ),
     ] {
-
         assert_eq!(error.to_string(), expected);
 
         let outer = ferriswatch::color::ColorError::from(error);
@@ -312,7 +292,6 @@ fn range_error_messages_survive_color_error_conversion() {
 #[test]
 
 fn builder_preserves_values_and_accepts_configuration_in_any_order() {
-
     let red = Channel::with_name("R")
         .with_range(0..=255)
         .with_value(128_u8)
@@ -349,7 +328,6 @@ fn builder_preserves_values_and_accepts_configuration_in_any_order() {
 #[test]
 
 fn builder_defaults_to_unbounded_and_allows_reconfiguration() {
-
     let free = Channel::with_name("free")
         .with_value(-12_i32)
         .build()
@@ -379,7 +357,6 @@ fn builder_defaults_to_unbounded_and_allows_reconfiguration() {
 #[test]
 
 fn builder_does_not_require_arithmetic_without_wrapping() {
-
     use ferriswatch::color::AdjacentValue;
 
     #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
@@ -388,12 +365,10 @@ fn builder_does_not_require_arithmetic_without_wrapping() {
 
     impl AdjacentValue for Level {
         fn next_value(self) -> Option<Self> {
-
             self.0.checked_add(1).map(Self)
         }
 
         fn previous_value(self) -> Option<Self> {
-
             self.0.checked_sub(1).map(Self)
         }
     }
@@ -428,7 +403,6 @@ fn builder_reports_why_range_is_invalid(
     #[case] bounds: (std::ops::Bound<f32>, std::ops::Bound<f32>),
     #[case] expected: ferriswatch::color::RangeErrorReason,
 ) {
-
     let error = Channel::with_name("test")
         .with_value(0.0_f32)
         .with_range(bounds)
@@ -437,7 +411,6 @@ fn builder_reports_why_range_is_invalid(
 
     match error {
         ChannelError::InvalidRange(name, actual, reason) => {
-
             assert_eq!(name, "test");
 
             assert_eq!(format!("{actual:?}"), format!("{bounds:?}"));
@@ -453,7 +426,6 @@ fn builder_reports_why_range_is_invalid(
 #[test]
 
 fn builder_distinguishes_wrapping_shape_finiteness_and_width() {
-
     use ferriswatch::color::WrappingRangeErrorReason;
 
     let inclusive = Channel::with_name("R")
@@ -527,7 +499,6 @@ fn builder_distinguishes_wrapping_shape_finiteness_and_width() {
 #[case(17, 5)]
 
 fn inclusive_integer_ranges_wrap_at_both_ends(#[case] value: i32, #[case] expected: i32) {
-
     let channel = Channel::with_name("whole")
         .with_range(5..=10)
         .with_wrapping()
@@ -542,14 +513,12 @@ fn inclusive_integer_ranges_wrap_at_both_ends(#[case] value: i32, #[case] expect
 #[test]
 
 fn integer_wrapping_supports_all_bound_shapes_and_singletons() {
-
     for bounds in [
         (Included(5), Included(10)),
         (Included(5), Excluded(11)),
         (Excluded(4), Included(10)),
         (Excluded(4), Excluded(11)),
     ] {
-
         assert_eq!(
             Channel::new("whole", 11_i8, bounds)
                 .unwrap()
@@ -584,7 +553,6 @@ fn integer_wrapping_supports_all_bound_shapes_and_singletons() {
 #[test]
 
 fn every_integer_type_supports_its_full_range() {
-
     macro_rules! check {
         ($($ty:ty),+) => {$(
             for value in [<$ty>::MIN, 0, <$ty>::MAX] {
@@ -608,7 +576,6 @@ fn every_integer_type_supports_its_full_range() {
 #[test]
 
 fn wrapping_handles_ranges_nearly_as_wide_as_u128() {
-
     assert_eq!(
         Channel::new("wide", 0_u128, 1..=u128::MAX)
             .unwrap()
@@ -653,11 +620,8 @@ fn wrapping_handles_ranges_nearly_as_wide_as_u128() {
 #[test]
 
 fn all_byte_ranges_match_wider_modulo_arithmetic() {
-
     for lower in 0..=255_i32 {
-
         for upper in lower..=255 {
-
             let width = upper - lower + 1;
 
             let mut unsigned = Channel::new("byte", 0_u8, lower as u8..=upper as u8)
@@ -672,7 +636,6 @@ fn all_byte_ranges_match_wider_modulo_arithmetic() {
                     .unwrap();
 
             for value in 0..=255_i32 {
-
                 let expected = lower + (value - lower).rem_euclid(width);
 
                 unsigned.set_value(value as u8);
@@ -690,7 +653,6 @@ fn all_byte_ranges_match_wider_modulo_arithmetic() {
 #[test]
 
 fn builder_min_max_are_inclusive_and_support_wrapping() {
-
     let channel = Channel::with_name("R")
         .with_min_value(0)
         .with_max_value(255)
@@ -719,7 +681,6 @@ fn builder_min_max_are_inclusive_and_support_wrapping() {
 #[test]
 
 fn builder_min_max_preserve_the_other_bound() {
-
     let lower_only = Channel::with_name("positive")
         .with_min_value(0)
         .with_value(-5)
@@ -772,7 +733,6 @@ fn builder_min_max_preserve_the_other_bound() {
 #[test]
 
 fn builder_min_max_report_invalid_bounds_at_build() {
-
     let error = Channel::with_name("R")
         .with_min_value(255_u8)
         .with_max_value(0)
@@ -793,7 +753,6 @@ fn builder_min_max_report_invalid_bounds_at_build() {
 #[test]
 
 fn builder_optional_bounds_can_be_set_and_removed() {
-
     let lower_only = Channel::with_name("positive")
         .with_range((Excluded(0_i32), Included(10)))
         .with_max_value(None)
@@ -839,7 +798,6 @@ fn builder_optional_bounds_can_be_set_and_removed() {
 #[test]
 
 fn setters_update_bounds_without_clamping_the_value() {
-
     let mut channel = Channel::new("level", 15_i32, 0..=20).unwrap();
 
     channel
@@ -876,7 +834,6 @@ fn setters_update_bounds_without_clamping_the_value() {
 #[test]
 
 fn setters_preserve_excluded_opposite_bounds() {
-
     let mut channel = Channel::new("level", 0_i32, (Excluded(0), Excluded(20))).unwrap();
 
     channel.set_min_value(5).unwrap();
@@ -897,7 +854,6 @@ fn setters_preserve_excluded_opposite_bounds() {
 #[test]
 
 fn setters_leave_channel_unchanged_on_invalid_range() {
-
     let mut channel = Channel::new("level", 0.5_f32, 0.0..=1.0).unwrap();
 
     let original = channel;
@@ -928,7 +884,6 @@ fn setters_leave_channel_unchanged_on_invalid_range() {
 #[test]
 
 fn setters_rebuild_integer_wrapping_and_reject_unbounded_wrapping() {
-
     let mut channel = Channel::new("whole", 12_i32, 0..=10)
         .unwrap()
         .with_wrapping()
@@ -950,7 +905,6 @@ fn setters_rebuild_integer_wrapping_and_reject_unbounded_wrapping() {
         channel.set_min_value(None).unwrap_err(),
         channel.set_max_value(None).unwrap_err(),
     ] {
-
         assert!(matches!(
             error,
             ChannelError::InvalidWrappingRange(
@@ -967,7 +921,6 @@ fn setters_rebuild_integer_wrapping_and_reject_unbounded_wrapping() {
 #[test]
 
 fn setters_revalidate_float_wrapping_before_mutating() {
-
     let mut channel = Channel::new("hue", 370.0_f32, 0.0..360.0)
         .unwrap()
         .with_wrapping()
@@ -998,7 +951,6 @@ fn setters_revalidate_float_wrapping_before_mutating() {
 #[test]
 
 fn disabling_wrapping_preserves_value_and_changes_clamping() {
-
     let wrapped = Channel::new("hue", 370.0_f32, 0.0..360.0)
         .unwrap()
         .with_wrapping()
@@ -1026,7 +978,6 @@ fn disabling_wrapping_preserves_value_and_changes_clamping() {
 #[test]
 
 fn builder_can_disable_and_reenable_wrapping() {
-
     let builder = Channel::with_name("whole")
         .with_value(12_i32)
         .with_range((Included(0), Included(10)))

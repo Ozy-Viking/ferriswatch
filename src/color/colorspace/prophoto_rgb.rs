@@ -24,7 +24,6 @@ impl ProPhotoRgb {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(r: f32, g: f32, b: f32) -> Self {
-
         Self {
             r: Channel::color_channel("r", r, 0.0..=1.0),
             g: Channel::color_channel("g", g, 0.0..=1.0),

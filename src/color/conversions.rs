@@ -2,13 +2,10 @@ use crate::color::matrices::Channels;
 use crate::color::{ColorError, ColorResult};
 
 pub(super) fn checked(values: Channels, names: [&'static str; 3]) -> ColorResult<[f32; 3]> {
-
     let values = values.map(|v| v as f32);
 
     for (value, name) in values.into_iter().zip(names) {
-
         if !value.is_finite() {
-
             return Err(ColorError::InvalidColorChannel(name, value));
         }
     }

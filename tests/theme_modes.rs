@@ -11,17 +11,13 @@ use ferriswatch::{
 #[test]
 
 fn mode_filtering_matches_declared_support_for_all_palette_accents() {
-
     for entry in catalogue::PALETTES {
-
         for variant in
             std::iter::once((entry.factory)()).chain(entry.accents.iter().map(|a| (a.factory)()))
         {
-
             assert_eq!(variant.support(), entry.metadata.support);
 
             for mode in [Appearance::Light, Appearance::Dark] {
-
                 assert_eq!(
                     variant.supports(mode),
                     entry.metadata.support.supports(mode)
@@ -31,7 +27,6 @@ fn mode_filtering_matches_declared_support_for_all_palette_accents() {
     }
 
     for mode in [Appearance::Light, Appearance::Dark] {
-
         let variants: Vec<_> = catalogue::variants_for(mode).collect();
 
         assert!(!variants.is_empty());
@@ -51,7 +46,6 @@ fn mode_filtering_matches_declared_support_for_all_palette_accents() {
 #[test]
 
 fn both_is_eligible_in_either_mode_without_changing_appearance() {
-
     let variant = Mocha::variant::<Mauve>().with_support(ThemeSupport::Both);
 
     assert!(variant.supports(Appearance::Light));
@@ -64,7 +58,6 @@ fn both_is_eligible_in_either_mode_without_changing_appearance() {
 #[test]
 
 fn paired_theme_updates_one_slot_without_enforcing_support() {
-
     let dark = Mocha::variant::<Mauve>();
 
     let light = Latte::variant::<NoAccent>();

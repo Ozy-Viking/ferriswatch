@@ -1,6 +1,9 @@
 //! Panda. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Panda uses white for ordinary text; its variable named foreground is pink. The single opaque background repeats; orange serves warnings and error repeats as critical.
+//! The pinned Brackets theme uses white for ordinary editor text; its source
+//! variable named `foreground` is pink and is not the CodeMirror text colour.
+//! CodeMirror token classes supply syntax semantics; no control colours are
+//! authored by the source.
 
 define_palette! {
     Main, "Panda",
@@ -21,6 +24,7 @@ define_palette! {
         GREEN = crate::color::Color::hex(0x19f9d8),
         RED = crate::color::Color::hex(0xff2c6d),
         ORANGE = crate::color::Color::hex(0xffb86c),
+        LIGHT_ORANGE = crate::color::Color::hex(0xffcc95),
         PINK = crate::color::Color::hex(0xff75b5),
         LIGHT_PINK = crate::color::Color::hex(0xff9ac1),
     }
@@ -55,18 +59,72 @@ define_palette! {
         },
         text_alt: None,
         primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::WHITE, Self::BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                primary,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                crate::palette::primary_hover(primary),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    primary,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                crate::palette::action_pressed(primary),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::WHITE,
+                Self::BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::COMMENT,
+                Self::BACKGROUND,
+            ),
         },
         secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), Self::PURPLE),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), crate::palette::primary_hover(Self::PURPLE)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::PURPLE), crate::palette::action_pressed(Self::PURPLE)),
-            muted: crate::theme_variant::ColorPair::new(Self::WHITE, Self::BACKGROUND),
-            disabled: crate::theme_variant::ColorPair::new(Self::COMMENT, Self::BACKGROUND),
+            normal: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::PURPLE,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                Self::PURPLE,
+            ),
+            hover: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::PURPLE,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                crate::palette::primary_hover(Self::PURPLE),
+            ),
+            pressed: crate::theme_variant::ColorPair::new(
+                crate::palette::action_text(
+                    Self::PURPLE,
+                    Self::BACKGROUND,
+                    Self::WHITE,
+                ),
+                crate::palette::action_pressed(Self::PURPLE),
+            ),
+            muted: crate::theme_variant::ColorPair::new(
+                Self::WHITE,
+                Self::BACKGROUND,
+            ),
+            disabled: crate::theme_variant::ColorPair::new(
+                Self::COMMENT,
+                Self::BACKGROUND,
+            ),
         },
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
@@ -91,40 +149,40 @@ define_palette! {
             pink: Self::PINK,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::PURPLE,
+            attribute: Self::ORANGE,
             boolean: Self::ORANGE,
-            builtin: Self::PURPLE,
+            builtin: Self::BLUE,
             builtin_function: Self::BLUE,
-            builtin_type: Self::PURPLE,
+            builtin_type: Self::BLUE,
             comment: Self::COMMENT,
             constant: Self::ORANGE,
-            control_keyword: Self::KEYWORD,
-            deleted: Self::ERROR,
-            deprecated: Self::ERROR,
+            control_keyword: Self::PINK,
+            deleted: Self::RED,
+            deprecated: Self::WHITE,
             documentation: Self::COMMENT,
-            escape: Self::PINK,
+            escape: Self::GREEN,
             foreground: Self::WHITE,
-            function: Self::BLUE,
-            heading: Self::BLUE,
+            function: Self::PURPLE,
+            heading: Self::LIGHT,
             inserted: Self::GREEN,
-            invalid: Self::ERROR,
-            keyword: Self::KEYWORD,
-            link: Self::BLUE,
-            macro_name: Self::BLUE,
+            invalid: Self::RED,
+            keyword: Self::PINK,
+            link: Self::ORANGE,
+            macro_name: Self::LIGHT,
             markup_bold: Self::WHITE,
             markup_italic: Self::WHITE,
-            modifier: Self::KEYWORD,
-            namespace: Self::PURPLE,
+            modifier: Self::PINK,
+            namespace: Self::LIGHT_PINK,
             number: Self::ORANGE,
-            operator: Self::PINK,
-            parameter: Self::WHITE,
-            property: Self::WHITE,
-            punctuation: Self::WHITE,
+            operator: Self::LIGHT_ORANGE,
+            parameter: Self::ORANGE,
+            property: Self::LIGHT,
+            punctuation: Self::LIGHT_ORANGE,
             string: Self::GREEN,
-            tag: Self::KEYWORD,
-            type_keyword: Self::KEYWORD,
-            type_name: Self::PURPLE,
-            variable: Self::WHITE,
+            tag: Self::RED,
+            type_keyword: Self::PINK,
+            type_name: Self::LIGHT_PINK,
+            variable: Self::ORANGE,
         },
     }
 }

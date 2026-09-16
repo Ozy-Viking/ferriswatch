@@ -103,9 +103,9 @@ mod tests {
     use super::*;
 
     use ferriswatch::{
-        dioxus::{ThemeConfig, ThemeProvider, ThemeSelection},
+        dioxus::ThemeProvider,
         palette::catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
-        theme::{Appearance, Theme},
+        theme::{Appearance, Theme, ThemeSelection, config::ThemeConfig},
         theme_variant::ThemePalette,
     };
 

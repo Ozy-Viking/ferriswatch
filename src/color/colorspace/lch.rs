@@ -26,7 +26,6 @@ impl Lch {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(l: f32, c: f32, h: f32) -> Self {
-
         Self {
             l: Channel::color_channel("l", l, 0.0..=100.0),
             c: Channel::color_channel("c", c, 0.0..),

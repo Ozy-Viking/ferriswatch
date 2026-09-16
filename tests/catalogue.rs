@@ -9,7 +9,6 @@ use std::collections::{HashMap, HashSet};
 #[test]
 
 fn full_catalogue_has_unique_ids_and_consistent_factories() {
-
     assert_eq!(PALETTES.len(), 64);
 
     assert_eq!(
@@ -24,7 +23,6 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
     let mut ids = HashSet::new();
 
     for entry in PALETTES {
-
         let m = &entry.metadata;
 
         assert!(ids.insert(m.id.as_ref()), "duplicate {}", m.id);
@@ -45,7 +43,6 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
         assert!(!entry.sources.is_empty());
 
         for source in entry.sources {
-
             assert_eq!(source.revision.len(), 40);
 
             assert!(source.revision.bytes().all(|b| b.is_ascii_hexdigit()));
@@ -58,7 +55,6 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
         let mut accents = HashSet::new();
 
         for accent in entry.accents {
-
             assert!(accents.insert(accent.id));
 
             let selected = catalogue::resolve(&m.id, Some(accent.id)).unwrap();
@@ -107,7 +103,6 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
 #[case("catppuccin/mocha/soft/extra", false)]
 
 fn rejects_unregistered_theme_combinations(#[case] id: &str, #[case] contrast: bool) {
-
     let err = catalogue::resolve(id, None).unwrap_err();
 
     assert_eq!(
@@ -116,7 +111,6 @@ fn rejects_unregistered_theme_combinations(#[case] id: &str, #[case] contrast: b
     );
 
     if !contrast {
-
         assert!(matches!(err, ResolveError::UnknownTheme(_)));
     }
 }
@@ -124,9 +118,7 @@ fn rejects_unregistered_theme_combinations(#[case] id: &str, #[case] contrast: b
 #[test]
 
 fn accent_errors_do_not_silently_select_defaults() {
-
     for id in ["", "NoAccent", "Blue", "not_a_colour"] {
-
         assert!(matches!(
             catalogue::resolve("catppuccin/mocha", Some(id)),
             Err(ResolveError::UnknownAccent { .. })
@@ -146,7 +138,6 @@ fn accent_errors_do_not_silently_select_defaults() {
 #[test]
 
 fn labels_and_appearance_preserve_upstream_identity() {
-
     for (id, label, appearance) in [
         ("catppuccin/frappe", "Catppuccin Frappé", Appearance::Dark),
         ("rose_pine/main", "Rosé Pine", Appearance::Dark),
@@ -156,7 +147,6 @@ fn labels_and_appearance_preserve_upstream_identity() {
         ("nightfox/dawnfox", "Dawnfox", Appearance::Light),
         ("ayu/mirage", "Ayu Mirage", Appearance::Dark),
     ] {
-
         let t = catalogue::resolve(id, None).unwrap();
 
         assert_eq!(t.name(), label);
@@ -165,11 +155,8 @@ fn labels_and_appearance_preserve_upstream_identity() {
     }
 
     for family in ["gruvbox", "everforest"] {
-
         for variant in ["dark", "light"] {
-
             for contrast in [Contrast::Soft, Contrast::Medium, Contrast::Hard] {
-
                 let t = catalogue::resolve(&format!("{family}/{variant}/{}", contrast.id()), None)
                     .unwrap();
 
@@ -182,7 +169,6 @@ fn labels_and_appearance_preserve_upstream_identity() {
 #[test]
 
 fn custom_ids_are_explicit_and_names_can_change_without_changing_identity() {
-
     let original = catalogue::resolve("nord/main", None).unwrap();
 
     let colors = *original.colors();
@@ -197,7 +183,6 @@ fn custom_ids_are_explicit_and_names_can_change_without_changing_identity() {
         "custom/nested/path",
         "custom/a__b",
     ] {
-
         assert_eq!(
             ThemeVariant::new(id, "Custom", Appearance::Dark, colors, None).unwrap_err(),
             IdentityError::InvalidCustomId
@@ -234,14 +219,12 @@ fn custom_ids_are_explicit_and_names_can_change_without_changing_identity() {
 #[test]
 
 fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
-
     let mut expected: HashMap<&str, HashMap<&str, Color>> = HashMap::new();
 
     for line in include_str!("fixtures/palettes.tsv")
         .lines()
         .filter(|l| !l.starts_with('#') && !l.is_empty())
     {
-
         let mut cols = line.split('\t');
 
         let id = cols.next().unwrap();
@@ -263,13 +246,11 @@ fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
     }
 
     for entry in PALETTES {
-
         let values = expected
             .get(entry.metadata.id.as_ref())
             .unwrap_or_else(|| panic!("missing fixture {}", entry.metadata.id));
 
         for (name, color) in entry.raw_colors {
-
             assert_eq!(
                 values.get(name),
                 Some(color),
@@ -280,7 +261,6 @@ fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
         }
 
         for accent in entry.accents {
-
             assert!(
                 values.values().any(|v| *v == accent.color),
                 "missing accent {} {}",
@@ -294,7 +274,6 @@ fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
 #[test]
 
 fn transparency_survives_all_surface_roles_and_both_actions() {
-
     let original = catalogue::resolve("catppuccin/mocha", None).unwrap();
 
     let mut c = *original.colors();
@@ -341,14 +320,12 @@ fn transparency_survives_all_surface_roles_and_both_actions() {
 #[test]
 
 fn new_palette_semantic_anchors_match_imported_source_fixtures() {
-
     let mut themes = HashSet::new();
 
     for line in include_str!("fixtures/semantic.tsv")
         .lines()
         .filter(|l| !l.is_empty() && !l.starts_with('#'))
     {
-
         let fields: Vec<_> = line.split('\t').collect();
 
         assert_eq!(fields.len(), 7);
@@ -368,7 +345,6 @@ fn new_palette_semantic_anchors_match_imported_source_fixtures() {
         .iter()
         .zip(&fields[1..])
         {
-
             assert_eq!(
                 *actual,
                 Color::hex_alpha(u32::from_str_radix(expected, 16).unwrap()),
@@ -384,14 +360,11 @@ fn new_palette_semantic_anchors_match_imported_source_fixtures() {
 #[test]
 
 fn action_foregrounds_choose_the_better_worst_state_contrast() {
-
     fn luminance(c: Color) -> f32 {
-
         0.2126 * c.r() + 0.7152 * c.g() + 0.0722 * c.b()
     }
 
     fn contrast(a: Color, b: Color) -> f32 {
-
         let a = luminance(a);
 
         let b = luminance(b);
@@ -400,9 +373,7 @@ fn action_foregrounds_choose_the_better_worst_state_contrast() {
     }
 
     for p in PALETTES {
-
         for accent in std::iter::once(None).chain(p.accents.iter().map(|a| Some(a.id))) {
-
             let t = p.resolve(accent).unwrap();
 
             let c = t.colors();
@@ -411,7 +382,6 @@ fn action_foregrounds_choose_the_better_worst_state_contrast() {
                 (c.primary, c.primary.normal.foreground),
                 (c.secondary, c.secondary.normal.foreground),
             ] {
-
                 let fills = [
                     action.normal.background,
                     action.hover.background,
@@ -420,20 +390,16 @@ fn action_foregrounds_choose_the_better_worst_state_contrast() {
 
                 // Transparent fills need a concrete composited canvas, tested in the visual report.
                 if fills.iter().any(|f| f.a() != 1.0) {
-
                     continue;
                 }
 
                 let other = if foreground == Color::hex(0) {
-
                     Color::hex(0xffffff)
                 } else {
-
                     Color::hex(0)
                 };
 
                 let worst = |fg| {
-
                     fills
                         .iter()
                         .map(|bg| contrast(fg, *bg))
@@ -454,7 +420,6 @@ fn action_foregrounds_choose_the_better_worst_state_contrast() {
 #[test]
 
 fn source_permalinks_encode_path_characters_without_losing_directories() {
-
     let source = catalogue::PaletteSource {
         repository: "https://github.com/example/palettes",
         revision: "0123456789abcdef0123456789abcdef01234567",
@@ -471,14 +436,12 @@ fn source_permalinks_encode_path_characters_without_losing_directories() {
 #[test]
 
 fn every_new_named_accent_matches_its_source_assignment() {
-
     let mut fixtures = HashMap::new();
 
     for line in include_str!("fixtures/accents.tsv")
         .lines()
         .filter(|l| !l.is_empty() && !l.starts_with('#'))
     {
-
         let fields: Vec<_> = line.split('\t').collect();
 
         assert_eq!(fields.len(), 3);
@@ -501,7 +464,6 @@ fn every_new_named_accent_matches_its_source_assignment() {
     }
 
     for entry in PALETTES.iter().filter(|p| {
-
         ![
             "catppuccin",
             "everforest",
@@ -512,9 +474,7 @@ fn every_new_named_accent_matches_its_source_assignment() {
         ]
         .contains(&p.metadata.family_id.as_ref())
     }) {
-
         for accent in entry.accents {
-
             assert!(
                 fixtures.contains_key(&(entry.metadata.id.as_ref(), accent.id)),
                 "{} {}",

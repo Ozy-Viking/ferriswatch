@@ -9,7 +9,6 @@ use rstest::rstest;
 #[case(0x123456ff, 255)]
 
 fn conversion_preserves_rgba_bytes(#[case] rgba: u32, #[case] alpha: u8) {
-
     let converted: syntect::highlighting::Color = Color::hex_alpha(rgba).into();
 
     assert_eq!(
@@ -21,9 +20,7 @@ fn conversion_preserves_rgba_bytes(#[case] rgba: u32, #[case] alpha: u8) {
 #[test]
 
 fn every_palette_builds_a_syntect_theme() {
-
     for palette in PALETTES {
-
         let variant = palette.resolve(None).unwrap();
 
         let theme = variant.syntect();

@@ -22,7 +22,6 @@ impl Hsl {
     /// Creates channels with this color space's bounds, without validating or clamping values.
 
     pub fn new(h: f32, s: f32, l: f32) -> Self {
-
         Self {
             h: Channel::color_channel("h", h, 0.0..360.0)
                 .with_wrapping()

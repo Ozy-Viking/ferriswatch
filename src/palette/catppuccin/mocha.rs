@@ -71,20 +71,50 @@ define_palette! {
             subtle: Self::OVERLAY_1,
         },
         text_alt: None,
-        primary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), primary),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::primary_hover(primary)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(primary), crate::palette::action_pressed(primary)),
-            muted: crate::theme_variant::ColorPair::new(Self::TEXT, Self::SURFACE_2),
-            disabled: crate::theme_variant::ColorPair::new(Self::OVERLAY_1, Self::SURFACE_2),
-        },
-        secondary: crate::theme_variant::ActionColors {
-            normal: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), Self::BLUE),
-            hover: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::primary_hover(Self::BLUE)),
-            pressed: crate::theme_variant::ColorPair::new(crate::palette::action_text(Self::BLUE), crate::palette::action_pressed(Self::BLUE)),
-            muted: crate::theme_variant::ColorPair::new(Self::TEXT, Self::SURFACE_0),
-            disabled: crate::theme_variant::ColorPair::new(Self::OVERLAY_1, Self::SURFACE_0),
-        },
+primary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        primary,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        crate::palette::primary_hover(primary),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        crate::palette::action_pressed(primary),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::TEXT,
+        Self::SURFACE_2,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::OVERLAY_1,
+        Self::SURFACE_2,
+    ),
+},
+secondary: crate::theme_variant::ActionColors {
+    normal: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        Self::BLUE,
+    ),
+    hover: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        crate::palette::primary_hover(Self::BLUE),
+    ),
+    pressed: crate::theme_variant::ColorPair::new(
+        Self::BASE,
+        crate::palette::action_pressed(Self::BLUE),
+    ),
+    muted: crate::theme_variant::ColorPair::new(
+        Self::TEXT,
+        Self::SURFACE_0,
+    ),
+    disabled: crate::theme_variant::ColorPair::new(
+        Self::OVERLAY_1,
+        Self::SURFACE_0,
+    ),
+},
         status: crate::theme_variant::StatusColors {
             success: Self::GREEN,
             warning: Self::YELLOW,

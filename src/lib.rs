@@ -13,5 +13,7 @@ pub mod dioxus;
 pub mod error;
 pub mod integrations;
 pub mod palette;
+#[cfg(feature = "parser")]
+pub mod parser;
 pub mod theme;
 pub mod theme_variant;
