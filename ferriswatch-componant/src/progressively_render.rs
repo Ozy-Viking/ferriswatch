@@ -1,5 +1,3 @@
-use dioxus::prelude::*;
-use web_time::Instant;
 
 pub(crate) const INITIAL_OPTIONS: usize = 4;
 
