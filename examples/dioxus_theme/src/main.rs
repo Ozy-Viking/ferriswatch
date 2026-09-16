@@ -1,3 +1,4 @@
+use dioxus::logger::tracing::Level;
 use dioxus::prelude::*;
 use ferriswatch::{
     css::ThemeScope,
@@ -12,6 +13,7 @@ use ferriswatch::{
 use ferriswatch_componant::ThemePicker;
 
 fn main() {
+    dioxus::logger::init(Level::WARN).expect("failed to initialize logger");
     dioxus::launch(App);
 }
 
@@ -96,7 +98,7 @@ fn Workbench() -> Element {
                         }
                         div { class: "aside-footer",
                             span { "{palette_count} palettes" }
-                            span { "{accent_count} accent colors" }
+                            span { "{active.name()} has {accent_count} accent colors" }
                         }
                     }
                     div { class: "stage",

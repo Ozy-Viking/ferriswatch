@@ -23,8 +23,11 @@ pub fn ThemePicker() -> Element {
             div { class: "fs-mode-control",
                 span { "Light" }
                 button {
-                    class: "fs-mode-toggle", r#type: "button", role: "switch",
-                    aria_label: "Dark mode", aria_checked: state.is_dark(),
+                    class: "fs-mode-toggle",
+                    r#type: "button",
+                    role: "switch",
+                    aria_label: "Dark mode",
+                    aria_checked: state.is_dark(),
                     onclick: move |_| state.toggle_mode(),
                     span { class: "fs-mode-thumb", aria_hidden: "true" }
                 }
@@ -65,7 +68,10 @@ mod tests {
         .build()
         .unwrap();
 
-        rsx! { ThemeProvider { config, ThemePicker {} } }
+        rsx! {
+            ThemeProvider { config, ThemePicker {} }
+
+        }
     }
 
     #[test]

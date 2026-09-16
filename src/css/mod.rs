@@ -40,5 +40,8 @@ pub fn DefaultStyles() -> dioxus::prelude::Element {
 
     use dioxus::prelude::*;
 
-    rsx! { document::Stylesheet { href: DEFAULT_STYLESHEET } }
+    rsx! {
+        document::Stylesheet { href: DEFAULT_STYLESHEET }
+
+    }
 }

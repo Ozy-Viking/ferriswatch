@@ -8,6 +8,8 @@
 //! # Ok::<(), catalogue::ResolveError>(())
 //! ```
 
+use std::borrow::Cow;
+
 use crate::{
     color::Color,
     theme::ThemeSelection,
@@ -100,6 +102,20 @@ impl PaletteRegistration {
                     theme_id: self.metadata.id.to_string(),
                     accent_id: id.into(),
                 }),
+        }
+    }
+}
+#[derive(Debug, Clone)]
+pub struct ThemeId {
+    pub id: Cow<'static, str>,
+    pub name: Cow<'static, str>,
+}
+
+impl From<PaletteRegistration> for ThemeId {
+    fn from(palette_registration: PaletteRegistration) -> Self {
+        Self {
+            id: palette_registration.metadata.id.clone(),
+            name: palette_registration.metadata.name.clone(),
         }
     }
 }

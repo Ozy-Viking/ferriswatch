@@ -34,9 +34,9 @@ pub fn AccentSelect(
     rsx! {
         div {
             title: current
-                .accent_name()
-                .unwrap_or("Default")
-                .to_owned(),
+                            .accent_name()
+                            .unwrap_or("Default")
+                            .to_owned(),
             ..attributes,
 
             Combobox::<String> {
@@ -54,20 +54,15 @@ pub fn AccentSelect(
                 ComboboxInput {
                     class: "{input_class}",
                     placeholder: current
-                        .accent_name()
-                        .unwrap_or("Default")
-                        .to_owned(),
+                                            .accent_name()
+                                            .unwrap_or("Default")
+                                            .to_owned(),
                     aria_label: "Accent",
                 }
 
-                ComboboxList {
-                    class: "{list_class}",
-                    aria_label: "Accents",
+                ComboboxList { class: "{list_class}", aria_label: "Accents",
 
-                    ComboboxEmpty {
-                        class: "{empty_class}",
-                        "No accents found"
-                    }
+                    ComboboxEmpty { class: "{empty_class}", "No accents found" }
 
                     ComboboxOption::<String> {
                         class: "{option_class}",

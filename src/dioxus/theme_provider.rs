@@ -389,11 +389,15 @@ pub fn ThemeProvider(
             style { "data-fs-root": "", "{root_selector} {{{declarations}}}" }
         }
         if override_dx {
-            style {
-                "data-fs-dx-switches": "",
+            style { "data-fs-dx-switches": "",
                 "{system_selector} {{ --dxc-dark-on:var(--dark);--dxc-light-on:var(--light); }}"
             }
         }
-        div { class: "fs-theme", "data-fs-dx-theme": override_dx.then_some("true"), style, {children} }
+        div {
+            class: "fs-theme",
+            "data-fs-dx-theme": override_dx.then_some("true"),
+            style,
+            {children}
+        }
     }
 }

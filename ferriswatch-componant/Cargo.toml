@@ -19,7 +19,7 @@ ferriswatch = { workspace = true, features = ["dioxus"] }
 web-time = "1.1.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys.workspace = true
+web-sys = { workspace = true, features = ["Window", "Performance"] }
 
 [profile.dev]
 debug = true

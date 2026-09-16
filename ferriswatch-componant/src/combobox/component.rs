@@ -96,10 +96,7 @@ pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Elem
                     placeholder: props.placeholder,
                     aria_label: props.aria_label.clone(),
                 }
-                ChevronsUpDown {
-                    class: Styles::dx_combobox_expand_icon,
-                    size: "16px",
-                }
+                ChevronsUpDown { class: Styles::dx_combobox_expand_icon, size: "16px" }
             }
             combobox::ComboboxList {
                 class: Styles::dx_combobox_list,
@@ -121,10 +118,7 @@ pub fn ComboboxEmpty(props: ComboboxEmptyProps) -> Element {
     let merged = merge_attributes(vec![base, props.attributes]);
 
     rsx! {
-        combobox::ComboboxEmpty {
-            attributes: merged,
-            {props.children}
-        }
+        combobox::ComboboxEmpty { attributes: merged, {props.children} }
     }
 }
 
@@ -150,10 +144,7 @@ pub fn ComboboxOption<T: Clone + PartialEq + 'static>(props: ComboboxOptionProps
             attributes: merged,
             {props.children}
             combobox::ComboboxItemIndicator {
-                Check {
-                    class: Styles::dx_combobox_check_icon,
-                    size: "16px",
-                }
+                Check { class: Styles::dx_combobox_check_icon, size: "16px" }
             }
         }
     }

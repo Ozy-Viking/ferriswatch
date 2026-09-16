@@ -73,10 +73,7 @@ pub fn ThemeCombobox(
     let theme_state = use_theme::<Memory>();
 
     rsx! {
-        div {
-            role: "group",
-            aria_label: "Theme and accent",
-            ..attributes,
+        div { role: "group", aria_label: "Theme and accent", ..attributes,
             ThemeSelect {
                 matching_mode_only,
                 class: theme_class,
@@ -130,8 +127,7 @@ mod tests {
         let config = mixed_config();
 
         rsx! {
-            ThemeProvider {
-                config,
+            ThemeProvider { config,
 
                 ThemeCombobox {
                     matching_mode_only: false,

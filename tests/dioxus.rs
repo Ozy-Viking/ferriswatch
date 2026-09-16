@@ -69,7 +69,10 @@ fn mixed_mode_app() -> Element {
 
     let config = mixed_mode_config();
 
-    rsx! { ThemeProvider { config, CaptureMenuState {} } }
+    rsx! {
+        ThemeProvider { config, CaptureMenuState {} }
+
+    }
 }
 
 #[test]
@@ -192,7 +195,10 @@ fn kitchen_app() -> Element {
 
     let config = kitchen_config();
 
-    rsx! { ThemeProvider { config, CaptureMenuState {} } }
+    rsx! {
+        ThemeProvider { config, CaptureMenuState {} }
+
+    }
 }
 
 #[test]
@@ -496,7 +502,10 @@ fn Observer() -> Element {
             .push(format!("{}:{:?}", theme.id(), theme.accent_id()))
     });
 
-    rsx! { p { "{theme.name()}" } }
+    rsx! {
+        p { "{theme.name()}" }
+
+    }
 }
 
 fn app() -> Element {
@@ -508,7 +517,10 @@ fn app() -> Element {
     .build()
     .unwrap();
 
-    rsx! { ThemeProvider { config, Observer {} } }
+    rsx! {
+        ThemeProvider { config, Observer {} }
+
+    }
 }
 
 #[test]

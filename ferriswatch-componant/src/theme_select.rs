@@ -3,6 +3,9 @@ use dioxus_primitives::combobox::{
     Combobox, ComboboxEmpty, ComboboxInput, ComboboxList, ComboboxOption,
 };
 use ferriswatch::dioxus::{Memory, use_theme};
+use web_time::Instant;
+
+use crate::progressively_render::INITIAL_OPTIONS;
 
 /// Searchable theme selector connected to the nearest theme provider.
 ///
@@ -32,11 +35,11 @@ pub fn ThemeSelect(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element {
     let mut state = use_theme::<Memory>();
+    let mut render_count = use_signal(|| INITIAL_OPTIONS);
 
     let name = use_memo(move || state.selected_theme().metadata.name.to_string());
 
     let palettes = use_memo(use_reactive!(|(matching_mode_only,)| {
-        dioxus::logger::tracing::info!("palettes");
         state
             .listed_palettes(matching_mode_only)
             .into_iter()
@@ -51,14 +54,21 @@ pub fn ThemeSelect(
     };
 
     rsx! {
-        div {
-            title: name(),
-            ..attributes,
+        div { title: name(), ..attributes,
 
             Combobox::<String> {
                 class: "{combobox_class}",
                 value: Some(state.theme_value().into()),
+                on_open_change: move |open| {
+                    if open {
+                        let total = palettes.read().len();
 
+                        render_count.set(INITIAL_OPTIONS.min(total));
+
+                        #[cfg(target_arch = "wasm32")]
+                        crate::progressively_render::progressively_render_options(render_count, total);
+                    }
+                },
                 on_value_change: on_value_change_fn,
 
                 ComboboxInput {
@@ -67,24 +77,19 @@ pub fn ThemeSelect(
                     aria_label: "Theme",
                 }
 
-                ComboboxList {
-                    class: "{list_class}",
-                    aria_label: "Themes",
+                ComboboxList { class: "{list_class}", aria_label: "Themes",
 
-                    ComboboxEmpty {
-                        class: "{empty_class}",
-                        "No themes found"
-                    }
+                    ComboboxEmpty { class: "{empty_class}", "No themes found" }
 
-                    for (index, (id, name)) in palettes.read().iter().enumerate() {
+                    for (index, palette) in palettes.read().iter().take(render_count()).enumerate() {
                         ComboboxOption::<String> {
-                            key: "{id}",
+                            key: "{palette.0}",
                             class: "{option_class}",
                             index,
-                            value: id.to_string(),
-                            text_value: name.to_string(),
-                            "data-value": id.to_string(),
-                            "{name}"
+                            value: palette.0.to_string(),
+                            text_value: palette.1.to_string(),
+                            "data-value": palette.0,
+                            "{palette.1}"
                         }
                     }
                 }
