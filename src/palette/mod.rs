@@ -205,3 +205,35 @@ fn action_pressed(color: Color) -> Color {
     )
     .expect("scaling valid colour channels preserves validity")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Color, action_text};
+
+    fn luminance(color: Color) -> f32 {
+        0.2126 * color.r() + 0.7152 * color.g() + 0.0722 * color.b()
+    }
+
+    fn contrast(a: Color, b: Color) -> f32 {
+        let a = luminance(a);
+        let b = luminance(b);
+
+        (a.max(b) + 0.05) / (a.min(b) + 0.05)
+    }
+
+    #[test]
+    fn action_text_chooses_the_better_palette_native_worst_state_contrast() {
+        let dark = Color::hex(0x20242c);
+        let light = Color::hex(0xe6e1cf);
+
+        for fill in [Color::hex(0xf29718), Color::hex(0x385f7a)] {
+            let selected = action_text(fill, dark, light);
+            let other = if selected == dark { light } else { dark };
+            let pressed =
+                Color::new(fill.r() * 0.70, fill.g() * 0.70, fill.b() * 0.70, fill.a()).unwrap();
+            let worst = |foreground| contrast(foreground, fill).min(contrast(foreground, pressed));
+
+            assert!(worst(selected) >= worst(other));
+        }
+    }
+}

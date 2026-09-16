@@ -154,26 +154,21 @@ impl ThemeState {
         }
 
         let mode = self.mode();
-        //
-        // let current = self.current();
-        //
-        // let mut palettes: Vec<_> = config.palettes_for(mode).collect();
-        //
-        // if !current.supports(mode) {
-        //
-        //     let selected = self.selected_theme();
-        //
-        //     if palettes
-        //         .iter()
-        //         .all(|palette| palette.metadata.id != selected.metadata.id)
-        //     {
-        //
-        //         palettes.push(selected);
-        //     }
-        // }
-        //
-        // palettes
-        config.theme_lists().get(mode).to_vec()
+        let current = self.current();
+        let mut palettes = config.theme_lists().get(mode).to_vec();
+
+        if !current.supports(mode) {
+            let selected = self.selected_theme();
+
+            if palettes
+                .iter()
+                .all(|palette| palette.metadata.id != selected.metadata.id)
+            {
+                palettes.push(selected);
+            }
+        }
+
+        palettes
     }
 
     /// Changes only the active mode's palette and accent.

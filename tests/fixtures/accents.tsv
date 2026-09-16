@@ -193,12 +193,14 @@ oceanic_next/main	green	99c794ff
 oceanic_next/main	cyan	5fb3b3ff
 oceanic_next/main	blue	6699ccff
 oceanic_next/main	purple	c594c5ff
+one/dark	accent	528bffff
 one/dark	hue_1	56b6c2ff
 one/dark	hue_2	61afefff
 one/dark	hue_3	c678ddff
 one/dark	hue_4	98c379ff
 one/dark	hue_5	e06c75ff
 one/dark	hue_6	d19a66ff
+one/light	accent	526fffff
 one/light	hue_1	0184bcff
 one/light	hue_2	4078f2ff
 one/light	hue_3	a626a4ff

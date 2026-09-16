@@ -19,13 +19,13 @@ To add `ferriswatch-componant`, follow the
 ```rust
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{ThemeConfig, ThemeProvider, ThemeSelection},
+    dioxus::ThemeProvider,
     palette::{
         catppuccin::{Latte, Mocha, latte::Blue, mocha::Mauve},
         families::{Catppuccin, RosePine},
     },
     theme_variant::ThemePalette,
-    theme::{Theme, Appearance},
+    theme::{Appearance, Theme, ThemeSelection, config::ThemeConfig},
 };
 
 #[component]
@@ -193,7 +193,10 @@ For example:
 
 ```rust,no_run
 use dioxus::prelude::*;
-use ferriswatch::dioxus::{DEFAULT_STYLESHEET, ThemeConfig, ThemeProvider, ThemeScope};
+use ferriswatch::{
+    dioxus::{DEFAULT_STYLESHEET, ThemeProvider, ThemeScope},
+    theme::config::ThemeConfig,
+};
 
 #[component]
 fn ThemedApp(config: ThemeConfig) -> Element {
@@ -233,9 +236,8 @@ Opt in when constructing the provider config:
 
 ```rust
 use ferriswatch::{
-    dioxus::ThemeConfig,
     palette::{NoAccent, catppuccin::{Latte, Mocha}},
-    theme::{Appearance, Theme},
+    theme::{Appearance, Theme, ThemeError, config::ThemeConfig},
     theme_variant::ThemePalette,
 };
 
@@ -245,7 +247,7 @@ let config = ThemeConfig::with_default(
 )
 .override_dx_components_theme(true)
 .build()?;
-# Ok::<(), ferriswatch::dioxus::ThemeError>(())
+# Ok::<(), ThemeError>(())
 ```
 
 This overrides the color variables from `dx-components-theme.css` in the

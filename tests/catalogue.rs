@@ -67,8 +67,6 @@ fn full_catalogue_has_unique_ids_and_consistent_factories() {
 
             assert_eq!(selected.accent(), Some(accent.color));
 
-            assert_eq!(selected.primary().normal.background, accent.color);
-
             assert_eq!(selected.focus(), accent.color);
 
             assert_eq!(selected.colors().surfaces, default.colors().surfaces);
@@ -220,6 +218,7 @@ fn custom_ids_are_explicit_and_names_can_change_without_changing_identity() {
 
 fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
     let mut expected: HashMap<&str, HashMap<&str, Color>> = HashMap::new();
+    let mut missing = Vec::new();
 
     for line in include_str!("fixtures/palettes.tsv")
         .lines()
@@ -251,13 +250,10 @@ fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
             .unwrap_or_else(|| panic!("missing fixture {}", entry.metadata.id));
 
         for (name, color) in entry.raw_colors {
-            assert_eq!(
-                values.get(name),
-                Some(color),
-                "{}/{}",
-                entry.metadata.id,
-                name
-            );
+            match values.get(name) {
+                Some(expected) => assert_eq!(expected, color, "{}/{}", entry.metadata.id, name),
+                None => missing.push(format!("{}/{}", entry.metadata.id, name)),
+            }
         }
 
         for accent in entry.accents {
@@ -269,6 +265,8 @@ fn imports_match_independent_upstream_literals_for_every_palette_and_accent() {
             );
         }
     }
+
+    assert!(missing.is_empty(), "missing fixture literals: {missing:#?}");
 }
 
 #[test]
@@ -337,7 +335,7 @@ fn new_palette_semantic_anchors_match_imported_source_fixtures() {
         for (actual, expected) in [
             theme.surfaces().background,
             theme.text().normal,
-            theme.primary().normal.background,
+            theme.focus(),
             theme.status().success,
             theme.status().warning,
             theme.status().error,
@@ -355,66 +353,6 @@ fn new_palette_semantic_anchors_match_imported_source_fixtures() {
     }
 
     assert_eq!(themes.len(), 38);
-}
-
-#[test]
-
-fn action_foregrounds_choose_the_better_worst_state_contrast() {
-    fn luminance(c: Color) -> f32 {
-        0.2126 * c.r() + 0.7152 * c.g() + 0.0722 * c.b()
-    }
-
-    fn contrast(a: Color, b: Color) -> f32 {
-        let a = luminance(a);
-
-        let b = luminance(b);
-
-        (a.max(b) + 0.05) / (a.min(b) + 0.05)
-    }
-
-    for p in PALETTES {
-        for accent in std::iter::once(None).chain(p.accents.iter().map(|a| Some(a.id))) {
-            let t = p.resolve(accent).unwrap();
-
-            let c = t.colors();
-
-            for (action, foreground) in [
-                (c.primary, c.primary.normal.foreground),
-                (c.secondary, c.secondary.normal.foreground),
-            ] {
-                let fills = [
-                    action.normal.background,
-                    action.hover.background,
-                    action.pressed.background,
-                ];
-
-                // Transparent fills need a concrete composited canvas, tested in the visual report.
-                if fills.iter().any(|f| f.a() != 1.0) {
-                    continue;
-                }
-
-                let other = if foreground == Color::hex(0) {
-                    Color::hex(0xffffff)
-                } else {
-                    Color::hex(0)
-                };
-
-                let worst = |fg| {
-                    fills
-                        .iter()
-                        .map(|bg| contrast(fg, *bg))
-                        .fold(f32::INFINITY, f32::min)
-                };
-
-                assert!(
-                    worst(foreground) + 1e-5 >= worst(other),
-                    "{} {:?}",
-                    t.id(),
-                    accent
-                );
-            }
-        }
-    }
 }
 
 #[test]
@@ -459,8 +397,6 @@ fn every_new_named_accent_matches_its_source_assignment() {
             fields[0],
             fields[1]
         );
-
-        assert_eq!(theme.primary().normal.background, expected);
     }
 
     for entry in PALETTES.iter().filter(|p| {

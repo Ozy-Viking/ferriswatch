@@ -53,7 +53,7 @@ define_palette! {
         JSON_KEY_LEVEL_0_FOREGROUND = crate::color::Color::hex(0xc594c5),
     }
     accents {
-        Red = DELETED_FOREGROUND => ("red", "Red"),
+        Red = TAG_FOREGROUND => ("red", "Red"),
         Orange = NUMBER_CONSTANT_FUNCTION_ARGUMENT_TAG_ATTRIBUTE_EMBEDDED_FOREGROUND => ("orange", "Orange"),
         Yellow = CLASS_SUPPORT_FOREGROUND => ("yellow", "Yellow"),
         Green = STRING_SYMBOLS_INHERITED_CLASS_MARKUP_HEADING_FOREGROUND => ("green", "Green"),

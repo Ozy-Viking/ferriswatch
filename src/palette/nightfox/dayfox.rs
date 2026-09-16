@@ -1,8 +1,9 @@
 //! Dayfox. See `REGISTRATION` for pinned upstream sources.
 //!
-//! Nightfox base shades and declared UI roles. bg0 remains the floating
-//! surface, sel0 is hover, and generated bright/dim shades used by upstream
-//! semantic roles are preserved as their exact resolved values.
+//! Dayfox base palette and declared UI roles. Resolved bright/dim shades are
+//! retained where upstream syntax exports require them. Syntect roles follow
+//! Nightfox's TextMate/Bat export where an equivalent scope exists, with native
+//! semantic roles used for otherwise-unrepresented concepts.
 
 define_palette! {
     Dayfox, "Dayfox",
@@ -122,8 +123,8 @@ define_palette! {
             error: Self::RED,
             critical: Self::RED,
             info: Self::BLUE,
-            debug: Self::FG_2,
-            trace: Self::FG_3,
+            debug: Self::GREEN,
+            trace: Self::COMMENT,
         },
         border: Self::BG_4,
         border_muted: Self::BG_2,
@@ -139,40 +140,40 @@ define_palette! {
             pink: Self::PINK,
         },
         syntax: crate::theme_variant::SyntaxColors {
-            attribute: Self::ORANGE_DIM,
-            boolean: Self::ORANGE,
+            attribute: Self::YELLOW,
+            boolean: Self::YELLOW,
             builtin: Self::RED,
-            builtin_function: Self::RED,
-            builtin_type: Self::CYAN_DIM,
-            comment: Self::COMMENT,
-            constant: Self::ORANGE_DIM,
-            control_keyword: Self::MAGENTA_DIM,
+            builtin_function: Self::BLUE_DIM,
+            builtin_type: Self::YELLOW,
+            comment: Self::BG_4,
+            constant: Self::YELLOW,
+            control_keyword: Self::MAGENTA,
             deleted: Self::RED,
             deprecated: Self::FG_3,
-            documentation: Self::COMMENT,
-            escape: Self::YELLOW_DIM,
-            foreground: Self::FG_1,
+            documentation: Self::BG_4,
+            escape: Self::FG_2,
+            foreground: Self::FG_0,
             function: Self::BLUE_DIM,
-            heading: Self::BLUE_DIM,
+            heading: Self::YELLOW,
             inserted: Self::GREEN,
             invalid: Self::RED,
             keyword: Self::MAGENTA,
-            link: Self::ORANGE_DIM,
+            link: Self::BLUE_DIM,
             macro_name: Self::PINK_DIM,
-            markup_bold: Self::RED_BRIGHT,
-            markup_italic: Self::FG_1,
-            modifier: Self::YELLOW,
-            namespace: Self::CYAN_DIM,
-            number: Self::ORANGE,
-            operator: Self::FG_2,
-            parameter: Self::CYAN_DIM,
+            markup_bold: Self::RED,
+            markup_italic: Self::RED,
+            modifier: Self::MAGENTA,
+            namespace: Self::YELLOW,
+            number: Self::YELLOW,
+            operator: Self::CYAN,
+            parameter: Self::PINK_DIM,
             property: Self::BLUE,
-            punctuation: Self::FG_2,
+            punctuation: Self::FG_0,
             string: Self::GREEN,
-            tag: Self::MAGENTA,
-            type_keyword: Self::YELLOW,
+            tag: Self::BLUE_DIM,
+            type_keyword: Self::MAGENTA,
             type_name: Self::YELLOW,
-            variable: Self::BLACK,
+            variable: Self::FG_0,
         },
     }
 }

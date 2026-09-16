@@ -221,7 +221,7 @@ define_palette! {
         TOKEN_GO_KEYWORDS = crate::color::Color::hex(0xfede5d),
         TOKEN_GO_INTERFACES = crate::color::Color::hex(0x72f1b8),
         TOKEN_GO_CONSTANTS_E_G_NIL_STRING_FORMAT_S_D_ETC = crate::color::Color::hex(0x2ee2fa),
-        TOKEN_MARKDOWN_LINKS_AND_IMAGE_PATHS = crate::color::Color::hex(0x72f1b8),
+        TOKEN_MARKDOWN_LINKS_AND_IMAGE_PATHS = crate::color::Color::hex(0xfede5d),
         TOKEN_MARKDOWN_LINK_TITLE = crate::color::Color::hex(0xfede5d),
         TOKEN_MARKDOWN_HEADINGS = crate::color::Color::hex(0xff7edb),
         TOKEN_MARKDOWN_ITALIC = crate::color::Color::hex(0x2ee2fa),

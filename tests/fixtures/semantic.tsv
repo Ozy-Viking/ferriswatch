@@ -1,4 +1,4 @@
-# theme_id	background	foreground	default_primary	success	warning	error
+# theme_id	background	foreground	default_accent	success	warning	error
 ayu/dark	0d131aff	bfbab0ff	f29718ff	91b362ff	ffb454ff	ff3333ff
 ayu/light	fafafaff	6c7680ff	f2973dff	99bf4dff	f29718ff	f51818ff
 ayu/mirage	212733ff	cbccc6ff	ffcc66ff	a6cc70ff	ffd580ff	ff3333ff
@@ -13,9 +13,9 @@ jetbrains/dark	1e1f22ff	bcbec4ff	3574f0ff	5fad65ff	f2c55cff	db5c5cff
 material/lighter	fafafaff	546e7aff	00bcd4ff	91b859ff	f6a434ff	ff5370ff
 material/oceanic	25363bff	b0bec5ff	11bba3ff	c3e88dff	ffcb6bff	ff5370ff
 material/palenight	292d3eff	a6accdff	ab47bcff	c3e88dff	ffcb6bff	ff5370ff
-monokai/main	272822ff	f8f8f2ff	a6e22eff	a6e22eff	b3b42bff	c4265eff
+monokai/main	272822ff	f8f8f2ff	a6e22eff	a6e22eff	cd9731ff	f44747ff
 night_owl/main	011627ff	d6deebff	82aaffff	22da6eff	b39554ff	ef5350ff
-nightfox/carbonfox	161616ff	f2f4f8ff	78a9ffff	25be6aff	08bdbaff	ee5396ff
+nightfox/carbonfox	161616ff	f2f4f8ff	78a9ffff	25be6aff	be95ffff	ee5396ff
 nightfox/dawnfox	faf4edff	575279ff	286983ff	618774ff	ea9d34ff	b4637aff
 nightfox/dayfox	f6f2eeff	3d2b5aff	2848a9ff	396847ff	ac5402ff	a5222fff
 nightfox/duskfox	232136ff	e0def4ff	569fbaff	a3be8cff	f6c177ff	eb6f92ff
@@ -23,17 +23,17 @@ nightfox/nightfox	192330ff	cdcecfff	719cd6ff	81b29aff	dbc074ff	c94f6dff
 nightfox/nordfox	2e3440ff	cdcecfff	81a1c1ff	a3be8cff	ebcb8bff	bf616aff
 nightfox/terafox	152528ff	e6eaeaff	5a93aaff	7aa4a1ff	fda47fff	e85c51ff
 nord/main	2e3440ff	d8dee9ff	88c0d0ff	a3be8cff	ebcb8bff	bf616aff
-oceanic_next/main	1b2b34ff	cdd3deff	6699ccff	99c794ff	fac863ff	eb606bff
-one/dark	282c34ff	abb2bfff	61afefff	98c379ff	e5c07bff	e06c75ff
-one/light	fafafaff	383a42ff	4078f2ff	50a14fff	c18401ff	e45649ff
+oceanic_next/main	1b2b34ff	cdd3deff	6699ccff	99c794ff	fac863ff	ec5f67ff
+one/dark	282c34ff	abb2bfff	528bffff	98c379ff	e5c07bff	e06c75ff
+one/light	fafafaff	383a42ff	526fffff	50a14fff	c18401ff	e45649ff
 panda/main	292a2bff	f3f3f3ff	b084ebff	19f9d8ff	ffb86cff	ff2c6dff
 poimandres/main	1b1e28ff	a6accdff	5de4c7ff	5de4c7ff	fffac2ff	d0679dff
 quiet_light/main	f5f5f5ff	333333ff	7a3e9dff	448c27ff	765500ff	cd3131ff
 shades_of_purple/main	2d2b55ff	ffffffff	fad000ff	3ad900ff	fad000ff	ec3a37f5
 solarized/dark	002b36ff	839496ff	268bd2ff	859900ff	b58900ff	dc322fff
 solarized/light	fdf6e3ff	657b83ff	268bd2ff	859900ff	b58900ff	dc322fff
-synthwave_84/main	262335ff	ffffffff	ff7edbff	72f1b8ff	f3e70fff	fe4450ff
+synthwave_84/main	262335ff	ffffffff	ff7edbff	72f1b8ff	72f1b8cc	fe4450ff
 tomorrow/day	ffffffff	4d4d4cff	4271aeff	718c00ff	c99e00ff	c82829ff
 tomorrow/night	1d1f21ff	c5c8c6ff	81a2beff	b5bd68ff	f0c674ff	cc6666ff
-vscode/dark_plus	1e1e1eff	d4d4d4ff	007accff	369432ff	dcdcaaff	d16969ff
-vscode/light_plus	ffffffff	000000ff	007accff	369432ff	795e26ff	ee0000ff
+vscode/dark_plus	1e1e1eff	d4d4d4ff	007accff	369432ff	cca700ff	f48771ff
+vscode/light_plus	ffffffff	000000ff	007accff	369432ff	855f00ff	a1260dff

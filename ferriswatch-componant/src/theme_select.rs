@@ -3,7 +3,6 @@ use dioxus_primitives::combobox::{
     Combobox, ComboboxEmpty, ComboboxInput, ComboboxList, ComboboxOption,
 };
 use ferriswatch::dioxus::{Memory, use_theme};
-use web_time::Instant;
 
 use crate::progressively_render::INITIAL_OPTIONS;
 
