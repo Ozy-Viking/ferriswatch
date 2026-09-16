@@ -1,5 +1,6 @@
 use dioxus::logger::tracing::Level;
 use dioxus::prelude::*;
+use dioxus::prelude::*;
 use ferriswatch::{
     css::ThemeScope,
     dioxus::{DEFAULT_STYLESHEET, LocalStorage, ThemeProvider, use_theme},
@@ -11,6 +12,16 @@ use ferriswatch::{
     theme_variant::ThemePalette,
 };
 use ferriswatch_componant::ThemePicker;
+
+const FAVICON: Asset = asset!(
+    "/assets/ferriswatch_icon_3.png",
+    AssetOptions::image()
+        .with_size(ImageSize::Manual {
+            width: 64,
+            height: 64,
+        })
+        .with_png()
+);
 
 fn main() {
     dioxus::logger::init(Level::WARN).expect("failed to initialize logger");
@@ -30,6 +41,12 @@ fn App() -> Element {
         .expect("valid theme configuration")
     });
     rsx! {
+        document::Title { "Ferriswatch Demo" }
+        document::Link {
+            rel: "icon",
+            r#type: "image/png",
+            href: FAVICON,
+        }
         document::Stylesheet { href: DEFAULT_STYLESHEET }
         style { {include_str!("style.css")} }
         script { src: asset!("/assets/scrollbar.js") }
@@ -58,7 +75,7 @@ fn Workbench() -> Element {
                     div {
                         h1 { "Ferriswatch" }
                         p { class: "lede",
-                            "Choose a palette and accent to preview components and CSS variables."
+                            "Ferris-swatch ... rust based swatches ... rust ba ... you get it"
                         }
                     }
                 }
@@ -240,7 +257,7 @@ fn ProjectPreview() -> Element {
                 }
                 p { class: "save-status fs-text-muted", role: "status",
                     if saved() {
-                        "Saved for this session."
+                        "Updated project name"
                     }
                 }
             }
