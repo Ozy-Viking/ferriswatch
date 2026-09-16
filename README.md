@@ -1,6 +1,6 @@
 # Ferriswatch
 
-<img src="/assets/ferris_swatch_with_eyes.svg" alt="Ferris Swatch" width="420">
+<img src="assets/ferris_swatch_with_eyes.svg" alt="Ferris Swatch" width="420">
 
 Shared colour palettes and resolved themes for easy application styling.
 
