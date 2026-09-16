@@ -1,8 +1,10 @@
+#[cfg(target_arch = "wasm32")]
+use dioxus::prelude::*;
 
 pub(crate) const INITIAL_OPTIONS: usize = 4;
 
 #[cfg(target_arch = "wasm32")]
-pub(crate) fn progressively_render_options(mut render_count: Signal<usize>, total: usize) {
+pub(crate) fn progressively_render_options(render_count: Signal<usize>, total: usize) {
     use web_sys::wasm_bindgen::{JsCast, closure::Closure};
 
     fn schedule_step(mut render_count: Signal<usize>, total: usize, current: usize) {

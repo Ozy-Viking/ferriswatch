@@ -1183,7 +1183,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "dioxus",
  "dioxus-sdk-storage",
@@ -1195,7 +1195,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch-componant"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "dioxus",
  "dioxus-icons",
