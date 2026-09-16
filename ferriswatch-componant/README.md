@@ -7,22 +7,8 @@ Dioxus widgets for Ferriswatch that depend on `dioxus-primitives` and
 `dioxus` feature. This crate adds `ThemePicker`, `ThemeCombobox`, and a
 Ferriswatch-styled `Combobox`.
 
-This crate is published only to OneDev. `ferriswatch` publishes to both crates.io
-and OneDev.
-`dioxus-primitives` and its `dioxus-attributes` dependency also use OneDev.
-
-```toml
-# .cargo/config.toml
-[registries.onedev]
-index = "sparse+https://onedev.hankin.io/rust/~cargo/"
-credential-provider = "cargo:token"
-```
-
-```toml
-[dependencies]
-ferriswatch = { version = "0.3.0", registry = "onedev", features = ["dioxus"] }
-ferriswatch-componant = { version = "0.3.0", registry = "onedev" }
-```
+See [OneDev setup](../docs/Onedev.md#cargo-registry) for registry configuration
+and dependency declarations.
 
 Mount `ThemePicker` or `ThemeCombobox` inside `ThemeProvider`, and build
 component assets with `dx`. `ThemeCombobox` is unstyled: pass classes for the

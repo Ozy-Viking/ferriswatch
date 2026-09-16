@@ -1,8 +1,10 @@
 # Ferriswatch
 
-<img src="assets/ferris_swatch_with_eyes.svg" alt="Ferris Swatch" width="160">
+<img src="assets/ferris_swatch_with_eyes.svg" alt="Ferris Swatch" width="420">
 
 Shared colour palettes and resolved themes for easy application styling.
+
+[Try the live demo](https://ozy-viking.github.io/ferriswatch/).
 
 Ferriswatch currently provides 64 palettes across 28 families, typed accent factories,
 and a runtime catalogue with stable theme and accent IDs.

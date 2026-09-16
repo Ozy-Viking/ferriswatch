@@ -7,20 +7,12 @@ Your application chooses the web, desktop or other renderer.
 
 ```toml
 [dependencies]
-ferriswatch = { version = "0.3.0", registry = "onedev", features = ["dioxus"] }
-ferriswatch-componant = { version = "0.3.0", registry = "onedev" }
+ferriswatch = { version = "0.3.0", features = ["dioxus"] }
 dioxus = { version = "0.7.10", features = ["web"] }
 ```
 
-`ferriswatch`, `ferriswatch-componant`, `dioxus-primitives`, and its
-`dioxus-attributes` dependency use OneDev.
-Configure the registry in `.cargo/config.toml`:
-
-```toml
-[registries.onedev]
-index = "sparse+https://onedev.hankin.io/rust/~cargo/"
-credential-provider = "cargo:token"
-```
+To add `ferriswatch-componant`, follow the
+[registry and dependency setup in the source repository](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Onedev.md#cargo-registry).
 
 ## Configure the application
 

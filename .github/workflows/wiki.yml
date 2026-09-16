@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "docs/**"
+      - "!docs/Onedev.md"
       - ".github/workflows/wiki.yml"
 
 permissions:
@@ -20,3 +21,5 @@ jobs:
       - uses: Andrew-Chen-Wang/github-wiki-action@v5
         with:
           path: docs/
+          ignore: |
+            Onedev.md
