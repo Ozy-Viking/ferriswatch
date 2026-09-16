@@ -1,2 +1,7 @@
-[web.wasm_opt]
-debug = true
+[application]
+name = "ferriswatch"
+default_platform = "web"
+
+[web.app]
+title = "Ferriswatch Demo"
+base_path = "ferriswatch"

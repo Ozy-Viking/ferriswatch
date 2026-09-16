@@ -130,7 +130,7 @@ progress::-moz-progress-bar { background-color: var(--fs-primary); }
 .swatch > span { display: block; height: 46px; border: 1px solid var(--fs-border-muted); border-radius: 6px; }
 .swatch code { font-size: 9px; color: var(--fs-muted); overflow-wrap: anywhere; }
 .page-footer { display: flex; justify-content: space-between; gap: 20px; color: var(--fs-muted); font-size: 10px; padding: 28px 0; margin-top: 30px; border-top: 1px solid var(--fs-border); }
-@media (max-width: 900px) { .palette-art { display: none; } .layout { grid-template-columns: 240px minmax(0, 1fr); } .stage { padding-left: 22px; } .stage-caption { display: none; } .project, .reference { padding: 16px 22px; } .save-row { flex-direction: column; } }
+@media (max-width: 900px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } .stage { padding-left: 22px; } .stage-caption { display: none; } .project, .reference { padding: 16px 22px; } .save-row { flex-direction: column; } }
 @media (max-width: 640px) { main { padding: 0 6vw; } h1 { letter-spacing: -1.5px; } .layout { display: block; } .settings { padding: 24px 0; } .fs-theme-picker { grid-template-columns: 1fr; gap: 14px; } .fine-print { margin-bottom: 0; } .aside-footer { display: none; } .stage { border-left: 0; border-top: 1px solid var(--fs-border); padding: 22px 0 0; } .project, .reference { padding: 12px 20px; } .project-top { flex-wrap: wrap; } .feedback-grid { grid-template-columns: 1fr; } .add-task { flex-wrap: wrap; } .add-task input { flex-basis: 100%; } .page-footer { flex-direction: column; gap: 6px; } }
 
 html:has(overlay-scrollbar[data-ready]) { scrollbar-width: none; }
@@ -147,3 +147,7 @@ overlay-scrollbar.no-overflow { visibility: hidden; }
 .saved-themes dt { font-size: 11px; color: var(--fs-muted); margin-bottom: 3px; }
 .saved-themes dd { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
 .saved-themes small { display: block; font-size: 11px; color: var(--fs-muted); margin-top: 2px; }
+
+@media (max-width: 640px) {
+  .intro { flex-direction: column; align-items: flex-start; gap: 0; padding-bottom: 20px; }
+}

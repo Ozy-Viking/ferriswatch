@@ -1,9 +1,13 @@
 # Ferriswatch
 
-Shared colour palettes and resolved themes for application styling.
+<img src="assets/ferris_swatch_with_eyes.svg" alt="Ferris Swatch" width="160">
 
-Ferriswatch provides 64 palettes across 28 families, typed accent factories, and a
-runtime catalogue with stable theme and accent IDs. See the [complete catalogue](docs/Catalogue.md).
+Shared colour palettes and resolved themes for easy application styling.
+
+Ferriswatch currently provides 64 palettes across 28 families, typed accent factories,
+and a runtime catalogue with stable theme and accent IDs.
+See the [complete catalogue](docs/Catalogue.md).
+Did I mention you can add your own themes too.
 
 ## Usage
 

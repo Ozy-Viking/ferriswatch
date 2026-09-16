@@ -49,12 +49,18 @@
   <feComposite in="edge-shade" in2="SourceAlpha" operator="in" result="inset-shade"/>
   <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="inset-shade"/></feMerge>
 </filter>
+<!-- Cut out the gaps behind both claws so the page background shows through. -->
+<mask id="fw-claw-gaps" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254" style="mask-type: luminance">
+  <rect width="1254" height="1254" fill="#ffffff"/>
+  <path fill="#000000" d="M 218 619 Q 259 668 290 658 L 298 630 Q 329 675 381 684 L 327 765 L 213 679 Z M 950 628 Q 955 677 977 668 L 1033 615 Q 1045 678 991 737 L 943 765 L 887 686 Z"/>
+</mask>
 </defs>
 <!-- A continuous silhouette avoids transparent seams between traced fragments. -->
+<g mask="url(#fw-claw-gaps)">
 <path fill="url(#fw-body)" d="M 199 543 C 172 500 160 466 196 452 Q 217 445 245 441 Q 255 440 250 423 C 237 386 222 356 256 347 Q 281 339 316 348 Q 329 352 327 335 C 325 293 326 256 354 258 Q 379 259 417 275 Q 433 280 437 261 C 448 217 460 190 485 195 Q 514 200 548 232 Q 558 241 568 225 C 593 187 609 161 632 169 Q 652 176 679 225 Q 689 243 701 232 C 737 201 767 180 787 202 Q 807 224 814 261 Q 817 282 833 276 C 873 260 900 248 916 266 Q 930 283 927 333 Q 926 350 941 348 C 978 342 1003 341 1014 365 Q 1022 384 1006 425 Q 999 442 1015 445 C 1053 450 1076 459 1077 480 Q 1076 500 1051 541 C 1135 554 1179 618 1179 704 Q 1177 798 1092 863 L 977 907 L 262 905 C 163 913 75 830 75 715 C 72 625 112 562 199 543 Z"/>
 <!-- The shaded lower shell sits behind the cards and claws. -->
 <path fill="url(#fw-shadow)" d="M 308 584 Q 620 708 942 584 Q 953 580 954 614 L 1039 695 L 1096 849 Q 1047 891 981 907 L 264 905 Q 158 907 96 814 L 139 693 L 294 629 Q 298 589 308 584 Z"/>
-<path fill="#202024" d="M 218 619 Q 259 668 290 658 L 298 630 Q 329 675 381 684 L 327 765 L 213 679 Z M 950 628 Q 955 677 977 668 L 1033 615 Q 1045 678 991 737 L 943 765 L 887 686 Z"/>
+</g>
 <!-- Smooth eyes retain the reference's white highlights. -->
 <ellipse cx="487" cy="500" rx="62" ry="80" fill="url(#fw-eye)" transform="rotate(3 487 500)"/>
 <ellipse cx="770" cy="498" rx="62" ry="81" fill="url(#fw-eye)" transform="rotate(-3 770 498)"/>

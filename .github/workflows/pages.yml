@@ -1,0 +1,62 @@
+name: Deploy Ferriswatch Example
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dioxus CLI
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install dx
+        run: cargo binstall dioxus-cli --version 0.7.10 -y
+
+      - name: Build Ferriswatch example
+        working-directory: examples/dioxus_theme
+        env:
+          CARGO_REGISTRIES_ONEDEV_TOKEN: ${{ secrets.RUST_TOKEN }}
+        run: dx bundle --web --release
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: examples/dioxus_theme/target/dx/ferriswatch-dioxus-example/release/web/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
