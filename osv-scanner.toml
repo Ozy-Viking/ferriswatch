@@ -15,6 +15,18 @@ license.override = ["MIT"]
 reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
 
 [[PackageOverrides]]
+name = "ferriswatch-core"
+ecosystem = "crates.io"
+license.override = ["MIT"]
+reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
+
+[[PackageOverrides]]
+name = "ferriswatch-macros"
+ecosystem = "crates.io"
+license.override = ["MIT"]
+reason = "ferriswatch is MIT licensed; see Cargo.toml and LICENSE."
+
+[[PackageOverrides]]
 name = "ferriswatch-vendor-dioxus-attributes"
 version = "0.1.0"
 ecosystem = "crates.io"
