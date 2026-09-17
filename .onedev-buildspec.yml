@@ -189,9 +189,22 @@ jobs:
           commands: |
             set -euo pipefail
             : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
-            cargo publish -p ferriswatch --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify
-            cargo publish -p ferriswatch --registry onedev --locked --no-verify
-            cargo publish -p ferriswatch-componant --registry onedev --locked --no-verify
+            cargo publish --workspace --exclude ferriswatch-dioxus-example --registry onedev --locked --no-verify
+            python3 - <<'PYTHON'
+            from pathlib import Path
+
+            manifest = Path("Cargo.toml")
+            contents = manifest.read_text()
+            qualifier = ', registry = "onedev"'
+            expected = 6
+            actual = contents.count(qualifier)
+            if actual != expected:
+                raise SystemExit(
+                    f"expected {expected} OneDev dependency qualifiers, found {actual}"
+                )
+            manifest.write_text(contents.replace(qualifier, ""))
+            PYTHON
+            cargo publish --workspace --exclude ferriswatch-dioxus-example --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify --allow-dirty
             python3 - <<'PYTHON'
             import json
             import subprocess
@@ -201,9 +214,11 @@ jobs:
                 "cargo", "metadata", "--no-deps", "--format-version", "1", "--locked",
             ]))
             packages = {p["name"]: p for p in metadata["packages"]}
-            releases = [f"{name}@@{packages[name]['version']}" for name in (
-                "ferriswatch", "ferriswatch-componant",
-            )]
+            releases = [
+                f"{package['name']}@@{package['version']}"
+                for package in packages.values()
+                if package["publish"]
+            ]
             Path("docsrs-publications.txt").write_text(",".join(releases) + "\n")
             PYTHON
         runAs: 0:0

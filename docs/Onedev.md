@@ -5,9 +5,17 @@ in the source repository and excluded from the GitHub wiki.
 
 ## Cargo registry
 
-`ferriswatch-componant` is published only to OneDev. `ferriswatch` publishes to both crates.io
-and OneDev.
-`dioxus-primitives` and its `dioxus-attributes` dependency also use OneDev.
+All publishable workspace crates publish to both crates.io and OneDev.
+`ferriswatch-vendor-dioxus-primitives` and
+`ferriswatch-vendor-dioxus-attributes` retain the upstream Rust library names
+`dioxus_primitives` and `dioxus_attributes`.
+
+The publish job uses Cargo's workspace publishing support to determine dependency
+order for each registry. It publishes to OneDev first, then removes the OneDev
+registry qualifiers from workspace dependencies in the ephemeral CI checkout
+before publishing to crates.io. This keeps internal dependencies within the
+registry being published. The Dioxus example has `publish = false` and is
+excluded.
 
 ```toml
 # .cargo/config.toml
@@ -18,12 +26,11 @@ credential-provider = "cargo:token"
 
 ```toml
 [dependencies]
-ferriswatch = { version = "0.3.0", registry = "onedev", features = ["dioxus"] }
-ferriswatch-componant = { version = "0.3.0", registry = "onedev" }
+ferriswatch = { version = "0.4", registry = "onedev", features = ["dioxus-components"] }
 ```
 
 For application setup and widget usage, see [Dioxus integration](Dioxus.md)
-and the [component README](../ferriswatch-componant/README.md).
+and the [component README](../crates/ferriswatch-components/README.md).
 
 ## Collaboration sync
 
@@ -122,4 +129,3 @@ this repository. HTTP errors report status and endpoint, without response bodies
 API references: [OneDev REST API](https://docs.onedev.io/restful-api),
 [GitHub issues](https://docs.github.com/en/rest/issues/issues),
 [GitHub PRs](https://docs.github.com/en/rest/pulls/pulls).
-

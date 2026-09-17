@@ -1,4 +1,4 @@
-#[path = "../src/css/definitions.rs"]
+#[path = "../crates/ferriswatch-core/src/css/definitions.rs"]
 mod definitions;
 
 fn main() -> std::process::ExitCode {
@@ -25,7 +25,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    let path = std::path::Path::new("src/css/default.css");
+    let path = std::path::Path::new("crates/ferriswatch-core/src/css/default.css");
 
     let expected = definitions::render();
 

@@ -1,12 +1,12 @@
 //! Browser fixture: dx serve --example dx_theme --web --port 8081
 use dioxus::prelude::*;
 use ferriswatch::{
-    dioxus::{ThemeConfig, ThemeProvider, ThemeScope},
+    dioxus::{ThemeProvider, ThemeScope},
     palette::{
-        catppuccin::{Latte, Mocha},
         NoAccent,
+        catppuccin::{Latte, Mocha},
     },
-    theme::{Appearance, Theme},
+    theme::{Appearance, Theme, config::ThemeConfig},
     theme_variant::ThemePalette,
 };
 

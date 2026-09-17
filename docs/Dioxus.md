@@ -2,17 +2,18 @@
 
 Enable Ferriswatch's `dioxus` feature alongside the consuming application's Dioxus
 0.7 dependency. Ferriswatch supplies theme configuration, provider state, and
-hooks. Widgets that wrap `dioxus-primitives` live in `ferriswatch-componant`.
+hooks. Use `dioxus-components` instead to also expose the widgets that wrap
+`dioxus-primitives`.
 Your application chooses the web, desktop or other renderer.
 
 ```toml
 [dependencies]
-ferriswatch = { version = "0.3.0", features = ["dioxus"] }
+ferriswatch = { version = "0.4", registry = "onedev", features = ["dioxus-components"] }
 dioxus = { version = "0.7.10", features = ["web"] }
 ```
 
-To add `ferriswatch-componant`, follow the
-[registry and dependency setup in the source repository](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Onedev.md#cargo-registry).
+Follow the [OneDev registry setup](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Onedev.md#cargo-registry)
+before adding the component feature.
 
 ## Configure the application
 
@@ -144,7 +145,7 @@ are its named accents.
 Support is advisory: these methods and provider selection do not reject a
 variant because its support differs from the target mode.
 
-`ferriswatch_componant::ThemePicker` includes a Light/Dark switch and filters
+`ferriswatch::ThemePicker` includes a Light/Dark switch and filters
 palette options for that mode. If an application explicitly selects an
 out-of-mode palette, the picker includes it as the current selection rather than
 displaying an unrelated value.
@@ -210,7 +211,7 @@ fn ThemedApp(config: ThemeConfig) -> Element {
 ```
 
 See [`crate::css`] for class mappings, overrides, generation, and commit checks.
-`ferriswatch-componant` provides `ThemePicker` and `ThemeCombobox`. The picker
+The `dioxus-components` feature provides `ThemePicker` and `ThemeCombobox`. The picker
 combines the light/dark slider with `ThemeCombobox`, a joined theme/accent
 control built from `dx components add combobox`. Click the left half to browse
 or search themes; use the right half to browse or search its accents. Arrow

@@ -1,0 +1,30 @@
+[package]
+name = "ferriswatch-components"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+readme = "README.md"
+repository.workspace = true
+publish.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+dioxus.workspace = true
+dioxus-icons.workspace = true
+dioxus-primitives.workspace = true
+ferriswatch-core = { workspace = true, features = [
+    "dioxus",
+] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { workspace = true, features = ["Window"] }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(docsrs)"] }

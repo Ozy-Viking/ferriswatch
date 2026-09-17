@@ -52,11 +52,11 @@ available through `ferriswatch::css`. See the [CSS guide](docs/Css.md) for
 `DEFAULT_CSS`, generation, and commit-hook setup.
 
 Enable the optional `dioxus` feature for typed theme selection, a required-default
-configuration builder, shared theme state, and a provider. `ThemePicker` and
-`ThemeCombobox` live in the `ferriswatch-componant` workspace crate because they
-depend on `dioxus-primitives`. `ThemeCombobox` is unstyled and takes host classes
-plus `matching_mode_only`. See [Dioxus integration](docs/Dioxus.md) for setup
-and custom palettes.
+configuration builder, shared theme state, and a provider. Enable
+`dioxus-components` to also expose `ThemePicker`, `ThemeCombobox`, and the other
+widgets backed by `dioxus-primitives`. `ThemeCombobox` is unstyled and takes host
+classes plus `matching_mode_only`. See [Dioxus integration](docs/Dioxus.md) for
+setup and custom palettes.
 
 ## Palette inspector
 
@@ -72,9 +72,9 @@ to compare panels, raised content, popups, text tiers, actions and statuses.
 ```sh
 cargo fmt --check
 cargo test --locked
-cargo test -p ferriswatch-componant --locked
+cargo test -p ferriswatch-components --locked
 cargo clippy --locked --all-targets
-cargo clippy -p ferriswatch-componant --locked --all-targets
+cargo clippy -p ferriswatch-components --locked --all-targets
 cargo doc --locked --no-deps --all-features
 python tools/check_palette_sources.py
 ```

@@ -119,8 +119,11 @@ fn default_css_has_exact_public_rules_and_declaration_allowlist() {
 
     assert_eq!(css_lines(), expected_file);
 
-    let tracked =
-        fs::read(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/css/default.css")).unwrap();
+    let tracked = fs::read(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("crates/ferriswatch-core/src/css/default.css"),
+    )
+    .unwrap();
 
     assert_eq!(tracked, DEFAULT_CSS.as_bytes());
 

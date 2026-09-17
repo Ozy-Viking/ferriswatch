@@ -1,7 +1,7 @@
 use dioxus::logger::tracing::Level;
 use dioxus::prelude::*;
-use dioxus::prelude::*;
 use ferriswatch::{
+    ThemePicker,
     css::ThemeScope,
     dioxus::{DEFAULT_STYLESHEET, LocalStorage, ThemeProvider, use_theme},
     palette::{
@@ -11,7 +11,6 @@ use ferriswatch::{
     theme::{Appearance, Theme, ThemeSelection, config::ThemeConfig},
     theme_variant::ThemePalette,
 };
-use ferriswatch_componant::ThemePicker;
 
 const FAVICON: Asset = asset!(
     "/assets/ferriswatch_icon_3.png",

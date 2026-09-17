@@ -44,7 +44,7 @@ color scheme are available throughout the document. `src/style.css` owns the pag
 responsive layout while the default classes provide semantic surfaces, text,
 actions, focus, borders, and feedback colors.
 
-The example uses `ferriswatch-componant::ThemePicker`, which combines the mode slider
+The example uses `ferriswatch::ThemePicker` through the `dioxus-components` feature. It combines the mode slider
 with `ThemeCombobox`. Its left half searches themes and its right half searches
 accents; both lists support scrolling and keyboard selection. `ThemePicker`
 supplies the combobox classes; styling `.fs-theme-picker` shows how an
