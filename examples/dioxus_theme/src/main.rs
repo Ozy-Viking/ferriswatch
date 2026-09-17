@@ -69,7 +69,7 @@ fn Workbench() -> Element {
                     div {
                         class: "palette-art",
                         aria_hidden: "true",
-                        dangerous_inner_html: include_str!("../../../assets/ferris_swatch_with_eyes.svg"),
+                        dangerous_inner_html: include_str!("../assets/ferris_swatch_with_eyes.svg"),
                     }
                     div {
                         h1 { "Ferriswatch" }

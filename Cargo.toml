@@ -119,7 +119,3 @@ path = "tools/generate_css.rs"
 [profile.dev]
 debug = true
 strip = "none"
-
-[profile.release]
-debug = true
-strip = "none"

@@ -46,7 +46,7 @@ jobs:
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: examples/dioxus_theme/target/dx/ferriswatch-dioxus-example/release/web/public
+          path: target/dx/ferriswatch-dioxus-example/release/web/public
 
   deploy:
     needs: build
