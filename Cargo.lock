@@ -1263,7 +1263,7 @@ version = "0.4.3"
 
 [[package]]
 name = "ferriswatch-vendor-dioxus-attributes"
-version = "0.1.0"
+version = "0.4.3"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -1273,7 +1273,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch-vendor-dioxus-primitives"
-version = "0.0.1"
+version = "0.4.3"
 dependencies = [
  "dioxus",
  "dioxus-sdk-time",

@@ -28,8 +28,8 @@ ferriswatch-components = { path = "crates/ferriswatch-components", version = "0.
 ferriswatch-macros = { path = "crates/ferriswatch-macros", version = "0.4", registry = "onedev" }
 
 dioxus-sdk-storage = "0.7.0"
-dioxus-attributes = { package = "ferriswatch-vendor-dioxus-attributes", path = "crates/vendor/ferriswatch-vendor-dioxus-attributes", version = "=0.1.0", registry = "onedev" }
-dioxus-primitives = { package = "ferriswatch-vendor-dioxus-primitives", path = "crates/vendor/ferriswatch-vendor-dioxus-primitives", version = "=0.0.1", registry = "onedev", default-features = false }
+dioxus-attributes = { package = "ferriswatch-vendor-dioxus-attributes", path = "crates/vendor/ferriswatch-vendor-dioxus-attributes", version = "0.4", registry = "onedev" }
+dioxus-primitives = { package = "ferriswatch-vendor-dioxus-primitives", path = "crates/vendor/ferriswatch-vendor-dioxus-primitives", version = "0.4", registry = "onedev", default-features = false }
 dioxus = { version = "0.7.10", default-features = false, features = [
     "macro",
     "html",
