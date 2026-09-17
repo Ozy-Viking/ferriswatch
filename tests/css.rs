@@ -354,7 +354,7 @@ fn temp_root() -> PathBuf {
             .as_nanos()
     ));
 
-    fs::create_dir_all(root.join("src/css")).unwrap();
+    fs::create_dir_all(root.join("crates/ferriswatch-core/src/css")).unwrap();
 
     root
 }
@@ -364,7 +364,7 @@ fn temp_root() -> PathBuf {
 fn generator_check_regeneration_and_determinism() {
     let root = temp_root();
 
-    let path = root.join("src/css/default.css");
+    let path = root.join("crates/ferriswatch-core/src/css/default.css");
 
     let missing = generator()
         .current_dir(&root)
