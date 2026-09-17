@@ -1214,7 +1214,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch"
-version = "0.4.2"
+version = "0.4.3"
 dependencies = [
  "dioxus",
  "ferriswatch-components",
@@ -1225,7 +1225,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch-components"
-version = "0.4.2"
+version = "0.4.3"
 dependencies = [
  "dioxus",
  "dioxus-icons",
@@ -1236,7 +1236,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch-core"
-version = "0.4.2"
+version = "0.4.3"
 dependencies = [
  "dioxus",
  "dioxus-sdk-storage",
@@ -1259,7 +1259,7 @@ dependencies = [
 
 [[package]]
 name = "ferriswatch-macros"
-version = "0.4.2"
+version = "0.4.3"
 
 [[package]]
 name = "ferriswatch-vendor-dioxus-attributes"
@@ -1268,7 +1268,7 @@ dependencies = [
  "dioxus-rsx",
  "proc-macro2",
  "quote",
- "syn 2.0.119",
+ "syn 3.0.5",
 ]
 
 [[package]]

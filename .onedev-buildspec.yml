@@ -1,9 +1,17 @@
 version: 53
+
 imports:
   - projectPath: rust
     revision: main
     accessTokenSecret: RUST_READ
+
 jobs:
+  # ---------------------------------------------------------------------------
+  # Tests / Clippy / WASM
+  #
+  # Runs for normal development and again for release tags.
+  # Release publishing depends on this job succeeding.
+  # ---------------------------------------------------------------------------
   - name: check
     steps:
       - type: CheckoutStep
@@ -14,6 +22,7 @@ jobs:
         withSubmodules: false
         condition: SUCCESSFUL
         optional: false
+
       - type: CommandStep
         name: Identify Rust cache compatibility
         runInContainer: true
@@ -28,6 +37,7 @@ jobs:
         useTTY: false
         condition: SUCCESSFUL
         optional: false
+
       - type: SetupCacheStep
         name: Restore Cargo dependencies and build artifacts
         key: ferriswatch-rust-v1
@@ -40,6 +50,7 @@ jobs:
         uploadStrategy: UPLOAD_IF_NOT_EXACT_MATCH
         condition: SUCCESSFUL
         optional: false
+
       - type: CommandStep
         name: Release tests and Clippy
         runInContainer: true
@@ -49,8 +60,10 @@ jobs:
           shell: bash
           commands: |
             set -euo pipefail
+
             rustup component add clippy
             rustup target add wasm32-unknown-unknown
+
             bash ci/check.sh
         runAs: 0:0
         envVars:
@@ -61,12 +74,14 @@ jobs:
         useTTY: false
         condition: SUCCESSFUL
         optional: false
+
       - type: PublishJUnitReportStep
         name: Publish test results
         reportName: Ferriswatch tests
         filePatterns: target/nextest/ci/junit.xml
         condition: ALWAYS
         optional: false
+
       - type: PublishClippyReportStep
         name: Publish Clippy diagnostics
         reportName: Ferriswatch Clippy
@@ -74,23 +89,43 @@ jobs:
         failThreshold: HIGH
         condition: ALWAYS
         optional: false
+
       - type: PublishArtifactStep
         name: Archive test and Clippy reports
         artifacts: target/nextest/ci/junit.xml target/clippy/*.json
         condition: ALWAYS
         optional: false
+
     triggers:
       - type: BranchUpdateTrigger
         branches: "** -sync/** -ferriswatch-sync-state"
         userMatch: anyone
+
       - type: PullRequestUpdateTrigger
+
+      # Re-run the complete test suite for the exact release tag.
+      - type: TagCreateTrigger
+        tags: "*.*.* -v*"
+        branches: main
+
     retryCondition: never
     maxRetries: 3
     retryDelay: 30
     includeUpstreamWhenRebuild: false
     includeDownstreamWhenRebuild: false
     timeout: 3600
-  - name: publish
+
+  # ---------------------------------------------------------------------------
+  # Release preflight
+  #
+  # Validates:
+  #   * tag == workspace version
+  #   * the normal OneDev form can be packaged for publishing
+  #   * the crates.io-transformed form can be packaged for publishing
+  #
+  # No crates.io publishing credential is supplied to this job.
+  # ---------------------------------------------------------------------------
+  - name: release-preflight
     steps:
       - type: CheckoutStep
         name: Check out source
@@ -100,6 +135,7 @@ jobs:
         withSubmodules: false
         condition: SUCCESSFUL
         optional: false
+
       - type: CommandStep
         name: Identify Rust cache compatibility
         runInContainer: true
@@ -114,20 +150,20 @@ jobs:
         useTTY: false
         condition: SUCCESSFUL
         optional: false
+
       - type: SetupCacheStep
-        name: Restore Cargo dependencies and build artifacts
+        name: Restore Cargo registry cache
         key: ferriswatch-rust-v1
-        checksumFiles: Cargo.lock .ci-rust-version .onedev-buildspec.yml ci/check.sh
+        checksumFiles: Cargo.lock .ci-rust-version .onedev-buildspec.yml
         entries:
           - path: .ci-cargo/registry
           - path: .ci-cargo/git
-          - path: target
-            excludes: clippy nextest
         uploadStrategy: UPLOAD_IF_NOT_EXACT_MATCH
         condition: SUCCESSFUL
         optional: false
+
       - type: CommandStep
-        name: Validate release tag and run checks
+        name: Validate release tag
         runInContainer: true
         image: onedev.hankin.io/docker/rust:latest
         interpreter:
@@ -135,52 +171,38 @@ jobs:
           shell: bash
           commands: |
             set -euo pipefail
+
             python3 - <<'PY'
             import os
             import tomllib
             from pathlib import Path
 
             data = tomllib.loads(Path("Cargo.toml").read_text())
+
             version = data["package"]["version"]
+
             if isinstance(version, dict) and version.get("workspace"):
                 version = data["workspace"]["package"]["version"]
-            if os.environ["RELEASE_TAG"] != version:
-                raise SystemExit(f"Release tag must be {version}")
+
+            release_tag = os.environ["RELEASE_TAG"]
+
+            if release_tag != version:
+                raise SystemExit(
+                    f"Release tag must be {version}, got {release_tag}"
+                )
+
+            print(f"Release tag {release_tag} matches workspace version {version}")
             PY
-            rustup component add clippy
-            rustup target add wasm32-unknown-unknown
-            bash ci/check.sh
         runAs: 0:0
         envVars:
-          - name: CARGO_HOME
-            value: /onedev-build/work/.ci-cargo
-          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
-            value: "@job_token@:@secret:RUST_TOKEN@"
           - name: RELEASE_TAG
             value: "@tag@"
         useTTY: false
         condition: SUCCESSFUL
         optional: false
-      - type: PublishJUnitReportStep
-        name: Publish test results
-        reportName: Ferriswatch tests
-        filePatterns: target/nextest/ci/junit.xml
-        condition: ALWAYS
-        optional: false
-      - type: PublishClippyReportStep
-        name: Publish Clippy diagnostics
-        reportName: Ferriswatch Clippy
-        filePatterns: target/clippy/*.json
-        failThreshold: HIGH
-        condition: ALWAYS
-        optional: false
-      - type: PublishArtifactStep
-        name: Archive test and Clippy reports
-        artifacts: target/nextest/ci/junit.xml target/clippy/*.json
-        condition: ALWAYS
-        optional: false
+
       - type: CommandStep
-        name: Publish verified package
+        name: Preflight OneDev publication
         runInContainer: true
         image: onedev.hankin.io/docker/rust:latest
         interpreter:
@@ -188,70 +210,319 @@ jobs:
           shell: bash
           commands: |
             set -euo pipefail
-            : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
-            cargo publish --workspace --exclude ferriswatch-dioxus-example --registry onedev --locked --no-verify
-            python3 - <<'PYTHON'
+
+            cargo publish \
+              --workspace \
+              --exclude ferriswatch-dioxus-example \
+              --registry onedev \
+              --locked \
+              --dry-run \
+              --no-verify
+        runAs: 0:0
+        envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
+
+          # Read access is still required for private registry dependencies.
+          # This does not exercise an actual publication.
+          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+            value: "@job_token@:@secret:RUST_TOKEN@"
+
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
+      - type: CommandStep
+        name: Preflight crates.io publication
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            # The workspace manifests use registry="onedev" so local development
+            # and OneDev publication have the correct fallback registry.
+            #
+            # crates.io cannot publish dependencies which explicitly name the
+            # private registry, so create the same transformed working tree used
+            # by the real crates.io publication job.
+            python3 - <<'PY'
             from pathlib import Path
 
             manifest = Path("Cargo.toml")
             contents = manifest.read_text()
+
             qualifier = ', registry = "onedev"'
             expected = 6
             actual = contents.count(qualifier)
+
             if actual != expected:
                 raise SystemExit(
-                    f"expected {expected} OneDev dependency qualifiers, found {actual}"
+                    f"expected {expected} OneDev dependency qualifiers, "
+                    f"found {actual}"
                 )
+
             manifest.write_text(contents.replace(qualifier, ""))
-            PYTHON
-            cargo publish --workspace --exclude ferriswatch-dioxus-example --registry crates-io --token "$CARGO_REGISTRY_TOKEN" --locked --no-verify --allow-dirty
-            python3 - <<'PYTHON'
-            import json
-            import subprocess
+            PY
+
+            cargo publish \
+              --workspace \
+              --exclude ferriswatch-dioxus-example \
+              --registry crates-io \
+              --locked \
+              --dry-run \
+              --no-verify \
+              --allow-dirty
+        runAs: 0:0
+        envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
+    triggers:
+      - type: TagCreateTrigger
+        tags: "*.*.* -v*"
+        branches: main
+
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 1800
+
+  # ---------------------------------------------------------------------------
+  # Publish to OneDev
+  #
+  # Runs only once both:
+  #   * check
+  #   * release-preflight
+  #
+  # have succeeded.
+  # ---------------------------------------------------------------------------
+  - name: publish-onedev
+    steps:
+      - type: CheckoutStep
+        name: Check out source
+        cloneCredential:
+          type: DefaultCredential
+        withLfs: false
+        withSubmodules: false
+        condition: SUCCESSFUL
+        optional: false
+
+      - type: CommandStep
+        name: Publish to OneDev
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            cargo publish \
+              --workspace \
+              --exclude ferriswatch-dioxus-example \
+              --registry onedev \
+              --locked \
+              --no-verify
+        runAs: 0:0
+        envVars:
+          - name: CARGO_HOME
+            value: /onedev-build/work/.ci-cargo
+          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
+            value: "@job_token@:@secret:RUST_TOKEN@"
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
+    triggers:
+      - type: TagCreateTrigger
+        tags: "*.*.* -v*"
+        branches: main
+
+    jobDependencies:
+      - jobName: check
+        requireSuccessful: true
+
+      - jobName: release-preflight
+        requireSuccessful: true
+
+    # Prevent two releases from publishing to OneDev simultaneously, while
+    # still allowing OneDev and crates.io publication to happen in parallel.
+    sequentialGroup: ferriswatch-publish-onedev
+
+    retryCondition: never
+    maxRetries: 3
+    retryDelay: 30
+    includeUpstreamWhenRebuild: false
+    includeDownstreamWhenRebuild: false
+    timeout: 1800
+
+  # ---------------------------------------------------------------------------
+  # Publish to crates.io
+  #
+  # Independent sibling of publish-onedev. Both can run in parallel after the
+  # release gates pass.
+  # ---------------------------------------------------------------------------
+  - name: publish-crates-io
+    steps:
+      - type: CheckoutStep
+        name: Check out source
+        cloneCredential:
+          type: DefaultCredential
+        withLfs: false
+        withSubmodules: false
+        condition: SUCCESSFUL
+        optional: false
+
+      - type: CommandStep
+        name: Prepare crates.io manifests
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            python3 - <<'PY'
             from pathlib import Path
 
-            metadata = json.loads(subprocess.check_output([
-                "cargo", "metadata", "--no-deps", "--format-version", "1", "--locked",
-            ]))
-            packages = {p["name"]: p for p in metadata["packages"]}
-            releases = [
-                f"{package['name']}@@{package['version']}"
-                for package in packages.values()
-                if package["publish"]
-            ]
-            Path("docsrs-publications.txt").write_text(",".join(releases) + "\n")
-            PYTHON
+            manifest = Path("Cargo.toml")
+            contents = manifest.read_text()
+
+            qualifier = ', registry = "onedev"'
+            expected = 6
+            actual = contents.count(qualifier)
+
+            if actual != expected:
+                raise SystemExit(
+                    f"expected {expected} OneDev dependency qualifiers, "
+                    f"found {actual}"
+                )
+
+            manifest.write_text(contents.replace(qualifier, ""))
+            PY
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
+      - type: CommandStep
+        name: Publish to crates.io
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            : "${CARGO_REGISTRY_TOKEN:?CARGO_REGISTRY_TOKEN is not set}"
+
+            cargo publish \
+              --workspace \
+              --exclude ferriswatch-dioxus-example \
+              --registry crates-io \
+              --token "$CARGO_REGISTRY_TOKEN" \
+              --locked \
+              --no-verify \
+              --allow-dirty
         runAs: 0:0
         envVars:
           - name: CARGO_HOME
             value: /onedev-build/work/.ci-cargo
           - name: CARGO_REGISTRY_TOKEN
             value: "@secret:CARGO_REGISTRY_TOKEN@"
-          - name: CARGO_REGISTRIES_ONEDEV_TOKEN
-            value: "@job_token@:@secret:RUST_TOKEN@"
         useTTY: false
         condition: SUCCESSFUL
         optional: false
+
+      - type: CommandStep
+        name: Record published crate versions
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            python3 - <<'PY'
+            import json
+            import subprocess
+            from pathlib import Path
+
+            metadata = json.loads(
+                subprocess.check_output([
+                    "cargo",
+                    "metadata",
+                    "--no-deps",
+                    "--format-version",
+                    "1",
+                    "--locked",
+                ])
+            )
+
+            releases = []
+
+            for package in metadata["packages"]:
+                if package["publish"]:
+                    releases.append(
+                        f"{package['name']}@@{package['version']}"
+                    )
+
+            Path("docsrs-publications.txt").write_text(
+                ",".join(releases) + "\n"
+            )
+            PY
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
       - type: PublishArtifactStep
         name: Record published crate versions
         artifacts: docsrs-publications.txt
         condition: SUCCESSFUL
         optional: false
+
     triggers:
       - type: TagCreateTrigger
         tags: "*.*.* -v*"
         branches: main
-    sequentialGroup: ferriswatch-publish
+
+    jobDependencies:
+      - jobName: check
+        requireSuccessful: true
+
+      - jobName: release-preflight
+        requireSuccessful: true
+
+    sequentialGroup: ferriswatch-publish-crates-io
+
     retryCondition: never
     maxRetries: 3
     retryDelay: 30
     includeUpstreamWhenRebuild: false
     includeDownstreamWhenRebuild: false
-    timeout: 3600
+    timeout: 1800
+
+  # ---------------------------------------------------------------------------
+  # Notify private docs.rs only after the OneDev packages exist.
+  #
+  # It does not need to wait for crates.io.
+  # ---------------------------------------------------------------------------
   - name: notify-docs
     steps:
       - type: CommandStep
-        name: notify private docs.rs
+        name: Notify private docs.rs
         runInContainer: true
         image: onedev.hankin.io/docker/rust:latest
         interpreter:
@@ -262,19 +533,26 @@ jobs:
         useTTY: false
         condition: SUCCESSFUL
         optional: false
+
     triggers:
       - type: TagCreateTrigger
         tags: "*.*.* -v*"
         branches: main
+
     jobDependencies:
-      - jobName: publish
+      - jobName: publish-onedev
         requireSuccessful: true
+
     retryCondition: never
     maxRetries: 3
     retryDelay: 30
     includeUpstreamWhenRebuild: false
     includeDownstreamWhenRebuild: false
     timeout: 600
+
+  # ---------------------------------------------------------------------------
+  # Mirror OneDev -> GitHub
+  # ---------------------------------------------------------------------------
   - name: Push to GitHub
     steps:
       - type: PushRepository
@@ -285,17 +563,24 @@ jobs:
         force: false
         condition: SUCCESSFUL
         optional: false
+
     triggers:
       - type: BranchUpdateTrigger
         branches: "** -sync/** -ferriswatch-sync-state"
         userMatch: anyone
+
       - type: TagCreateTrigger
+
     retryCondition: never
     maxRetries: 3
     retryDelay: 30
     includeUpstreamWhenRebuild: false
     includeDownstreamWhenRebuild: false
     timeout: 600
+
+  # ---------------------------------------------------------------------------
+  # OneDev/GitHub collaboration synchronisation
+  # ---------------------------------------------------------------------------
   - name: Sync collaboration
     steps:
       - type: CheckoutStep
@@ -306,6 +591,7 @@ jobs:
         withSubmodules: false
         condition: SUCCESSFUL
         optional: false
+
       - type: CommandStep
         name: Test and preflight collaboration sync
         runInContainer: true
@@ -315,6 +601,7 @@ jobs:
           shell: sh
           commands: |
             set -eu
+
             python -m unittest discover -s tools -p 'test_sync*.py'
             python tools/sync_collaboration.py
         runAs: 0:0
@@ -326,7 +613,9 @@ jobs:
         useTTY: true
         condition: SUCCESSFUL
         optional: false
+
     sequentialGroup: ferriswatch-collaboration-sync
+
     retryCondition: never
     maxRetries: 3
     retryDelay: 30

@@ -10,7 +10,7 @@ members = [
 default-members = ["."]
 
 [workspace.package]
-version = "0.4.2"
+version = "0.4.3"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
@@ -21,6 +21,7 @@ keywords = ["theme", "palette", "colors", "styling"]
 categories = ["gui"]
 
 [workspace.dependencies]
+
 ferriswatch = { path = ".", version = "0.4", registry = "onedev" }
 ferriswatch-core = { path = "crates/ferriswatch-core", version = "0.4", registry = "onedev" }
 ferriswatch-components = { path = "crates/ferriswatch-components", version = "0.4", registry = "onedev" }
@@ -53,7 +54,7 @@ num-integer = "0.1.46"
 palette = "0.7.6"
 proc-macro2 = "1.0"
 quote = "1.0"
-syn = { version = "2.0", features = ["full", "extra-traits"] }
+syn = { version = "3.0", features = ["full", "extra-traits"] }
 time = { version = "0.3.44", features = [
     "std",
     "macros",
