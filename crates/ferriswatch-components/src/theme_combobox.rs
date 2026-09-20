@@ -1,5 +1,5 @@
+use crate::components::{AccentSelect, ThemeSelect};
 use crate::ferriswatch::dioxus::{Memory, use_theme};
-use crate::{AccentSelect, ThemeSelect};
 use dioxus::prelude::*;
 
 /// Joined [`ThemeSelect`] and [`AccentSelect`] controls for the nearest provider.
@@ -17,7 +17,7 @@ use dioxus::prelude::*;
 ///
 /// ```rust,no_run
 /// use dioxus::prelude::*;
-/// use ferriswatch_components::ThemeCombobox;
+/// use ferriswatch_components::components::ThemeCombobox;
 ///
 /// fn picker() -> Element {
 ///     rsx! {

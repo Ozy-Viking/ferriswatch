@@ -10,7 +10,7 @@ members = [
 default-members = ["."]
 
 [workspace.package]
-version = "0.4.6"
+version = "0.4.7"
 edition = "2024"
 authors = ["Zack Hankin <onedev+rust/ferriswatch@hankin.io>"]
 license = "MIT"
@@ -80,10 +80,7 @@ include = [
     "/LICENSE",
     "/README.md",
     "src/**",
-    "docs/Color.md",
-    "docs/Css.md",
-    "docs/Dioxus.md",
-    "docs/Palettes.md",
+    "docs/Home.md",
     "tools/generate_css.rs",
     "!tests/**",
     "!tools/README.md",

@@ -1,6 +1,8 @@
 //! Raw palettes and their supported accent choices.
 //!
-//! See the repository's [palette guide](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Palettes.md).
+#![doc = include_str!("../../docs/Palettes.md")]
+#![doc = include_str!("../../docs/PaletteSources.md")]
+#![doc = include_str!("../../docs/PaletteValidation.md")]
 
 use crate::color::Color;
 

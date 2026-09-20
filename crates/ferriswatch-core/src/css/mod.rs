@@ -1,6 +1,6 @@
 //! Framework-independent semantic CSS.
 //!
-//! See the repository's [CSS guide](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Css.md).
+#![doc = include_str!("../../docs/Css.md")]
 
 mod variables;
 

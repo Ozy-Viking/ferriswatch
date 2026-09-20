@@ -21,3 +21,5 @@ provider. Each accepts `class`, `combobox_class`, `input_class`, `list_class`,
 `option_class`, and `empty_class`. `ThemeSelect` additionally accepts
 `matching_mode_only`; `AccentSelect` follows the selected theme's accents.
 `ThemeCombobox` joins these two components and displays selection errors.
+
+See the [components guide](../../docs/Components.md) for setup, examples, and styling properties.

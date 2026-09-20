@@ -1,13 +1,14 @@
 # Palette families
 
 Ferriswatch includes 64 concrete palettes across 28 families. All factories return
-`ThemeVariant`. The [generated catalogue](Catalogue.md) lists every stable theme ID,
-accent ID, default accent and pinned upstream source. [Source attribution](PaletteSources.md)
+`ThemeVariant`. The [generated catalogue](crate::catalogue) lists every stable theme ID,
+accent ID, default accent and pinned upstream source. [Source attribution](#palette-source-attribution)
 links the retained upstream licenses.
 
 ## Typed factories and runtime selection
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::palette::{kanagawa, everforest, NoAccent};
 use ferriswatch::theme_variant::ThemePalette;
 use ferriswatch::catalogue;
@@ -30,6 +31,7 @@ use `main::Main`. Typed accents remain local to each concrete palette module and
 `FromStr` / `Display` for their persisted snake_case ID:
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::palette::catppuccin::mocha::Blue;
 let accent: Blue = "blue".parse()?;
 assert_eq!(accent.to_string(), "blue");
@@ -93,7 +95,7 @@ contrast over the derived normal/hover/pressed range. A fixed secondary action
 keeps its foreground when only the primary accent changes.
 
 This is a mapping policy, not a claim that every role can be used as small text on
-every background. The [mapping review](PaletteValidation.md) records repeated
+every background. The [mapping review](#palette-mapping-validation) records repeated
 assignments, source-specific decisions and measured limitations. Rendering an
 application with transparent fills requires checking its actual composited canvas.
 
@@ -103,6 +105,7 @@ Custom themes require a stable, caller-supplied `custom/identifier`. Labels may 
 owned strings loaded at runtime. They need not be registry entries.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::{catalogue, color::Color};
 use ferriswatch::theme_variant::{ThemeVariant, ResolvedAccent};
 

@@ -18,6 +18,7 @@ before adding the component feature.
 ## Configure the application
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use dioxus::prelude::*;
 use ferriswatch::{
     dioxus::ThemeProvider,
@@ -31,21 +32,19 @@ use ferriswatch::{
 
 #[component]
 fn App() -> Element {
-    let config = use_hook(|| {
-        ThemeConfig::with_default(
-            Theme::new(Latte::variant::<Blue>(), Mocha::variant::<Mauve>()),
-            Appearance::Dark,
-        )
-            .available(
-                ThemeSelection::all()
-                    .without_family::<RosePine>()
-                    .without_family::<Catppuccin>()
-                    .with_palette::<Mocha>()
-                    .with_palette::<Latte>(),
-            )
-            .build()
-            .expect("the configured default is available")
-    });
+    let config = ThemeConfig::with_default(
+        Theme::new(Latte::variant::<Blue>(), Mocha::variant::<Mauve>()),
+        Appearance::Dark,
+    )
+    .available(
+        ThemeSelection::all()
+            .without_family::<RosePine>()
+            .without_family::<Catppuccin>()
+            .with_palette::<Mocha>()
+            .with_palette::<Latte>(),
+    )
+    .use_config()
+    .expect("the configured default is available");
 
     rsx! {
         ThemeProvider { config,
@@ -57,6 +56,13 @@ fn App() -> Element {
     }
 }
 ```
+
+In a component, finish the builder with
+[`use_config`](crate::theme::config::ThemeConfigBuilder::use_config) to validate
+and retain the configuration once per mount. Call it unconditionally like any
+Dioxus hook. It caches errors too, and ignores later builder values. Expressions
+before `.use_config()` still run on each render. Use `.build()` outside a
+component, or when a fresh validation result is needed.
 
 `ThemeConfig::with_default(theme, mode)` requires both saved variants and an
 initial mode. The builder starts with all built-in palettes available.
@@ -83,6 +89,7 @@ provider, so separate application instances and SSR requests do not share it.
 Nested providers have independent state and CSS scopes.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use dioxus::prelude::*;
 use ferriswatch::dioxus::{LocalStorage, use_theme};
 
@@ -193,6 +200,7 @@ is never loaded automatically. `DefaultStyles {}` remains a convenience wrapper.
 For example:
 
 ```rust,no_run
+# extern crate ferriswatch_core as ferriswatch;
 use dioxus::prelude::*;
 use ferriswatch::{
     dioxus::{DEFAULT_STYLESHEET, ThemeProvider, ThemeScope},
@@ -236,6 +244,7 @@ advisory.
 Opt in when constructing the provider config:
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::{
     palette::{NoAccent, catppuccin::{Latte, Mocha}},
     theme::{Appearance, Theme, ThemeError, config::ThemeConfig},

@@ -786,3 +786,59 @@ fn mode_switches_preserve_both_accents_and_inactive_updates_do_not_rerender_curr
 
     dom.render_immediate_to_vec();
 }
+
+#[derive(Clone)]
+struct ConfigHookProbe {
+    builder: std::rc::Rc<RefCell<ThemeConfigBuilder>>,
+    results: std::rc::Rc<RefCell<Vec<Result<ThemeConfig, ThemeError>>>>,
+}
+
+fn config_hook_probe(probe: ConfigHookProbe) -> Element {
+    let result = probe.builder.borrow().clone().use_config();
+    probe.results.borrow_mut().push(result);
+    rsx! {}
+}
+
+#[rstest::rstest]
+#[case::valid_first(false)]
+#[case::invalid_first(true)]
+fn use_config_retains_first_result_until_remount(#[case] invalid_first: bool) {
+    let valid = single_default(Mocha::variant::<Mauve>());
+    let invalid = valid.clone().available(ThemeSelection::new());
+    let (initial, replacement) = if invalid_first {
+        (invalid, valid)
+    } else {
+        (valid, invalid)
+    };
+    let expected = initial.clone().build();
+    let probe = ConfigHookProbe {
+        builder: std::rc::Rc::new(RefCell::new(initial)),
+        results: Default::default(),
+    };
+    let mut dom = VirtualDom::new_with_props(config_hook_probe, probe.clone());
+    dom.rebuild_in_place();
+    let first = probe.results.borrow()[0].clone();
+    match (&first, &expected) {
+        (Ok(actual), Ok(expected)) => assert_eq!(actual.default_theme(), expected.default_theme()),
+        (Err(actual), Err(expected)) => assert_eq!(actual, expected),
+        _ => panic!("hook result differs from build result"),
+    }
+
+    *probe.builder.borrow_mut() = replacement;
+    dom.mark_dirty(ScopeId::APP);
+    dom.render_immediate_to_vec();
+    assert_eq!(probe.results.borrow().len(), 2);
+    // ThemeConfig equality checks allocation identity, not just equal values.
+    assert_eq!(probe.results.borrow()[1], first);
+
+    drop(dom);
+    let mut remounted = VirtualDom::new_with_props(config_hook_probe, probe.clone());
+    remounted.rebuild_in_place();
+    let results = probe.results.borrow();
+    assert_eq!(results.len(), 3);
+    if invalid_first {
+        assert!(results[2].is_ok());
+    } else {
+        assert_eq!(results[2], Err(ThemeError::EmptySelection));
+    }
+}

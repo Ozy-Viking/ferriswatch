@@ -1,7 +1,7 @@
 use dioxus::logger::tracing::Level;
 use dioxus::prelude::*;
 use ferriswatch::{
-    ThemePicker,
+    components::ThemePicker,
     css::ThemeScope,
     dioxus::{DEFAULT_STYLESHEET, LocalStorage, ThemeProvider, use_theme},
     palette::{
@@ -29,16 +29,14 @@ fn main() {
 
 #[component]
 fn App() -> Element {
-    let config = use_hook(|| {
-        ThemeConfig::with_default(
-            Theme::new(Latte::variant::<Blue>(), Mocha::variant::<Mauve>()),
-            Appearance::Dark,
-        )
-        .available(ThemeSelection::all())
-        .override_dx_components_theme(true)
-        .build()
-        .expect("valid theme configuration")
-    });
+    let config = ThemeConfig::with_default(
+        Theme::new(Latte::variant::<Blue>(), Mocha::variant::<Mauve>()),
+        Appearance::Dark,
+    )
+    .available(ThemeSelection::all())
+    .override_dx_components_theme(true)
+    .use_config()
+    .expect("valid theme configuration");
     rsx! {
         document::Title { "Ferriswatch Demo" }
         document::Link {

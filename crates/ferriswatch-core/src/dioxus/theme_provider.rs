@@ -297,7 +297,6 @@ pub fn use_theme<S: super::persistence::ThemeStorage>() -> ThemeState {
 /// for portals in the same document; use one root provider per document.
 /// Scope controls CSS inheritance, not where component context is available.
 #[component]
-
 pub fn ThemeProvider(
     config: ThemeConfig,
     children: Element,

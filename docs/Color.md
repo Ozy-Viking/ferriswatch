@@ -10,6 +10,7 @@ representation when you request a conversion. The methods return new values,
 leaving the stored color unchanged.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, ColorError, Hsl, Rgb};
 
 fn main() -> Result<(), ColorError> {
@@ -42,6 +43,7 @@ are all `0.0`. It is a constant, so it can be used in other constant definitions
 without a constructor or error handling.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::Color;
 
 const BACKGROUND: Color = Color::TRANSPARENT;
@@ -62,6 +64,7 @@ as eight hex digits, padded with leading zeros.
 `Color::from_rgba8(r, g, b, a)`.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::Color;
 
 const ROSEWATER: Color = Color::hex(0xf5e0dc);
@@ -77,6 +80,7 @@ supported color space. Linear sRGB also supports `Color::from(value)` because
 that conversion cannot fail.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, ColorError, Hsl, Srgb};
 
 fn main() -> Result<(), ColorError> {
@@ -150,6 +154,7 @@ alpha. Reverse directions that can reject non-finite values or overflow retain
 `TryFrom`. Bare spaces discard alpha or supply opaque alpha; wrappers preserve it.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, Rgb, Rgba};
 let source = Color::new(-0.25, 0.5, 2.0, 0.375)?;
 let rgb: Rgb = source.into();
@@ -177,6 +182,7 @@ RGB, it clamps before quantization so an out-of-gamut color can become a valid
 byte color. Conversion errors that occur before clamping still propagate.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, ColorError, Oklch, Rgb};
 
 fn main() -> Result<(), ColorError> {
@@ -202,6 +208,7 @@ conversion errors still propagate. Hue wraps during HSL conversion, so 480
 degrees represents the same hue as 120 degrees.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, ColorError, DisplayP3, Hsl};
 
 fn main() -> Result<(), ColorError> {
@@ -231,6 +238,7 @@ final target. `Color::clamped_from(...)` treats `Color` as the destination and
 clamps immediately; a later conversion cannot recover values clipped there.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Color, ColorError, DisplayP3, Oklch};
 
 fn main() -> Result<(), ColorError> {
@@ -279,6 +287,7 @@ perform perceptual gamut mapping or validate non-finite values. Non-finite
 inputs to color-space conversions are rejected.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Clamp, Hsl};
 
 let mut color = Hsl::new(120.0, 0.5, 0.25);
@@ -306,6 +315,7 @@ an unbounded endpoint returns `None`.
 wrapping is disabled, and a value must be supplied before `build()`.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Channel, ChannelError, Clamp};
 
 fn main() -> Result<(), ChannelError<u16>> {
@@ -353,6 +363,7 @@ float type. Non-finite values remain unchanged when clamped with wrapping
 enabled.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Channel, ChannelError, Clamp};
 
 fn main() -> Result<(), ChannelError> {
@@ -380,6 +391,7 @@ preserve the opposite endpoint and stored value. An invalid update leaves the
 entire channel unchanged.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Channel, ChannelError};
 
 fn main() -> Result<(), ChannelError<u8>> {
@@ -434,6 +446,7 @@ values outside `0..=1`. `opaque(color)` creates alpha one. Byte accessors
 convert between `0..=255` and the normalized fraction.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Alpha, ColorError, Rgb};
 
 fn main() -> Result<(), ColorError> {
@@ -477,6 +490,7 @@ bytes; alpha wrappers append a rounded alpha byte.
 prefix and two digits per channel.
 
 ```rust
+# extern crate ferriswatch_core as ferriswatch;
 use ferriswatch::color::{Channel, ChannelError, Hsl, Rgb};
 
 fn main() -> Result<(), ChannelError<u8>> {

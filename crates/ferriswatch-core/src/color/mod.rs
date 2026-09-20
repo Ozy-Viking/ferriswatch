@@ -1,4 +1,4 @@
-//! See the repository's [color guide](https://github.com/Ozy-Viking/ferriswatch/blob/main/docs/Color.md).
+#![doc = include_str!("../../docs/Color.md")]
 
 mod channel;
 

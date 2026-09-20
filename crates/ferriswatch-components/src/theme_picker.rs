@@ -1,17 +1,16 @@
 use crate::ferriswatch::dioxus::{Memory, use_theme};
 use dioxus::prelude::*;
 
-use crate::ThemeCombobox;
+use crate::components::ThemeCombobox;
 
 const THEME_COMBOBOX_CSS: Asset = asset!("/src/theme_combobox.css");
 const COMBOBOX_CSS: Asset = asset!("/src/combobox/style.css");
 
 /// Basic accessible selectors for available palettes and their supported accents.
 ///
-/// Supplies the joined layout and combobox chrome that [`ThemeCombobox`] leaves
+/// Supplies the joined layout and combobox chrome that [`crate::components::ThemeCombobox`] leaves
 /// unstyled.
 #[component]
-
 pub fn ThemePicker() -> Element {
     let mut state = use_theme::<Memory>();
 

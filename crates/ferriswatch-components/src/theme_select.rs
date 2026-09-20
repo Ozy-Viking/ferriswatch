@@ -10,7 +10,7 @@ use crate::progressively_render::INITIAL_OPTIONS;
 ///
 /// Lists palettes for the active appearance by default. Selecting a palette
 /// preserves the current accent when that palette supports it. Supply CSS
-/// classes directly, or use [`crate::ThemePicker`] for the joined default UI.
+/// classes directly, or use [`crate::components::ThemePicker`] for the joined default UI.
 #[component]
 pub fn ThemeSelect(
     /// Restrict the menu to palettes supporting the active appearance.

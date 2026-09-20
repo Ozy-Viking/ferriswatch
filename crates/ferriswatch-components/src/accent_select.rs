@@ -7,7 +7,7 @@ use dioxus_primitives::combobox::{
 /// Searchable accent selector connected to the nearest theme provider.
 ///
 /// Lists only accents supported by the selected theme, plus its default.
-/// Supply CSS classes directly, or use [`crate::ThemePicker`] for the joined UI.
+/// Supply CSS classes directly, or use [`crate::components::ThemePicker`] for the joined UI.
 #[component]
 pub fn AccentSelect(
     /// CSS class for the primitives combobox root.

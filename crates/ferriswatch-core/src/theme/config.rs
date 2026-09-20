@@ -119,6 +119,31 @@ impl ThemeConfigBuilder {
         self
     }
 
+    /// Builds and retains this component's configuration on its first render.
+    ///
+    /// Available with the `dioxus` feature. Call unconditionally in a component
+    /// or custom hook, in the same order on every render. The first result,
+    /// including an error, is reused until the component remounts. Later builder
+    /// values do not replace it.
+    ///
+    /// Builder expressions before this method still run on every render; only
+    /// validation and configuration allocation are cached. Use [`Self::build`]
+    /// outside Dioxus components or to validate a fresh configuration each time.
+    ///
+    /// # Errors
+    ///
+    /// Returns the validation errors from [`Self::build`].
+    ///
+    /// # Panics
+    ///
+    /// Panics when called outside a Dioxus component's rendering scope.
+    #[cfg(feature = "dioxus")]
+    pub fn use_config(self) -> Result<ThemeConfig, ThemeError> {
+        // Keep the palette data out of the initializer passed through Dioxus's hook stack.
+        let builder = Box::new(self);
+        dioxus::prelude::use_hook(move || builder.build())
+    }
+
     /// Validates registrations and checks that the exact default is available.
 
     pub fn build(self) -> Result<ThemeConfig, ThemeError> {

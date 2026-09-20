@@ -1,3 +1,5 @@
+#![doc = include_str!("../docs/Catalogue.md")]
+
 //! Built-in theme discovery and resolution from stable IDs.
 //!
 //! ```

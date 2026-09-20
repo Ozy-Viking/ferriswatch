@@ -17,3 +17,12 @@ pub mod palette;
 pub mod parser;
 pub mod theme;
 pub mod theme_variant;
+
+#[doc(inline)]
+pub use catalogue::PALETTES;
+#[doc(inline)]
+pub use color::Color;
+#[doc(inline)]
+pub use theme::Theme;
+#[doc(inline)]
+pub use theme_variant::ThemeVariant;
