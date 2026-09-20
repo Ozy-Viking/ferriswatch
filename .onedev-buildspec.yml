@@ -304,7 +304,7 @@ jobs:
   #
   # have succeeded.
   # ---------------------------------------------------------------------------
-  - name: publish-onedev
+  - name: publish-onedev-cargo
     steps:
       - type: CheckoutStep
         name: Check out source
@@ -341,6 +341,55 @@ jobs:
         condition: SUCCESSFUL
         optional: false
 
+      - type: CommandStep
+        name: Record published crate versions
+        runInContainer: true
+        image: onedev.hankin.io/docker/rust:latest
+        interpreter:
+          type: PosixInterpreter
+          shell: bash
+          commands: |
+            set -euo pipefail
+
+            python3 - <<'PY'
+            import json
+            import subprocess
+            from pathlib import Path
+
+            metadata = json.loads(
+                subprocess.check_output([
+                    "cargo",
+                    "metadata",
+                    "--no-deps",
+                    "--format-version",
+                    "1",
+                    "--locked",
+                ])
+            )
+
+            releases = []
+
+            for package in metadata["packages"]:
+                if package["publish"]:
+                    releases.append(
+                        f"{package['name']}@@{package['version']}"
+                    )
+
+            Path("docsrs-publications.txt").write_text(
+                ",".join(releases) + "\n"
+            )
+            PY
+        runAs: 0:0
+        useTTY: false
+        condition: SUCCESSFUL
+        optional: false
+
+      - type: PublishArtifactStep
+        name: Record published crate versions
+        artifacts: docsrs-publications.txt
+        condition: SUCCESSFUL
+        optional: false
+
     triggers:
       - type: TagCreateTrigger
         tags: "*.*.* -v*"
@@ -367,7 +416,7 @@ jobs:
   # ---------------------------------------------------------------------------
   # Publish to crates.io
   #
-  # Independent sibling of publish-onedev. Both can run in parallel after the
+  # Independent sibling of publish-onedev-cargo. Both can run in parallel after the
   # release gates pass.
   # ---------------------------------------------------------------------------
   - name: publish-crates-io
@@ -444,54 +493,6 @@ jobs:
         condition: SUCCESSFUL
         optional: false
 
-      - type: CommandStep
-        name: Record published crate versions
-        runInContainer: true
-        image: onedev.hankin.io/docker/rust:latest
-        interpreter:
-          type: PosixInterpreter
-          shell: bash
-          commands: |
-            set -euo pipefail
-
-            python3 - <<'PY'
-            import json
-            import subprocess
-            from pathlib import Path
-
-            metadata = json.loads(
-                subprocess.check_output([
-                    "cargo",
-                    "metadata",
-                    "--no-deps",
-                    "--format-version",
-                    "1",
-                    "--locked",
-                ])
-            )
-
-            releases = []
-
-            for package in metadata["packages"]:
-                if package["publish"]:
-                    releases.append(
-                        f"{package['name']}@@{package['version']}"
-                    )
-
-            Path("docsrs-publications.txt").write_text(
-                ",".join(releases) + "\n"
-            )
-            PY
-        runAs: 0:0
-        useTTY: false
-        condition: SUCCESSFUL
-        optional: false
-
-      - type: PublishArtifactStep
-        name: Record published crate versions
-        artifacts: docsrs-publications.txt
-        condition: SUCCESSFUL
-        optional: false
 
     triggers:
       - type: TagCreateTrigger
@@ -540,7 +541,7 @@ jobs:
         branches: main
 
     jobDependencies:
-      - jobName: publish-onedev
+      - jobName: publish-onedev-cargo
         requireSuccessful: true
 
     retryCondition: never
