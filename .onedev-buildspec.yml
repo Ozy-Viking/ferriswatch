@@ -39,14 +39,12 @@ jobs:
         optional: false
 
       - type: SetupCacheStep
-        name: Restore Cargo dependencies and build artifacts
+        name: Restore Cargo dependencies
         key: ferriswatch-rust-v1
         checksumFiles: Cargo.lock .ci-rust-version .onedev-buildspec.yml ci/check.sh
         entries:
           - path: .ci-cargo/registry
           - path: .ci-cargo/git
-          - path: target
-            excludes: clippy nextest
         uploadStrategy: UPLOAD_IF_NOT_EXACT_MATCH
         condition: SUCCESSFUL
         optional: false
